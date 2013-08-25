@@ -13,7 +13,12 @@ Prerequisites for Developer Machines
 ====================================
 
 * git
-* python 2.7 (install from http://www.ninite.com/ )
+* python 2.7 (Windows users can install from http://www.ninite.com/ )
+* On ubuntu 13.04::
+
+    # Pillow build requirements:
+    sudo apt-get install python-dev libjpeg-dev libjpeg8 zlib1g-dev libfreetype6 libfreetype6-dev
+
 
 (Quick) Setup
 =============

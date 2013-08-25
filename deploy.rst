@@ -12,7 +12,7 @@ Deployment Instructions
     apt-get upgrade
 
     # install some packages
-    apt-get install postgresql nginx supervisor python virtualenvwrapper git python-dev libpq-dev
+    apt-get install postgresql nginx supervisor python virtualenvwrapper git python-dev libpq-dev libjpeg-dev libjpeg8 zlib1g-dev libfreetype6 libfreetype6-dev
 
     # Create postgres user
     sudo -iu postgres createuser oc -S -D -R
