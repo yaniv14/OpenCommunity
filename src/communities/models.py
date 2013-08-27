@@ -138,7 +138,7 @@ class Community(UIDMixin):
               'LANGUAGE_CODE': settings.LANGUAGE_CODE,
              })
 
-        subject = render_to_string("emails/%s_title.txt" % template, d)
+        subject = render_to_string("emails/%s_title.txt" % template, d).strip()
 
         message = render_to_string("emails/%s.txt" % template, d)
         html_message = render_to_string("emails/%s.html" % template, d)
