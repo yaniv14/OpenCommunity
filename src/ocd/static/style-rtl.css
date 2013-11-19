@@ -57,6 +57,15 @@ p > a {
 	word-break: break-word;
 }
 
+.wysiwyg-text-align-left {
+    text-align: left;
+}
+.wysiwyg-text-align-right {
+    text-align: right;
+}
+.wysiwyg-text-align-center {
+    text-align: center;
+}
 /* Errors */
 
 ul.errorlist {

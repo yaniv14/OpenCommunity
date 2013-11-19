@@ -20,7 +20,7 @@
             "</li>";
         },
 
-		"justify": function(locale, options) {
+        "justify": function(locale, options) {
             var size = (options && options.size) ? ' btn-'+options.size : '';
             return "<li>" +
               "<div class='btn-group'>" +
@@ -29,7 +29,7 @@
                   "<a class='btn btn-default btn-sm" + size + "' data-wysihtml5-command='justifyLeft' title='" + locale.justify.justifyleft + "' tabindex='-1'><i class='fa fa-align-left'></i></span></a>" +
               "</div>" +
             "</li>";
-		},
+        },
        
         "emphasis": function(locale, options) {
             var size = (options && options.size) ? ' btn-'+options.size : '';
@@ -57,21 +57,21 @@
             return "<li>" +
               "<div class='bootstrap-wysihtml5-insert-link-modal modal fade tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>" +
                 "<div class='modal-dialog'>" +
-	                "<div class='modal-content'>" +
-		                "<div class='modal-header'>" +
-		                  "<button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>" +
-		                  "<h4 class='modal-title'>" + locale.link.insert + "</h4>" +
-		                "</div>" +
-		                "<div class='modal-body'>" +
-		                  "<input value='http://' class='bootstrap-wysihtml5-insert-link-url input-xlarge'>" +
-		                  "<label class='checkbox'> <input type='checkbox' class='bootstrap-wysihtml5-insert-link-target' checked>" + locale.link.target + "</label>" +
-		                "</div>" +
-		                "<div class='modal-footer'>" +
-		                  "<button type='button' class='btn btn-default btn-sm' data-dismiss='modal'>" + locale.link.cancel + "</button>" +
-		                  "<button type='button' class='btn btn-primary' data-dismiss='modal'>" + locale.link.insert + "</button>" +
-		                "</div>" +
-		              "</div>" +
-	              "</div>" +
+                    "<div class='modal-content'>" +
+                        "<div class='modal-header'>" +
+                          "<button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>" +
+                          "<h4 class='modal-title'>" + locale.link.insert + "</h4>" +
+                        "</div>" +
+                        "<div class='modal-body'>" +
+                          "<input value='http://' class='bootstrap-wysihtml5-insert-link-url input-xlarge'>" +
+                          "<label class='checkbox'> <input type='checkbox' class='bootstrap-wysihtml5-insert-link-target' checked>" + locale.link.target + "</label>" +
+                        "</div>" +
+                        "<div class='modal-footer'>" +
+                          "<button type='button' class='btn btn-default btn-sm' data-dismiss='modal'>" + locale.link.cancel + "</button>" +
+                          "<button type='button' class='btn btn-primary' data-dismiss='modal'>" + locale.link.insert + "</button>" +
+                        "</div>" +
+                      "</div>" +
+                  "</div>" +
               "</div>" +
               "<a class='btn btn-default btn-sm" + size + "' data-wysihtml5-command='createLink' title='" + locale.link.insert + "' tabindex='-1'><span class='glyphicon glyphicon-share'></span></a>" +
             "</li>";
@@ -407,29 +407,11 @@
         "html": false,
         "image": false,
         events: {},
-        ParserRules: {
+        parserRules: {
             classes: {
-                // (path_to_project/lib/css/wysiwyg-color.css)
-                "wysiwyg-color-silver" : 1,
-                "wysiwyg-color-gray" : 1,
-                "wysiwyg-color-white" : 1,
-                "wysiwyg-color-maroon" : 1,
-                "wysiwyg-color-red" : 1,
-                "wysiwyg-color-purple" : 1,
-                "wysiwyg-color-fuchsia" : 1,
-                "wysiwyg-color-green" : 1,
-                "wysiwyg-color-lime" : 1,
-                "wysiwyg-color-olive" : 1,
-                "wysiwyg-color-yellow" : 1,
-                "wysiwyg-color-navy" : 1,
-                "wysiwyg-color-blue" : 1,
-                "wysiwyg-color-teal" : 1,
-                "wysiwyg-color-aqua" : 1,
-                "wysiwyg-color-orange" : 1,
                 "wysiwyg-text-align-center" : 1,
-		        "wysiwyg-text-align-justify" : 1,
-		        "wysiwyg-text-align-left" : 1,
-		        "wysiwyg-text-align-right" : 1
+                "wysiwyg-text-align-left" : 1,
+                "wysiwyg-text-align-right" : 1
             },
             tags: {
                 "b":  {},
@@ -438,12 +420,6 @@
                 "ol": {},
                 "ul": {},
                 "li": {},
-                "h1": {},
-                "h2": {},
-                "h3": {},
-                "h4": {},
-                "h5": {},
-                "h6": {},
                 "blockquote": {},
                 "u": 1,
                 "img": {
@@ -462,16 +438,12 @@
                     }
                 },
                 "span": 1,
-                "div": {
-		            "add_class": {
-		                "align": "align_text"
-		            }
-		        },
-		        "p": {
-		            "add_class": {
-		                "align": "align_text"
-		            }
-		        },
+                "div": 1,
+                "p": {
+                    "add_class": {
+                        "align": "align_text"
+                    }
+                },
                 // to allow save and edit files with code tag hacks
                 "code": 1,
                 "pre": 1
@@ -482,7 +454,7 @@
     };
 
     if (typeof $.fn.wysihtml5.defaultOptionsCache === 'undefined') {
-		$.fn.wysihtml5.defaultOptionsCache = $.extend(true, {}, $.fn.wysihtml5.defaultOptions);
+        $.fn.wysihtml5.defaultOptionsCache = $.extend(true, {}, $.fn.wysihtml5.defaultOptions);
     }
 
     var locale = $.fn.wysihtml5.locale = {

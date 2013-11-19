@@ -7,6 +7,8 @@ EXTRA_TAGS = [
               'p',
               'br',
               'span',
+              'div',
+              'u',
               ]
 
 TAGS = bleach.ALLOWED_TAGS + EXTRA_TAGS
@@ -18,13 +20,27 @@ BLOCK_TAGS = [
     'li',
     'ol',
     'ul',
+    'div',
 ]
+
+DIV_CLASSES = [
+               'wysiwyg-text-align-left',
+               'wysiwyg-text-align-right',
+               'wysiwyg-text-align-center',
+               ]
+
+
+def div_filter(name, value):
+    if name != 'class':
+        return False
+    return value.strip() in DIV_CLASSES
 
 ATTRIBUTES = {
     'a': ['href', 'title'],
     'abbr': ['title'],
     'acronym': ['title'],
     'span': ['style'],
+    'div': div_filter,
 }
 
 STYLES = ['text-decoration']
