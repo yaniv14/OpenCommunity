@@ -32,23 +32,38 @@
         </ul>
 	</div>
 <div class="main_meeting_content">
-	<div class="text-right col-xs-12" style="font-size: 14px; border-bottom: 1px solid #666; margin-bottom: 10px;">
+	<div class="text-right col-xs-12 title_divider">
 		{% with status=object|upcoming_status %}
 			-- {{ status.0 }} --
 			{% if status.1 %}<!-- <h5>({{ status.1 }}) </h5> -->{% endif %}
 		{% endwith %}
 	</div>
-	<div class="col-xs-12">
+		<div class="row">
 		{% if cperms.communities.viewupcoming_community %}
 			{% if cperms.communities.viewupcoming_draft or object.upcoming_meeting_is_published %}
-				<div class="pull-right">
+				<div class="text-right pull-right col-xs-12 col-sm-6">
 					{% if cperms.community.editupcoming_community %}
-						<i class="fa fa-edit"></i> <a data-rel="form" href="{% url "upcoming_edit" community.id %}" style="color: #6C6C6E;display: inline-block; text-align: left;"><span>{% trans "Edit" %}</span></a>
+						<a class="btn btn-oc" data-rel="form" href="{% url "upcoming_edit" community.id %}">{% trans "Edit" %}</a>
+					{% endif %}
+					{% if cperms.community.editagenda_community %}
+						<a class="btn btn-oc" data-rel="form" href="{% url "issue_create_upcoming" community.id %}">{% trans "Create Issue" %}</a>
+					{% endif %}
+					{% if cperms.community.editupcoming_community %}
+                        {% if object.upcoming_meeting_started %}
+                            <form method="post" action="{% url "upcoming_end" community.id  %}">
+                                {% csrf_token %}
+                                <button class="btn btn-oc">{% trans "Undo Start Meeting" %}</button>
+                            </form>
+                        {% else %}
+                            <button class="btn btn-oc" data-rel="form" data-url="{% url "upcoming_start" community.id  %}">
+                                    {% trans "Start Meeting" %}
+                            </button>
+                        {% endif %}
 					{% endif %}
 				</div>
 			{% endif %}
 		{% endif %}
-		<div class="pull-left">
+		<div class="text-left pull-left col-xs-12 col-sm-6">
 			<h1>
 			{% if object.upcoming_meeting_title and cperms.communities.viewupcoming_community %}
 				{% if cperms.community.editagenda_community or object.upcoming_meeting_is_published %}
@@ -74,29 +89,10 @@
 	        		<i class="fa fa-calendar"></i> {{ object|display_upcoming_time }}
 					<i class="fa fa-map-marker"></i> {{object.upcoming_meeting_location|default:_("Not set yet")}}
 				{% if cperms.community.editparticipants_community and community.upcoming_meeting_started %}
-					<i class="fa fa-group"></i> <a data-rel="form" href="{% url "upcoming_edit_participants" community.id  %}" style="color: #6C6C6E;">{% trans "Participants" %}: {{object.full_participants}}</a>
+					<a data-rel="form" href="{% url "upcoming_edit_participants" community.id  %}" style="color: #6C6C6E;">| {% trans "Participants" %}: {{object.full_participants}}</a>
 				{% endif %}
 				</h5>
-
-				{% if cperms.community.editupcoming_community %}
-                    <h5 class="pull-right">
-                        {% if object.upcoming_meeting_started %}
-                            <form method="post" action="{% url "upcoming_end" community.id  %}">
-                                {% csrf_token %}
-                                <button class="btn btn-default" style="border: 0; outline: none;background: 0;padding: 0;">
-                                    <i class="fa fa-undo"></i> <span>{% trans "Undo Start Meeting" %}</span>
-                                </button>
-                            </form>
-                        {% else %}
-                            <button class="btn btn-default" style="border: 0; outline: none;background: 0;padding: 0;"
-                                    data-rel="form" data-url="{% url "upcoming_start" community.id  %}" >
-                                    <i class="fa fa-play-circle"></i> <span>{% trans "Start Meeting" %}</span>
-                            </button>
-                        {% endif %}
-                    </h5>
-				{% endif %}
-								
-				<h5 style="clear: both;border-top: 1px solid;padding-top: 10px;">
+				<h5 style="clear: both; border-top: 1px solid #cecfb3; padding: 0; margin: 0;">
 				{% if object.upcoming_meeting_comments %}
 				    {{object.upcoming_meeting_comments|userhtml}}
 				{% endif %}
@@ -104,18 +100,7 @@
 			</div>
 	
 			<div id="agenda-container" class="agenda-list clear">
-				<h2 class="pull-left"> {% trans "Agenda items" %} <span class="loader"> <img src="{{STATIC_URL}}images/ajax-loader.gif" alt="Loading"/> </span></h2>
-				{% if cperms.community.editagenda_community %}
-					<a class="btn btn-oc pull-right" data-rel="form" href="{% url "issue_create_upcoming" community.id %}"> <i class="fa fa-plus"></i> <span>{% trans "Create Issue" %}</span></a>
-				{% endif %}
-				{% if object.has_straw_votes and cperms.issues.vote and object.upcoming_meeting_is_published and user.id %}
-					<h2 class="pull-right">
-						<span class="badge vote-badge">
-							{% trans "Total proposals/Votes" %}
-						</span>
-					</h2>
-				{% endif %}	
-	
+				<h2> {% trans "Agenda items" %} <span class="loader"> <img src="{{STATIC_URL}}images/ajax-loader.gif" alt="Loading"/> </span></h2>
 				<ul id="agenda" class="nav nav-pills nav-stacked clear">
 					{% for i in object.upcoming_issues %}
 						{% include "communities/_issue.html" %}

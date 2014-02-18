@@ -4,7 +4,7 @@ html {
 	font-family: "Alef", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 body {
-	background: url('images/background.jpg') repeat;
+	background: #666666;
 	direction: rtl;
 	/*{global-font-family}*/
 	font-family: "Alef", "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -24,22 +24,30 @@ h6,
 .h6 {
 	font-family: "Alef", "Helvetica Neue", Helvetica, Arial, sans-serif;
 	font-weight: bold;
-	color: #6C6C6E;
 }
 h1 {
-	font-size: 28px;
-	padding: 5px 0;
+	font-size: 30px;
+	/*padding: 5px 0;*/
 	margin: 0;
 	font-weight: normal;
 	word-break: break-word;
 }
 h2 {
-	font-size: 18px;
+	font-size: 22px;
 	margin-top: 10px;
+	font-weight: normal;
 }
 h5 {
 	margin-top: 5px;
 	margin-bottom: 5px;
+}
+.meeting_right_column h2 {
+	color: #fff;
+}
+.title_divider {
+	font-size: 14px;
+	border-bottom: 1px solid #cecfb3;
+	margin-bottom: 10px;
 }
 .modal-body h3 {
 	font-size: 18px;
@@ -86,6 +94,9 @@ ul.errorlist li {
 
 /* Forms */
 
+#upcoming-meeting form {
+	display: inline-block;
+}
 .modal-body {
 	padding: 20px 20px 10px 20px;
 }
@@ -334,25 +345,26 @@ nav.oc_navbar {
 	font-size: 14px;
 }
 .navbar-toggle {
-        margin-top: 4px;
-        margin-bottom: 4px;
+    margin-top: 4px;
+    margin-bottom: 4px;
 }
 .navbar-brand {
-        padding: 10px 15px;
+    padding: 10px 15px;
 }
 .navbar-default .navbar-brand {
-        font-size: 16px;
-        font-weight: bold;
-        color: #666;
+    font-size: 16px;
+    font-weight: bold;
+    color: #666;
 }
 .just_slash {
-        padding: 10px 0;
+    padding: 10px 0;
+	color: #ffffff;
 }
 .navbar-default .navbar-collapse {
-        background-color: transparent;
+    background-color: transparent;
 }
 .navbar-default .navbar-nav > li > a {
-        color: #333333;
+    color: #333333;
 }
 
 .oc_menu {
@@ -513,7 +525,7 @@ ul li.issue.oc_li a.addremove {
 	position: absolute;
 	width: 40px;
 	height: 100%;
-	border-right: 1px solid #ccc;
+	/*border-right: 1px solid #ccc;*/
 	top: 0;
 	left: 0;
 }
@@ -987,6 +999,9 @@ form.delete-invitation {
 
 /* Images & Icons */
 
+h5 .fa {
+	margin-right: 2px;
+}
 .check_box {
 	display: table-cell;
 	width: 40px;
@@ -1419,10 +1434,10 @@ li.btn-tab span {
 }
 .meetings_list li a,
 .issues_list li a {
-	color: #6C6C6E;
+	color: #FFFFFF;
 	display: block;
 	margin-left: 15px;
-	border-bottom: 1px solid #d5d6c6;
+	border-bottom: 1px solid #999999;
 	padding: 10px 10px 10px 0;
 }
 .meetings_list li a:hover,
@@ -1695,7 +1710,7 @@ label[for=id_proposal-title] {
 	}
 	.navbar-default .navbar-nav > li > a,
 	.navbar-default p.navbar-text {
-		color: #666;
+		color: #fff;
 	}
 	i.fa + span {
 		display: inline;
