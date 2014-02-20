@@ -1,6 +1,6 @@
 from contextlib import contextmanager
 from fabric.api import *
-from fabric.contrib.files import upload_template, uncomment
+from fabric.contrib.files import upload_template, uncomment, append
 import os.path
 
 PROJ_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -72,6 +72,30 @@ def prod():
     env.redirect_host = 'opencommunity.org.il'
     env.venv_command = '. ~/.virtualenvs/oc/bin/activate'
     env.pidfile = '/home/oc/OpenCommunity/src/masterpid'
+
+
+@task
+def enprod():
+
+    env.user = "en"
+
+    env.code_dir = '/home/%s/OpenCommunity/' % env.user
+    env.venv_dir = '%svenv/' % env.code_dir
+    env.venv_command = '. venv/bin/activate'
+    env.log_dir = '%slogs/' % env.code_dir
+
+    env.vhost = 'en.demos.org.il'
+    env.redirect_host = 'www.%s' % env.vhost
+    env.hosts = [env.vhost]
+
+    env.ocuser = "weben"
+    env.pidfile = '/home/%s/web.pid' % env.ocuser
+
+    env.gunicorn_port = 9001
+
+    env.github_user = 'yaniv14'
+    env.clone_url = "https://github.com/%s/OpenCommunity.git" % env.github_user
+
 
 
 @task
@@ -255,19 +279,36 @@ def initial_project_setup():
 
 @task
 def createsuperuser():
+    """ Creates a Django superuser for the project """
     with virtualenv(env.code_dir):
         run("cd src && python manage.py createsuperuser")
 
 
 @task
 def supervisor_status():
+    """ Show server's supoervisord status """
     run("sudo supervisorctl status")
 
 
 @task
 def switch(branch):
+    """ fetches all branchs, and checkouts the specified git branch """
     with cd(env.code_dir):
         run('git fetch origin')
         run('git checkout {}'.format(branch))
         deploy()
 
+@task
+def showkeys():
+    """ Displays authorized public ssh keys for user """
+    with hide('stdout'):
+        keys = run('cat .ssh/authorized_keys')
+    print keys
+
+@task
+def push_key(key_file):
+    """ Appends an ssh public key file from the specified file
+    """
+    with open(key_file) as f:
+        key_text = f.read()
+    append('~/.ssh/authorized_keys', key_text)
