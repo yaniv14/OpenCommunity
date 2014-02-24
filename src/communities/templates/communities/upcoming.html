@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block page_header %}
-<span class="show_meetings visible-xs" style="cursor: pointer;">{% trans "All Meetings" %}</span>
+<span class="show_meetings visible-xs" style="cursor: pointer; color: #fff;">{% trans "All Meetings" %}</span>
 {% endblock %}
 
 {% block meeting %}
@@ -92,7 +92,7 @@
 					<a data-rel="form" href="{% url "upcoming_edit_participants" community.id  %}" style="color: #6C6C6E;">| {% trans "Participants" %}: {{object.full_participants}}</a>
 				{% endif %}
 				</h5>
-				<h5 style="clear: both; border-top: 1px solid #cecfb3; padding: 0; margin: 0;">
+				<h5 style="clear: both; <!--border-top: 1px solid #cecfb3; -->padding: 10px 0 0 0; margin: 0; font-size: 16px;">
 				{% if object.upcoming_meeting_comments %}
 				    {{object.upcoming_meeting_comments|userhtml}}
 				{% endif %}
@@ -108,38 +108,35 @@
 				</ul>
 			</div>
 	
+			{% if cperms.community.editagenda_community %}
+			<div class="pull-right" style="margin-top: 20px; line-height: 3em;">
+				<a data-rel="form" href="{% url "upcoming_publish" community.id  %}" class="btn btn-oc"> {% if object.upcoming_meeting_started %} <i class="fa fa-envelope-o"></i> <span>{% trans "Summary Draft" %}</span> {% else %} <i class="fa fa-envelope-o"></i> <span>{% trans "Publish Agenda" %}</span> {% endif %}</a>
+			{% if object.upcoming_meeting_started and cperms.meetings.add_meeting %}
+				<a href="{% url "upcoming_close" community.id %}" data-rel="form" class="btn btn-warning" style="margin: 0`;"> {% trans "Close Meeting" %} </a>
+			{% endif %}
+			</div>
+			{% endif %}
 			{% if object.upcoming_meeting_started and cperms.community.editupcoming_community %}
 			
-				<h2 class="pull-left">{% trans "Summary" %}</h2>
-				<div class="push pull-right">
+				<h2 class="pull-left" style="margin-bottom: 0;">{% trans "Summary" %}
 					<a data-rel="form" href="{% url "upcoming_edit_summary" community.id %}" class="clear" style="padding: 9px;display: inline-block;">
 						<img src="{{ STATIC_URL }}images/comment_edit_pencil.png" />
 					</a>
-				</div>
+				</h2>
 				{% if object.upcoming_meeting_summary %}
-					<div class="summary_box clear">
+					<div class="clear">
 						{{object.upcoming_meeting_summary|userhtml}}
 					</div>
 				{% endif %}
 			
 			{% endif %}
-
-			{% if cperms.community.editagenda_community %}
-			<div style="margin: 1em auto;text-align: center;clear: both;">
-				<a data-rel="form" href="{% url "upcoming_publish" community.id  %}" class="btn btn-oc"> {% if object.upcoming_meeting_started %} <i class="fa fa-envelope-o"></i> <span>{% trans "Summary Draft" %}</span> {% else %} <i class="fa fa-envelope-o"></i> <span>{% trans "Publish Agenda" %}</span> {% endif %}</a>
-			{% if object.upcoming_meeting_started and cperms.meetings.add_meeting %}
-				<a href="{% url "upcoming_close" community.id %}" data-rel="form" class="btn btn-warning" style="margin: 0 20px;"> {% trans "Close Meeting" %} </a>
-			{% endif %}
-			</div>
-			{% endif %}
-	
 	
         {% if cperms.community.editagenda_community %}
         <div id="available-agenda" class="agenda-list">
         
         {% if community.issue_ranking_enabled %}
             <h2 class="pull-left">{% trans "Available Issues" %}</h2>
-            <ul id="issues-order" class="nav nav-tabs pull-right">
+            <ul id="issues-order" class="nav nav-tabs pull-right" style="margin-top: 10px;">
                 <li class="active"><a href="by_time" data-toggle="tab">{% trans "By time" %}</a></li>
                 <li><a href="by_rank" data-toggle="tab">{% trans "By rank" %}</a></li>
             </ul>    

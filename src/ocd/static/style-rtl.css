@@ -34,7 +34,7 @@ h1 {
 }
 h2 {
 	font-size: 22px;
-	margin-top: 10px;
+	margin-top: 20px;
 	font-weight: normal;
 }
 h5 {
@@ -46,7 +46,7 @@ h5 {
 }
 .title_divider {
 	font-size: 14px;
-	border-bottom: 1px solid #cecfb3;
+	/*border-bottom: 1px solid #cecfb3;*/
 	margin-bottom: 10px;
 }
 .modal-body h3 {
@@ -354,7 +354,7 @@ nav.oc_navbar {
 .navbar-default .navbar-brand {
     font-size: 16px;
     font-weight: bold;
-    color: #666;
+    color: #fff;
 }
 .just_slash {
     padding: 10px 0;
@@ -364,14 +364,14 @@ nav.oc_navbar {
     background-color: transparent;
 }
 .navbar-default .navbar-nav > li > a {
-    color: #333333;
+    color: #fff !important;
 }
 
 .oc_menu {
 	border: 0;
 	width: 32px;
 	height: 32px;
-	background: url('images/left_action.png') no-repeat;
+	background: url('images/left_action_white.png') no-repeat;
 }
 .oc_user_menu {
 	background: url('images/user_action.png') no-repeat;
@@ -445,14 +445,14 @@ ul li.issue.oc_li a.addremove {
 	height: 100%;
 }
 
-
 #agenda li .grab {
     width: 40px;
     background: url('images/drag-handle.png') center no-repeat;
-    float: right;
+    /*float: right;*/
     cursor: move;
     position: absolute;
 	height: 100%;
+	right: 35px;
 }
 #ordered li .grab {
     width: 60px;
@@ -491,25 +491,32 @@ ul li.issue.oc_li a.addremove {
 #available .timer {
 	display: none;
 }
+.issue-info {
+    margin-right: 80px;
+    padding-bottom: 10px;
+}
 .timer {
-	position: absolute;
+	/*position: absolute;
 	top: 10px;
 	left: 45px;
+    font-weight: bold;*/
     background: transparent;
     color: #666;
     font-size: 14px;
-    font-weight: bold;
     cursor: pointer;
+    display: inline;
 }
 .user_votes_on_issue {
-	position: absolute;
+	display: inline;
+	/*position: absolute;
 	top: 10px;
-	left: 45px;
+	left: 45px;*/
 }
 
 #agenda .icon-plus-minus, 
 #ordered .icon-plus-minus {
 	background: url('images/minus_action.png') no-repeat 50% 50%;
+	right: 0;
 }
 #available .icon-plus-minus,
 #voted_out .icon-plus-minus {
@@ -567,7 +574,6 @@ ul li.issue.oc_li a.addremove {
 
 .oc_detail_top {
 	padding: 0 15px;
-	border-bottom: 1px solid #d8d8d9;
 }
 
 .summary_box {
@@ -812,7 +818,7 @@ ul.prop-table {
 	width: 100%;
 	margin: 0;
 	padding: 0;
-	border: 1px solid #d8e0df;
+	border: 1px solid #edeed5;
 	background: #ffffff;
 	list-style-type: none;
 }
@@ -832,12 +838,12 @@ ul.proposals li.drag-icon {
 	width: 48px;
 	background-color: #e3e3e3;
 }
-ul:nth-child(even).proposals li.drag-icon {
+/*ul:nth-child(even).proposals li.drag-icon {
 	background-color: #cacccd;
 }
 ul:nth-child(odd).proposals li.drag-icon {
 	background-color: #dcddde;
-}
+}*/
 ul.proposals li.prop-title {
 	padding: .7em 15px 0 15px;
 	word-break: break-word;
@@ -968,6 +974,9 @@ ul.proposals li.prop-content p {
 	padding-top: 10px;
 	padding-bottom: 10px;
 }
+.userhtml {
+	font-size: 16px;
+}
 .issue_attachments ul {
 	list-style-type: none;
 	padding-right: 0;
@@ -1012,7 +1021,7 @@ h5 .fa {
 	display: table-cell;
 	width: 40px;
 	vertical-align: middle;
-	border-right: 1px solid #d8e0df;
+	/*border-right: 1px solid #d8e0df;*/
 }
 .check_box.checked {
 	background: url(images/proposal-check.png) no-repeat center;
@@ -1415,7 +1424,13 @@ li.btn-tab span {
 	padding: 5px 5px 5px 0;
 }
 #agenda li.issue.oc_li > a {
-	margin-left: 125px;
+	margin-left: 85px;
+	margin-right: 80px;
+	padding-bottom: 0;
+	font-size: 16px;
+}
+.empty-issue-info {
+	height: 10px;
 }
 .issues_list li,
 .meetings_list li {
@@ -1442,7 +1457,7 @@ li.btn-tab span {
 }
 .meetings_list li a:hover,
 .issues_list li a:hover {
-	color: #6C6C6E;
+	color: #FFFFFF;
 }
 .dropdown-menu > li > form {
 	display: block;
@@ -1729,7 +1744,7 @@ label[for=id_proposal-title] {
 		padding-bottom: 10px;
 	}
 	li.issue.oc_li > a {
-		margin: 0 40px 0 125px;
+		margin: 0 80px 0 85px;
 		padding-right: 0;
 		padding-left: 0;
 	}
