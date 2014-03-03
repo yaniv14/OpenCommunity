@@ -3,7 +3,9 @@
 
 <div>
     <div class="issue-top">
-        {% include "issues/_issue_title.html" %}
+        <div class="row">
+        	{% include "issues/_issue_title.html" %}
+    	</div>
     </div>
 
         <h2 class="filter-title pull-left">{% trans "Background" %}</h2>
@@ -27,7 +29,7 @@
                         {{ai.background|default_if_none:""|userhtml}}
                     </div>
                     {% if ai.attachments.count %}
-                        <ul style="clear: both; margin:0; list-style-type: none;">
+                        <ul style="clear: both; margin:0; list-style-type: none; padding: 0;">
                             {% for att in ai.attachments.all %}
                                 <li class="issue-attachments on filter-meeting-{{ai.meeting.id}} filter">
                                     <a href="{{ att.get_absolute_url }}" class="file_ext {{ att.get_icon }}">{{att.title}}</a>
@@ -50,7 +52,7 @@
           </div> 
 
           {% if object.current_attachments.count %}
-            <ul style="clear: both; margin:0; list-style-type: none;">
+            <ul style="clear: both; margin:0; list-style-type: none; padding: 0;">
               {% for att in object.current_attachments.all %}
                   <li class="issue-attachments filter-upcoming filter">
                       <a href="{{ att.get_absolute_url }}" class="file_ext {{ att.get_icon }}">{{att.title}}</a>
@@ -121,14 +123,14 @@
             {% endfor %}
             {% if cperms.issues.add_issuecomment and object.community.upcoming_meeting_started and object.is_upcoming %}
                 <li class="rich_editor filter-upcoming filter">
-                    <form id="add-comment" method="post">
+                    <form id="add-comment" method="post" style="position: relative;">
                         {% csrf_token %}
                         {{form}}
-                        <div class="col-xs-12 text-center rich_editor_box">
-                            <button class="add-comment-btn btn btn-oc btn-lg" disabled="1" style="width: 200px;">
+                        <!-- <div class="col-xs-12 text-center rich_editor_box"> -->
+                            <button class="add-comment-btn btn btn-oc btn-sm" disabled="1" style="position: absolute; top: -5px; left: 0;font-size: 14px; padding: 3px 8px">
                                 {% trans "Save" %}
                             </button>
-                        </div>
+                        <!-- </div> -->
                     </form>
                 </li>
             {% endif %}

@@ -101,7 +101,8 @@ ul.errorlist li {
 	padding: 20px 20px 10px 20px;
 }
 .modal-content {
-	background: url('images/background.jpg') repeat;
+	background: #666666;
+	/*background: url('images/background.jpg') repeat;*/
 }
 .modal-header {
 	background-image: url('images/title_bg.png');
@@ -116,6 +117,7 @@ ul.errorlist li {
 }
 .modal-footer {
 	margin-top: 0;
+	border-top: 0;
 }
 .form-group {
 	margin-bottom: 10px;
@@ -161,7 +163,8 @@ ul.errorlist li {
 .meeting-form-bg+.modal-dialog .modal-header,
 .issue-form-bg+.modal-dialog .modal-header,
 .proposal-form-bg+.modal-dialog .modal-header {
-	background-image: url('images/background.jpg');
+	background: #666666;
+	/*background-image: url('images/background.jpg');*/
 }
 .meeting-form-bg+.modal-dialog .modal-title,
 .meeting-form-bg+.modal-dialog .modal-header .close,
@@ -169,7 +172,7 @@ ul.errorlist li {
 .issue-form-bg+.modal-dialog .modal-header .close,
 .proposal-form-bg+.modal-dialog .modal-title,
 .proposal-form-bg+.modal-dialog .modal-header .close {
-	color: #6C6C6E;
+	color: #fff;
 }
 .participants-body-form .list-group-item:first-child {
 	border-top: 0;
@@ -301,7 +304,7 @@ ul.errorlist li {
 }
 .btn-comment {
 	width: auto;
-	height: 20px;
+	height: 24px;
 	cursor: pointer;
 	border-radius: 0;
 }
@@ -568,7 +571,7 @@ ul li.issue.oc_li a.addremove {
 }
 
 .issue-abstract {
-    padding: 5px 15px;
+    /*padding: 5px 15px;*/
     margin: 8px 0 5px 0;
 }
 
@@ -934,7 +937,7 @@ ul.proposals li.prop-content p {
 	/*background: #fff;*/
 	list-style-type: none;
 	margin-bottom: 1px;
-	border-bottom: 1px solid #ccc;
+	border-bottom: 1px solid #fff;
 }
 .comments .historic_comments > li:last-child,
 .comments > li:last-child {
@@ -1015,7 +1018,7 @@ h5 .fa {
 	display: table-cell;
 	width: 40px;
 	background: url(images/proposal-uncheck.png) no-repeat center;
-	border-right: 1px solid #d8e0df;
+	/*border-right: 1px solid #d8e0df;*/
 }
 .check_box_vote {
 	display: table-cell;
@@ -1025,9 +1028,11 @@ h5 .fa {
 }
 .check_box.checked {
 	background: url(images/proposal-check.png) no-repeat center;
+	background-size: 20px;
 }
 .check_box.rejected {
 	background: url(images/proposal-rejected.png) no-repeat center;
+	background-size: 20px;
 }
 .nohal {
 	position: absolute;

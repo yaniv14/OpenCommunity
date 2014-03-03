@@ -10,22 +10,24 @@
 {% endblock %}
 
 {% block page_header %}
-    {% if form.instance.id %}
-        {% trans "Edit Proposal" %}
-    {% else %}
-        {% trans "New Proposal" %}
-    {% endif %}
+    <ul id="proposal-type" class="nav nav-tabs">
+      <li><a href="#">{% trans "General" %}</a></li>
+      <li><a href="#">{% trans "Rule" %}</a></li>
+      <li><a href="#">{% trans "Task" %}</a></li>
+   </ul>
 {% endblock %}
 
 {% block header-end %}
 {% endblock %}
 
 {% block content %}
-    <ul id="proposal-type" class="nav nav-tabs">
-      <li><a href="#">{% trans "General" %}</a></li>
-      <li><a href="#">{% trans "Rule" %}</a></li>
-      <li><a href="#">{% trans "Task" %}</a></li>
-   </ul>
+    <h4 class="modal-title">
+    {% if form.instance.id %}
+        {% trans "Edit Proposal" %}
+    {% else %}
+        {% trans "New Proposal" %}
+    {% endif %}
+    </h4>
     {{ form }}
     
 <script>
