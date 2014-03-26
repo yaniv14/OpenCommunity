@@ -1,4 +1,5 @@
 import urlparse
+from communities.models import Community
 
 from django.contrib.auth import get_user_model
 from django.core.urlresolvers import reverse, resolve
@@ -7,6 +8,7 @@ from django.test.testcases import TestCase
 
 from communities.tests.common import create_sample_community
 from issues.models import Issue, Proposal, ProposalType
+from users.models import Membership
 
 User = get_user_model()
 
@@ -15,6 +17,12 @@ class IssuesUITest(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.community, cls.members, cls.chairmen = create_sample_community()
+
+    @classmethod
+    def tearDownClass(cls):
+        Membership.objects.all().delete()
+        Community.objects.all().delete()
+        User.objects.all().delete()
 
     def setUp(self):
         self.client = Client()
