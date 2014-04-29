@@ -105,8 +105,12 @@ ul.errorlist li {
 	/*background: url('images/background.jpg') repeat;*/
 }
 .modal-header {
-	background-image: url('images/title_bg.png');
+	/*background-image: url('images/title_bg.png');*/
 	border-radius: 6px 6px 0 0;
+	color: #ffffff;
+}
+.modal-header.wide-header {
+	padding-bottom: 15px !important;
 }
 .modal-title {
 	color: #fff;
@@ -164,6 +168,7 @@ ul.errorlist li {
 .issue-form-bg+.modal-dialog .modal-header,
 .proposal-form-bg+.modal-dialog .modal-header {
 	background: #666666;
+	padding-bottom: 0;
 	/*background-image: url('images/background.jpg');*/
 }
 .meeting-form-bg+.modal-dialog .modal-title,
@@ -1454,15 +1459,18 @@ li.btn-tab span {
 }
 .meetings_list li a,
 .issues_list li a {
-	color: #FFFFFF;
 	display: block;
 	margin-left: 15px;
-	border-bottom: 1px solid #999999;
+	border-bottom: 1px solid #cdcdcd;
 	padding: 10px 10px 10px 0;
 }
-.meetings_list li a:hover,
+.meetings_list li a,
+.meetings_list li a:hover {
+	color: #ffffff;
+}
+.issues_list li a,
 .issues_list li a:hover {
-	color: #FFFFFF;
+	color: #666;
 }
 .dropdown-menu > li > form {
 	display: block;
@@ -1519,11 +1527,17 @@ li.btn-tab span {
 }
 #issue-detail-siblings .nav-tabs > li,
 #issue-detail .nav-tabs > li {
-	background: #eeeeee;
+	background: transparent;
 	margin: 0 1px;
 }
-#proposal-type li a {
+#proposal-type li.active a {
 	color: #6C6C6E;
+}
+#proposal-type li a {
+	color: #ffffff;
+}
+#upcoming-meeting #proposal-type li a {
+	color: #555555;
 }
 label[for=id_proposal-title] {
 	padding-top: 20px;
@@ -1636,6 +1650,16 @@ label[for=id_proposal-title] {
 .twitter-typeahead {
 	width: 100%;
 	direction: rtl !important;
+}
+.nav > li > a:hover, .nav > li > a:focus {
+	background-color: transparent;
+	border: 0;
+}
+
+/* Navbar */
+
+.nav-tabs {
+	border-bottom: 0;
 }
 
 /* Footer */

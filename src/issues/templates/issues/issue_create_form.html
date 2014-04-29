@@ -13,6 +13,8 @@
 <div class="issue-form-bg"></div>
 {% endblock %}
 
+{% block wide_header %}wide-header{% endblock %}
+
 {% block content %}
     {% csrf_token %}
     {{form}}
