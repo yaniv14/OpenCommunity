@@ -15,20 +15,47 @@
 	        {% if object.status == object.statuses.ACCEPTED or object.status == object.statuses.REJECTED %}
 	            <div class="{{object.get_status_class}}">
 	                
-	                {% if object.status == object.statuses.ACCEPTED %}
-	                    <i class="fa fa-check-circle"></i> {% trans "Proposal accepted" %}!
-	                {% endif %}
-	                {% if object.status == object.statuses.REJECTED %}
-	                    <i class="fa fa-times-circle"></i> {% trans "Proposal rejected" %}!
-	                {% endif %}
+					{% if object.status == object.statuses.ACCEPTED %}
+						{% if object.is_task and not object.can_vote %}
+							{% if object.task_completed %}
+								<i class="fa fa-check-square-o"></i> {% trans "Task completed" %}!
+							{% else %}
+								<i class="fa fa-square-o"></i> {% trans "Open task!" %}
+							{% endif %}
+						{% else %}
+							<i class="fa fa-check-circle"></i> {% trans "Proposal accepted" %}!
+						{% endif %}
+					{% endif %}
+
+					{% if object.status == object.statuses.REJECTED %}
+						<i class="fa fa-times-circle"></i> {% trans "Proposal rejected" %}!
+					{% endif %}
 	                
-	                {% if object.decided_at_meeting %}
-	                	<a href="{{ object.decided_at_meeting.get_absolute_url }}" class="text-center" style="display: block;">({{ object.decided_at_meeting.get_title_or_date }})</a>
-	                {% endif %}
-	        
 	                {% if object.can_vote and cperms.issues.acceptopen_proposal %}
 	                    <a href="#" class="unaccept btn btn-warning btn-md" data-value="{{object.statuses.IN_DISCUSSION}}">{% trans "Cancel approval" %}</a>
 	                {% endif %}
+
+					{% if not object.can_vote and object.is_task %}
+						{% if cperms.issues.edittask_proposal or object.assigned_to_user == user %}
+							<form class="form-inline" role="form" id="task-completed-form" method="post" action="{% url 'task_completed' community_id=community.id  issue_id=object.issue.id pk=object.id %}" style="margin: 5px 0; display: inline-block;">
+								{% csrf_token %}
+								{% if object.task_completed %}
+									<button class="btn btn-default btn-sm" name="completed" value="0">
+										{% trans "Open task" %}
+									</button>
+								{% else %}
+									<button class="btn btn-oc btn-sm" name="completed" value="1">
+										{% trans "Complete task" %}
+									</button>
+								{% endif %}
+							</form>
+						{% endif %}
+					{% endif %}
+
+	                {% if object.decided_at_meeting %}
+	                	<a href="{{ object.decided_at_meeting.get_absolute_url }}" class="text-center" style="display: block;">({{ object.decided_at_meeting.get_title_or_date }})</a>
+	                {% endif %}
+
 	            </div>
 	        {% endif %}
 	    {% endif %}
@@ -48,21 +75,35 @@
     </div>
 	<div class="oc_detail_top row clear" style="margin-right: -5px;margin-left: -5px;border:0;background: none;">
         <div class="pull-left">
-            <h5><i class="fa fa-user"></i> {% trans "By:" %} {{ object.created_by }}. {{ object.created_at|date:"d/m/Y" }}&nbsp;&nbsp;</h5>
+            <h5>
+			    {% if object.type == 1 %}
+	                <i class="fa fa-list"></i> {% trans "Task" %}
+			    {% elif object.type == 2 %}
+	                <i class="fa fa-book"></i> {% trans "Rule" %}
+			    {% elif object.type == 3 %}
+	                <i class="fa fa-file"></i> {% trans "General" %}
+		    	{% endif %}
+            	<i class="fa fa-user"></i> {% trans "By:" %} {{ object.created_by }}. {{ object.created_at|date:"d/m/Y" }}&nbsp;&nbsp;
+        	</h5>
         </div>
         {% if object.type == 1 %}
             {% if object.assigned_to %}
     			<div class="pull-left">
-              <h5><i class="fa fa-hand-o-left"></i> {% trans "Assigned to" %}: {{ object.assigned_to }}&nbsp;&nbsp;</h5>
+              <h5><i class="fa fa-hand-o-{% if LANGUAGE_CODE == 'he' %}left{% else %}right{% endif %}"></i> {% trans "Assigned to" %}: {{ object.assigned_to }}&nbsp;&nbsp;</h5>
 	        	</div>
             {% if object.assigned_to and object.due_by %}{% endif %}
             {% endif %}
             {% if object.due_by %}
     			  <div class="pull-left">
-                    <h5><i class="fa fa-calendar"></i> {% trans "Due by" %}: {{ object.due_by|date:"d/m/Y" }}</h5>
+                    <h5><i class="fa fa-calendar"></i> {% trans "Due by" %}: {{ object.due_by|date:"d/m/Y" }}&nbsp;&nbsp;</h5>
 	        	</div>
             {% endif %}
         {% endif %}
+	    {% if object.type == 2 and object.tags.count %}
+			<div class="pull-left">
+                <h5><i class="fa fa-tags"></i> {% trans "Tags" %}: {{ object.tags.names|join:", " }}</h5>
+        	</div>
+    	{% endif %}
     	<div class="col-xs-12" style="border-top: 1px solid; clear: both;margin-bottom: 10px;"></div>
 		<h5 style="clear: both;">
 		    {% if object.content %}
@@ -74,119 +115,29 @@
 
     {% with proposal=object c=proposal.issue.community %}
         {% if proposal.can_straw_vote and cperms.issues.vote and user|member_of:c %}
-            {% include 'issues/_vote.html' %}
+            {% include 'issues/_straw_vote.html' %}
         {% endif %}
         {% if proposal.can_show_straw_votes %}
-            <div id="results_container">
+            <div id="results_container" class="clear">
+            	<h2>{% trans "Straw vote result" %}</h2>
                 {% include 'issues/_proposal_vote_results.html' %}
             </div>
+        {% endif %}
+        {% if can_board_vote_self and not proposal.decided %}
+            {% include 'issues/_board_vote_self.html' %}
         {% endif %}
 	{% endwith %}
 	
 	{% if show_board_vote_result %}
-	  <div class="board_vote clearfix">
-		<div class="col-xs-4 prop-infavor">
-			<h4>{% trans "Pro" %}</h4>
-			<p>
-				{{ proposal|board_by_vote:'pro'|length }} - {% widthratio proposal|board_by_vote:'pro'|length object|board_votes_count 100 %}%
-			</p>
-			<ul>
-  				{% for u in proposal|board_by_vote:'pro' %}
-				<li>
-			      {{ u.display_name }}
-				</li>
-				{% endfor %}
-			</ul>
-		</div>
-		<div class="col-xs-4 prop-nutral">
-			<h4>{% trans "Neutral" %}</h4>
-			<p>
-				{{ proposal|board_by_vote:'neut'|length }} - {% widthratio proposal|board_by_vote:'neut'|length object|board_votes_count 100 %}%
-			</p>
-			<ul>
-  				{% for u in proposal|board_by_vote:'neut' %}
-				<li>
-			      {{ u.display_name }}
-				</li>
-				{% endfor %}
-			</ul>
-		</div>
-		<div class="col-xs-4 prop-against">
-			<h4>{% trans "Con" %}</h4>
-			<p>
-				{{ proposal|board_by_vote:'con'|length }} - {% widthratio proposal|board_by_vote:'con'|length object|board_votes_count 100 %}%
-			</p>
-			<ul>
-  				{% for u in proposal|board_by_vote:'con' %}
-				<li>
-			      {{ u.display_name }}
-				</li>
-				{% endfor %}
-			</ul>
-    </div>
-    </div>  
+			<h2 class="clear">{% trans "Vote by the" %} {{ object.issue.community.board_name|default:_("Board") }}</h2>
+			{% include 'issues/_board_vote_res.html' %}
 	{% endif %}
-	{% if cperms.issues.proposal_board_vote and chairman_can_vote %}
-	  <div class="board_vote clearfix">
-		<div class="col-xs-12 clearfix" style="border-bottom: 1px solid">
-			<div class="col-xs-4"></div>
-			<div class="col-xs-8">
-				<div class="col-xs-4 text-center" style="background: #a4cb53;">
-					<h5 style="margin:5px 0">
-						<button class="btn btn-default btn-sm all-pro" data-value="pro" data-href="{% url 'vote_on_proposal' community_id=community.id pk=proposal.id %}">{% trans "Pro" %}</button>
-					</h5>
-				</div>
-				<div class="col-xs-4 text-center" style="background: #ffffff;">
-					<h5 style="margin:5px 0">
-						<button class="btn btn-default btn-sm all-neutral" data-value="reset" data-href="{% url 'vote_on_proposal' community_id=community.id pk=proposal.id %}">{% trans "Neutral" %}</button>
-					</h5>
-				</div>
-				<div class="col-xs-4 text-center" style="background: #d95e59;">
-					<h5 style="margin:5px 0">
-						<button class="btn btn-default btn-sm all-con" data-value="con" data-href="{% url 'vote_on_proposal' community_id=community.id pk=proposal.id %}">{% trans "Con" %}</button>
-					</h5>
-				</div>
-			</div>
-		</div>
-		{% for key, val in board_votes.per_user.items %}
-			<div class="col-xs-12 clearfix user_vote_line"{% if forloop.last %} style="border-bottom: 1px solid;"{% endif %}>
-				<div class="col-xs-4">
-					{{ key.display_name }}
-				</div>
-				<div class="col-xs-8">
-					<div class="col-xs-4 text-center" style="background: #a4cb53;">
-						<div class="radio-inline">
-							<label>
-								<input type="radio" data-href="{% url 'vote_on_proposal' community_id=community.id pk=proposal.id %}" name="votesRadios{{key.id}}" value="pro" {% if val == 1 %}checked="checked"{% endif %}>
-							</label>
-						</div>
-					</div>
-					<div class="col-xs-4 text-center" style="background: #ffffff;">
-						<div class="radio-inline">
-							<label>
-								<input type="radio" data-href="{% url 'vote_on_proposal' community_id=community.id pk=proposal.id %}" name="votesRadios{{key.id}}" value="reset" {% if val == 0 %}checked="checked"{% endif %}>
-							</label>
-						</div>
-					</div>
-					<div class="col-xs-4 text-center" style="background: #d95e59;">
-						<div class="radio-inline">
-							<label>
-								<input type="radio" data-href="{% url 'vote_on_proposal' community_id=community.id pk=proposal.id %}" name="votesRadios{{key.id}}" value="con" {% if val == -1 %}checked="checked"{% endif %}>
-							</label>
-						</div>
-					</div>
-				</div>
-			</div>
-		{% endfor %}
-		<div class="col-xs-12 clearfix">
-			<div class="col-xs-4"></div>
-			<div id="member_vote_sum" class="col-xs-8">
-				{% with proposal=object %}
-				{% include 'issues/_member_vote_sum.html' %}
-				{% endwith %}
-			</div>
-		</div>
-    </div>
+  {% if cperms.issues.proposal_board_vote and chairman_can_vote %}
+  <h2 class="clear" style="margin-right: 10px;"><input type="checkbox" id="reg_board_vote" 
+    data-url="{% url 'set_register_votes' community_id=community.id  issue_id=object.issue.id pk=object.id %}"    
+    {% if object.register_board_votes %}checked="checked"{% endif %} />
+      {% trans "Vote by the" %} {{ object.issue.community.board_name|default:_("Board") }}</h2>
+      {% include "issues/_chairman_vote.html" %}
 	{% endif %}
 	
     {% if object.can_vote and cperms.issues.acceptopen_proposal %}

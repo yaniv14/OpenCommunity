@@ -29,23 +29,30 @@ class CommunitiesTest(TestCase):
         pass
 
 
-    def test_homepage_annonymous(self):
-        response = self.client.get(reverse('home'))
+    def test_search_annonymous_public(self):
+        response = self.client.get(reverse('community_search',kwargs={'pk':self.c1.pk}))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, self.c1.name)
-        self.assertNotContains(response, self.c2.name)
 
-    def test_homepage_member(self):
+    def test_search_annonymous_private(self):
+        response = self.client.get(reverse('community_search',kwargs={'pk':self.c2.pk}))
+        self.assertEqual(response.status_code, 302)
+
+    def test_search_member_public(self):
         self.client.login(email=self.c2member.email, password='secret')
-        response = self.client.get(reverse('home'))
+        response = self.client.get(reverse('community_search',kwargs={'pk':self.c1.pk}))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, self.c1.name)
-        self.assertContains(response, self.c2.name)
 
-    def test_homepage_not_a_member(self):
+    def test_search_member_private(self):
+        self.client.login(email=self.c2member.email, password='secret')
+        response = self.client.get(reverse('community_search',kwargs={'pk':self.c2.pk}))
+        self.assertEqual(response.status_code, 200)
+
+    def test_search_not_a_member_public(self):
         self.client.login(email=self.not_a_member.email, password='secret')
-        response = self.client.get(reverse('home'))
+        response = self.client.get(reverse('community_search',kwargs={'pk':self.c1.pk}))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, self.c1.name)
-        self.assertNotContains(response, self.c2.name)
 
+    def test_search_not_a_member_private(self):
+        self.client.login(email=self.not_a_member.email, password='secret')
+        response = self.client.get(reverse('community_search',kwargs={'pk':self.c2.pk}))
+        self.assertEqual(response.status_code, 403)

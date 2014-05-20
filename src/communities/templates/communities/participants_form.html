@@ -3,8 +3,8 @@
 
 {% block page_header %}
     <span class="participant-title">
-    	<span class="select-participants"{% if not object.full_participants.count %} style="display: none;"{% endif %}>{% trans "Select Participants" %} <button type="button" class="btn btn-default">{% trans "List" %}</button></span>
-    	<span class="list-of-participants"{% if object.full_participants.count %} style="display: none;"{% endif %}>{% trans "List of Participants" %} <button type="button" class="btn btn-default">{% trans "Edit" %}</button></span>
+    	<span class="select-participants"{% if not object.full_participants.count %} style="display: none;"{% endif %}>{% trans "Select participants" %} <button type="button" class="btn btn-default">{% trans "List" %}</button></span>
+    	<span class="list-of-participants"{% if object.full_participants.count %} style="display: none;"{% endif %}>{% trans "List of participants" %} <button type="button" class="btn btn-default">{% trans "Edit" %}</button></span>
 	</span>
 {% endblock %}
 
@@ -49,15 +49,8 @@
 			<div class="row">
 				<div class="form-group">
 					<div class="col-xs-12">
-						<div class="input-group">
-							<input type="text" class="form-control" id="add_member"/>
-					    	<span class="input-group-btn">
-								<button type="button" class="btn btn-default disabled" id="add_member_btn">
-									{% trans "Add" %}
-								</button>
-							</span>
-    					</div>
-					</div>
+                        <input type="text" class="form-control" id="add_member"/>
+                    </div>
 				</div>
 			</div>
 			{% if object.previous_members_participations.count %}
@@ -146,9 +139,15 @@
 		{% endif %}
 		{% if object.meeting_participants.board %}
 		<div class="panel-heading">
-			<h3 class="panel-title">{% trans "Board" %}</h3>
+      <h3 class="panel-title">{{ object.board_name }}</h3>
 		</div>
 		<ul class="list-group">
+			{% for chairman in object.meeting_participants.chairmen %}
+			  <li class="list-group-item clearfix">
+          <span style="line-height: 2;">{{ chairman.display_name }}</span>
+			  </li>
+      {% endfor %}
+
 			{% for board in object.meeting_participants.board %}
 			<li class="list-group-item clearfix">
 				<span style="line-height: 2;">{{ board.display_name }}</span>

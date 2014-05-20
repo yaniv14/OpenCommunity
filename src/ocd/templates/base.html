@@ -5,7 +5,9 @@
 
         <meta charset="utf-8">
 
-        <title>{% trans "Open Community" %}</title>
+        {% block title %}
+        	<title>{% trans "DemOS" %}</title>
+        {% endblock %}
 
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -37,22 +39,22 @@
                     {% endif %}
                     <div class="col-xs-12">
                         <h2>
-                            {% block page_header %}{% trans "Page Title" %}{% endblock %}
+                            {% block page_header %}{% trans "Page title" %}{% endblock %}
                         </h2>
                         {% block content %}
                         {% endblock %}
                     </div>
                 </div>
             </div>
-    
+
             <div data-role="popup" id="popup" data-dismissible="true" style="display:none">
                 <div data-role="header" data-theme="a" class="ui-bar-a ui-corner-top ui-header">
                     <h3>{% trans "Attention" %}</h3>
                 </div>
                 <div data-role="content" data-theme="d" class="ui-corner-bottom ui-content">
-    
+
                     <div id="popup-content"></div>
-    
+
                     <a href="#" data-role="button" data-rel="back"
                     data-theme="c">{% trans "Close" %}</a>
                 </div>
@@ -64,7 +66,27 @@
 
         {% block dialogs %}
         {% endblock %}
-
+		<footer class="footer">
+			<div class="container">
+				<p class="pull-right">
+					<a href="{% url 'about' %}">{% trans "About" %}</a>
+					&nbsp;|&nbsp;
+					<a href="#">{% trans "Back to top" %}</a>
+				</p>
+				<p>
+					<a href="http://www.hasadna.org.il" style="vertical-align: top;"> <canvas class="hasadnaLogo" width="16" height="16"></canvas> <span class="hidden-footer" style="vertical-align: top;">{% trans "An eKnight" %} </span>{% trans "from Hasadna" %} </a>
+				</p>
+				{% if version %}
+				<p class="version text-center">
+					{% trans "Version" %}: <span dir="ltr">{{ version }}</span>
+				</p>
+				{% else %}
+				<p class="version text-center">
+					{% trans "DEVELOPMENT SERVER" %}
+				</p>
+				{% endif %}
+			</div>
+		</footer>
         <script>
             OCD = {
                 language: '{{ LANGUAGE_CODE }}',
@@ -79,6 +101,7 @@
         <script src="{{ STATIC_URL }}js/forms.js"></script>
         <script src="{{STATIC_URL}}bootstrap-wysihtml5/wysihtml5-0.4.0-oc.js"></script>
         <script src="{{STATIC_URL}}bootstrap-wysihtml5/bootstrap-wysihtml5.js"></script>
+        <script src="https://s3-eu-west-1.amazonaws.com/hasadna-design/hasadnaLogo.min.js" type="text/javascript"></script>
         {% if LANGUAGE_CODE == 'he' %}
             <script src="{{STATIC_URL}}bootstrap-wysihtml5/locales/bootstrap-wysihtml5.he-IL.js"></script>
         {% endif %}
@@ -88,8 +111,15 @@
             $(function(){
                 $('.main-page').show();
                 $('body').trigger('ocd.show');
+				$('.search-icon').on('click', function() {
+					$('input').blur();
+					$('#toggle-search').toggleClass('hidden');
+					$('#toggle-search input').focus();
+				});
             });
         </script>
-
+        {% if not debug %}
+        {% include 'analytics/base.html' %}
+        {% endif %}
     </body>
 </html>

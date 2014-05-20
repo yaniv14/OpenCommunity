@@ -1,32 +1,5 @@
 "use strict";
 
-function refreshProposalForm() {
-
-    // prevent html5 required field
-    $('#id_proposal-title').prop('disabled', $('#id_proposal-type').val() == '');
-
-    // hide task related fields
-    var el = $('#proposal-section');
-    //var els1 = $('#id_proposal-content').parent().parent().parent().parent();
-    if ($('#id_proposal-type').val() == '') {
-        el.hide();
-        //els1.hide();
-        $('#id_proposal-title,#id_proposal-type').removeAttr('required');
-    } else {
-        el.show();
-        //els1.show();
-        $('#id_proposal-title,#id_proposal-type').prop('required', true);
-    }
-
-    // hide task related fields
-    var els = $('#id_proposal-assigned_to,#id_proposal-due_by').parent().parent();
-    if ($('#id_proposal-type').val() == '1') {
-        els.show();
-    } else {
-        els.hide();
-    }
-
-}
 
 /* use tabs instead of drop down for proposal type */
 function init_proposal_tabs(with_issue) {
@@ -45,7 +18,7 @@ function init_proposal_tabs(with_issue) {
         var type_select = $('#id_proposal-type');
         var proposal_controls = $('#id_proposal-content,#id_proposal-title').closest('.form-group');
         var task_controls = $('#id_proposal-assigned_to,#id_proposal-due_by').closest('.form-group');
-
+        var tags_control = $('#id_proposal-tags').closest('.form-group'); 
         var selected_idx = $(this).index();
         if (!with_issue) {
             selected_idx += 1;
@@ -54,18 +27,22 @@ function init_proposal_tabs(with_issue) {
             type_select.val('');
             proposal_controls.hide();
             task_controls.hide();
+            tags_control.hide();
             $("[id^='id_proposal']").prop('required', false);
         } else {
             proposal_controls.show();
             if (selected_idx == IDX_ADMIN) {
                 type_select.val(TYPE_ADMIN);
                 task_controls.hide();
+                tags_control.hide();
             } else if (selected_idx == IDX_RULE) {
                 type_select.val(TYPE_RULE);
                 task_controls.hide();
+                tags_control.show();
             } else if (selected_idx == IDX_TASK) {
                 type_select.val(TYPE_TASK);
                 task_controls.show();
+                tags_control.hide();
             }
             proposal_controls.prop('required', true);
         }

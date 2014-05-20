@@ -1,4 +1,4 @@
 {% load i18n community_tags%}
 {% autoescape off %}
-{{community}} - {{community.board_name}}: {% if community.upcoming_meeting_scheduled_at %}{% trans "Upcoming Agenda For" %} {{community|display_upcoming_time}}{% else %}{% trans "Upcoming Agenda" %}{% endif %}{% if community.upcoming_meeting_title %} - {{community.upcoming_meeting_title}}{% endif %}{% if upcoming_meeting_version > 1 %} ({% trans "Version" %} {{community.upcoming_meeting_version}}){% endif %}
+{{community}} - {{community.board_name}}: {% if community.upcoming_meeting_scheduled_at %}{% trans "Upcoming agenda for" %} {{community|display_upcoming_time}}{% else %}{% trans "Upcoming agenda" %}{% endif %}{% if community.upcoming_meeting_title %} - {{community.upcoming_meeting_title}}{% endif %}{% if upcoming_meeting_version > 1 %} ({% trans "Version" %} {{community.upcoming_meeting_version}}){% endif %}
 {% endautoescape %}

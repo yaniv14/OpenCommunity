@@ -1,6 +1,6 @@
 from contextlib import contextmanager
 from fabric.api import *
-from fabric.contrib.files import upload_template, uncomment
+from fabric.contrib.files import upload_template, append
 import os.path
 
 PROJ_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -12,6 +12,7 @@ env.code_dir = '~/OpenCommunity/'
 env.venv_command = '. bin/activate'
 env.log_dir = '/var/log/opencommunity/'
 env.clone_url = "https://github.com/hasadna/OpenCommunity.git"
+env.pip_version = "1.5.4"
 
 
 @contextmanager
@@ -67,11 +68,38 @@ def yaniv():
 
 
 @task
+def paul():
+    env.gunicorn_port = 9013
+    env.user = 'paul'
+    env.github_user = 'pwalsh'
+    qa()
+
+
+@task
 def prod():
     env.hosts = ['oc@ny1.opencommunity.org.il']
     env.redirect_host = 'opencommunity.org.il'
     env.venv_command = '. ~/.virtualenvs/oc/bin/activate'
     env.pidfile = '/home/oc/OpenCommunity/src/masterpid'
+
+
+@task
+def enprod():
+    env.user = "en"
+
+    env.code_dir = '/home/%s/OpenCommunity/' % env.user
+    env.venv_dir = '%svenv/' % env.code_dir
+    env.venv_command = '. venv/bin/activate'
+    env.log_dir = '%slogs/' % env.code_dir
+
+    env.vhost = 'en.demos.org.il'
+    env.redirect_host = 'www.%s' % env.vhost
+    env.hosts = [env.vhost]
+
+    env.ocuser = "weben"
+    env.pidfile = '/home/%s/web.pid' % env.ocuser
+
+    env.gunicorn_port = 9001
 
 
 @task
@@ -98,7 +126,14 @@ def reload_app():
 
 
 @task
+def upgrade_pip():
+    with virtualenv(env.code_dir):
+        run("pip install pip=={}".format(env.pip_version))
+
+
+@task
 def deploy(restart=True):
+    upgrade_pip()
     with virtualenv(env.code_dir):
         run("git pull")
         run("pip install -r requirements.txt")
@@ -108,8 +143,8 @@ def deploy(restart=True):
         run("cd src && python manage.py collectstatic --noinput")
         run("git log -n 1 --format=\"%ai %h\" > static/version.txt")
         run("git log -n 1 > static/version-full.txt")
-        if restart:
-            reload_app()
+    if restart:
+        reload_app()
 
 
 @task
@@ -127,22 +162,23 @@ def very_hard_reload():
 def log():
     run("tail %s*" % env.log_dir)
 
+
 APT_PACKAGES = [
-                'postgresql',
-                'nginx',
-                'supervisor',
-                'python',
-                'virtualenvwrapper',
-                'git',
-                'python-dev',
-                'libpq-dev',
-                'libjpeg-dev',
-                'libjpeg8',
-                'zlib1g-dev',
-                'libfreetype6',
-                'libfreetype6-dev',
-                'postfix',
-                ]
+    'postgresql',
+    'nginx',
+    'supervisor',
+    'python',
+    'virtualenvwrapper',
+    'git',
+    'python-dev',
+    'libpq-dev',
+    'libjpeg-dev',
+    'libjpeg8',
+    'zlib1g-dev',
+    'libfreetype6',
+    'libfreetype6-dev',
+    'postfix',
+]
 
 
 @task
@@ -157,7 +193,8 @@ def create_ocuser_and_db():
     run("sudo adduser %s --gecos '' --disabled-password" % env.ocuser)
     run("sudo -iu postgres createuser %s -S -D -R" % env.ocuser)
     run("sudo -iu postgres createdb %s -O %s" % (env.ocuser, env.ocuser))
-    run("sudo -iu postgres psql -c \"alter user %s with password '%s';\"" % (env.ocuser, env.ocuser))
+    run("sudo -iu postgres psql -c \"alter user %s with password '%s';\"" % (
+    env.ocuser, env.ocuser))
 
 
 @task
@@ -179,22 +216,21 @@ def create_local_settings():
 @task
 def nginx_setup():
     with cd(env.code_dir):
-
         upload_template('nginx.conf.template',
                         env.code_dir + 'conf/nginx.conf',
                         {
-                         'host': env.vhost,
-                         'redirect_host': env.redirect_host,
-                         'dir': env.code_dir,
-                         'port': env.gunicorn_port,
-                         }, use_jinja=True, template_dir=CONF_DIR)
+                            'host': env.vhost,
+                            'redirect_host': env.redirect_host,
+                            'dir': env.code_dir,
+                            'port': env.gunicorn_port,
+                        }, use_jinja=True, template_dir=CONF_DIR)
         nginx_conf1 = '/etc/nginx/sites-available/%s.conf' % env.ocuser
         nginx_conf2 = '/etc/nginx/sites-enabled/%s.conf' % env.ocuser
 
-#       FIXME
-#       uncomment('/etc/nginx/nginx.conf',
-#                 'server_names_hash_bucket_size\s+64',
-#                 use_sudo=True)
+        #       FIXME
+        #       uncomment('/etc/nginx/nginx.conf',
+        #                 'server_names_hash_bucket_size\s+64',
+        #                 use_sudo=True)
 
         run('sudo ln -fs %sconf/nginx.conf %s' % (env.code_dir, nginx_conf1))
         run('sudo ln -fs %s %s' % (nginx_conf1, nginx_conf2))
@@ -209,10 +245,10 @@ def gunicorn_setup():
         upload_template('server.sh.template',
                         env.code_dir + 'server.sh',
                         {
-                         'venv': env.venv_dir,
-                         'port': env.gunicorn_port,
-                         'pidfile': env.pidfile,
-                         }, mode=0777, use_jinja=True, template_dir=PROJ_DIR)
+                            'venv': env.venv_dir,
+                            'port': env.gunicorn_port,
+                            'pidfile': env.pidfile,
+                        }, mode=0777, use_jinja=True, template_dir=PROJ_DIR)
 
 
 @task
@@ -221,12 +257,13 @@ def supervisor_setup():
         upload_template('supervisor.conf.template',
                         env.code_dir + 'conf/supervisor.conf',
                         {
-                         'dir': env.code_dir,
-                         'ocuser': env.ocuser,
-                         'logdir': env.log_dir,
-                         }, mode=0777, use_jinja=True, template_dir=CONF_DIR)
+                            'dir': env.code_dir,
+                            'ocuser': env.ocuser,
+                            'logdir': env.log_dir,
+                        }, mode=0777, use_jinja=True, template_dir=CONF_DIR)
 
-        run('sudo ln -fs %sconf/supervisor.conf /etc/supervisor/conf.d/%s.conf'
+        run(
+            'sudo ln -fs %sconf/supervisor.conf /etc/supervisor/conf.d/%s.conf'
             % (env.code_dir, env.ocuser))
         run("sudo supervisorctl reread")
         run("sudo supervisorctl update")
@@ -255,19 +292,46 @@ def initial_project_setup():
 
 @task
 def createsuperuser():
+    """ Creates a Django superuser for the project """
     with virtualenv(env.code_dir):
         run("cd src && python manage.py createsuperuser")
 
 
 @task
 def supervisor_status():
+    """ Show server's supoervisord status """
     run("sudo supervisorctl status")
 
 
 @task
 def switch(branch):
+    """ fetches all branchs, and checkouts the specified git branch """
     with cd(env.code_dir):
         run('git fetch origin')
         run('git checkout {}'.format(branch))
         deploy()
 
+
+@task
+def showkeys():
+    """ Displays authorized public ssh keys for user """
+    with hide('stdout'):
+        keys = run('cat .ssh/authorized_keys')
+    print keys
+
+
+@task
+def push_key(key_file):
+    """ Appends an ssh public key file from the specified file
+    """
+    with open(key_file) as f:
+        key_text = f.read()
+    append('~/.ssh/authorized_keys', key_text)
+
+
+@task
+def rebuild_index():
+    """Rebuilds haystack search indexes for project"""
+    with virtualenv(env.code_dir):
+        run("cd src && python manage.py rebuild_index --noinput")
+        run("sudo chown -v {} whoosh_index whoosh_index/*".format(env.ocuser))

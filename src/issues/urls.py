@@ -1,13 +1,14 @@
 from django.conf.urls import patterns, url
 from issues import views
 
-
 urlpatterns = patterns('',
 
     url(r'^$', views.IssueList.as_view(), name="issues"),
 
     url(r'^create/$', views.IssueCreateView.as_view(), name="issue_create"),
+
     url(r'^upcoming-create/$', views.IssueCreateView.as_view(upcoming=True),
+
                                 name="issue_create_upcoming"),
 
     url(r'^(?P<pk>\d+)/$', views.IssueDetailView.as_view(), name="issue"),
@@ -50,6 +51,9 @@ urlpatterns = patterns('',
     url(r'^(?P<issue_id>\d+)/(?P<pk>\d+)/delete/$',
         views.ProposalDeleteView.as_view(), name="proposal_delete"),
 
+    url(r'^(?P<issue_id>\d+)/(?P<pk>\d+)/task_completed/$',
+        views.ProposalCompletedTaskView.as_view(), name="task_completed"),
+
     url(r'^(?P<issue_id>\d+)/(?P<pk>\d+)/edit-task/$',
         views.ProposalEditTaskView.as_view(), name="proposal_edit_task"),
 
@@ -67,4 +71,18 @@ urlpatterns = patterns('',
 
     url(r'^vote_res_panel/(?P<pk>\d+)/$',
         views.VoteResultsView.as_view(), name="vote_results_panel"),
+
+    url(r'^(?P<issue_id>\d+)/set_register_votes/(?P<pk>\d+)/$',
+        views.ChangeBoardVoteStatusView.as_view(), name="set_register_votes"),
+
+    url(r'^autocomplete_tag/$',
+        views.AutoCompleteTagView.as_view(), name="autocomplete_tag"),
+
+    url(r'^assignments/$',
+        views.AssignmentsView.as_view(), name="assignments"),
+
+    url(r'^procedures/$',
+        views.ProceduresView.as_view(), name="procedures"),
+    
+
 )

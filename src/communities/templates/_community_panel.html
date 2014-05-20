@@ -1,6 +1,6 @@
 {% load i18n %}
 
-<li class="hidden-xs" style="width: 50px;height: 40px;"></li>
+<!-- <li class="hidden-xs" style="width: 50px;height: 40px;"></li> -->
 
 {% if cperms.issues.viewopen_issue %}
     <li><a {% if pill == 'issues' %}class="active"{% endif %} href="{% url 'issues' community.id %}">{% trans "Issues" %}</a></li>
@@ -17,6 +17,13 @@
     <li><a href="{% url 'history' community.id %}">{% trans "History" %}</a></li>
 {% endif %}
 {% endcomment %}
+
+{% if cperms.issues.viewopen_issue %}
+    <li class="just_slash hidden-xs">/</li>
+    <li><a href="{% url 'procedures' community.id %}">{% trans "Rules" %}</a></li>
+    <li class="just_slash hidden-xs">/</li>
+    <li><a href="{% url 'assignments' community.id %}">{% trans "Tasks" %}</a></li>
+{% endif %}
 
 {% if cperms.community.invite_member %}
     <li class="just_slash hidden-xs">/</li>

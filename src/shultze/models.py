@@ -5,6 +5,8 @@ from pyvotecore.condorcet import CondorcetHelper
 from pyvotecore.schulze_by_graph import SchulzeNPRByGraph
 from pyvotecore.schulze_method import SchulzeMethod #TODO: remove this when iteritems bug is solved
 import itertools
+from collections import defaultdict
+import math
 
 # Not a django model!
 class PyVoteCoreAssistance(CondorcetHelper):
@@ -150,10 +152,51 @@ class IssuesGraph(models.Model):
             edges_dict[(edge.from_node.issue_id, edge.to_node.issue_id)] = edge.weight
         return edges_dict
     
-    def get_schulze_npr_results(self):
-        input = self.get_edges_dict()
-        output = SchulzeNPRByGraph(input).as_dict()
+    def get_schulze_npr_results(self, winner_threshold=None, tie_breaker=None, ballot_notation=None):
+        edges_dict = self.get_edges_dict()
+        output = SchulzeNPRByGraph(edges_dict, winner_threshold, tie_breaker, ballot_notation).as_dict()
         return output
+    
+    def get_schulze_npr_order_and_rating(self, winner_threshold=None, tie_breaker=None, ballot_notation=None):
+        edges_dict = self.get_edges_dict()
+        output = SchulzeNPRByGraph(edges_dict, winner_threshold, tie_breaker, ballot_notation).as_dict()
+        rated_order = []
+        for round, (c1, c2) in enumerate(zip(output['order'], output['order'][1:])):
+            assert output['rounds'][round]['winner'] == c1
+            if 'tied_winners' in output['rounds'][round].keys():
+                if c2 in output['rounds'][round]['tied_winners']:
+                    rated_order.append({(c1,c2): 0})
+                    continue
+            rated_order.append({(c1,c2): edges_dict[(c1,c2)] - edges_dict[(c2,c1)]})
+        return rated_order
+
+    def get_schulze_npr_order_and_rating_bottom_up_sum(self, winner_threshold=None, tie_breaker=None, ballot_notation=None):
+        pairs_rating = self.get_schulze_npr_order_and_rating(winner_threshold=winner_threshold, tie_breaker=tie_breaker, ballot_notation=ballot_notation)
+#        maximum = max(pair_rating.values()[0] for pair_rating in pairs_rating)
+        running_sum = 0
+        rated_order = []
+        for pair_rating in reversed(pairs_rating):
+            c1, c2 = pair_rating.keys()[0]
+            if not rated_order:
+                rated_order.append({c2: running_sum})
+            running_sum += pair_rating[(c1, c2)]
+            rated_order.append({c1: running_sum})
+        return rated_order[::-1]
+
+    @staticmethod
+    def normalize_ordered_rating_bottom_up_sum(rated_order, votes_range_min, votes_range_max):
+        votes_range = float(votes_range_max - votes_range_min)
+        max_shulze = float(rated_order[0].values()[0])
+        if votes_range <= 0:
+            print '#####ERROR#######division by zero - falling back to schultze scores###########'
+            return rated_order
+        for rated_candidate in rated_order:
+            candidate_id = rated_candidate.keys()[0]
+            candidate_rating = rated_candidate[candidate_id]
+            candidate_votes = candidate_rating*(votes_range/max_shulze) + votes_range_min
+            rated_candidate[candidate_id] = candidate_votes
+        return rated_order
+
 
 class IssueNode(models.Model):
     """
@@ -186,7 +229,7 @@ def process_vote_stub(community_id, current_order, prev_order=[]):
     try:
         community_instance = Community.objects.get(id=community_id)
     except Community.DoesNotExist:
-        raise
+        raise  # return None?
     try:
         graph = IssuesGraph.objects.get(community=community_instance)
     except IssuesGraph.DoesNotExist:

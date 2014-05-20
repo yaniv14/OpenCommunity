@@ -1,0 +1,37 @@
+{% load i18n %}
+{% load opencommunity voting_tags %}
+
+<li class="issue oc_li" data-issue="{{i.id}}">
+	<div class="available-issue-date">
+		{{ i.created_at|ocshortdate }}
+	</div>
+	<a href="{{i.get_absolute_url}}"{% if not object.upcoming_meeting_is_published %} style="margin-{% if LANGUAGE_CODE == 'he' %}left{% else %}right{% endif %}: 100px;"{% endif %}>
+		{{i.title}}
+	</a>
+
+	{% if cperms.community.editagenda_community and not i.changed_in_current and not i.completed %}
+		<div class="timer{% if not object.upcoming_meeting_started and i.is_upcoming %} timer_extra{% endif %}" data-url="{% url 'issue_set_length' community.id i.id %}">
+			<span data-strict="{{i.length_in_minutes|minutes_strict}}">{{i.length_in_minutes|minutes|default:'--:--'}}</span>
+    </div>
+    {% if not object.upcoming_meeting_started and i.is_upcoming and i.can_straw_vote %}
+    <div class="user_votes_on_issue">
+      {% user_votes_on_issue %}
+    </div>
+    {% endif %}
+		<div class="icon-plus-minus agenda_plus_minus">
+			<a href="#" class="addremove"></a>
+		</div>
+	{% else %} 
+		{% if i.can_straw_vote and cperms.issues.vote and user.id and not object.upcoming_meeting_started and i.is_upcoming %}
+			<div class="user_votes_on_issue">
+				{% user_votes_on_issue %}
+			</div>
+		{% endif %}
+		{% if object.upcoming_meeting_started %}
+			<div class="agenda_plus_minus
+			{% if i.completed and cperms.issues.view_update_status %}tick{% else %}
+			{% if i.changed_in_current and cperms.issues.view_update_status %}cog{% endif %}
+			{% endif %}"></div>
+		{% endif %}
+	{% endif %}
+</li>

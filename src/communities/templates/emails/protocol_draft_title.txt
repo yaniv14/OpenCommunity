@@ -1,4 +1,4 @@
 {% load i18n community_tags %}
 {% autoescape off %}
-{{community}} - {{community.board_name}}: {% trans "Meeting Summary Draft" %}: {% if community.upcoming_meeting_title %}{{community.upcoming_meeting_title}},{% endif %}{% if community.upcoming_meeting_scheduled_at %} {{community|display_upcoming_time}}{% endif %}
+{{community}} - {{community.board_name}}: {% trans "Meeting summary draft" %}: {% if community.upcoming_meeting_title %}{{community.upcoming_meeting_title}},{% endif %}{% if community.upcoming_meeting_scheduled_at %} {{community|display_upcoming_time}}{% endif %}
 {% endautoescape %}

@@ -4,7 +4,7 @@
     <li><a href="{% url 'admin:index' %}">{% trans "Admin" %}</a></li>
 {% endif %}
 
-<li><a href="{% url 'home' %}">{% trans "All Communities" %}</a></li>
+<li><a href="{% url 'home' %}">{% trans "All communities" %}</a></li>
 {% if user.is_authenticated %}
 <li role="presentation" class="divider"></li>
     <li><a href="{% url 'logout' %}">{% trans "Log out" %}</a></li>

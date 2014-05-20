@@ -1,0 +1,43 @@
+{% load i18n %}
+
+{% block title %}
+<title>{% trans "DemOS 500" %}</title>
+{% endblock %}
+
+{% block extrahead %}
+<style>
+    body{
+        direction:rtl;
+    }
+
+    #t1{
+        font-size:7em;
+    }
+
+    #t2{
+        font-size:1.5em;
+    }
+
+    img{
+        width:20%;
+    }
+
+    #backBtn{
+        background-color
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="section_1">
+    <div id="t1">
+        {% trans "Oops..." %}
+    </div>
+    <div id="t2">
+        {% trans "The server is playing up." %}.
+        <br>
+        <a id="backBtn">{% trans "You can go to" %} <a id="ct1" href="/">{% trans "Main page" %}</a>. </a>
+    </div>
+</div>
+{% endblock %}
+

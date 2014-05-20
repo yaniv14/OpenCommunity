@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load opencommunity highlight %}
+
+{% block extra-page-id %}
+id="procedure-list"
+{% endblock %}
+
+{% block extrahead %}
+    <link href="{{ STATIC_URL }}search/results_page.css" rel="stylesheet">
+{% endblock %}
+
+
+{% block title %}
+	<title>{{ community.name }} - {% trans "Task Tracking" %}</title>
+{% endblock %}
+
+{% block page_header %}
+{% endblock %}
+
+{% block content %}
+<h1>{% trans "Task Tracking" %}</h1>
+  <form method="get" action=".">
+  <div class="row">
+      <div class="col-xs-12 form-group">
+          <input type="text" name="q" class="form-control issue-search" value="{{ query }}" placeholder="{% trans "Search by keywords or assigned person" %}">
+      </div>
+      <div class="col-xs-12 form-group" style="display:none;">
+         <input type="submit" value="Search">
+      </div>
+  </div>
+  </form>
+
+    <!-- ul id="assignment-order" class="nav nav-tabs">
+        <li class="pull-left"><span style="padding: 10px 0 0 20px; display:block; position: relative; font-weight: bold;">{% trans 'Sort by' %}:</span></li>
+        <li {% if 'due' in ord %}class="active"{% endif %}><a href="{% if filter_as_link %}{{ request.path }}?q={{ query }}&ord=date{% else %}#by_due_date{% endif %}" {% if not filter_as_link %}data-toggle="tab" {% endif %}>{% trans "Due Date" %}</a></li>
+     <li {% if ord == 'assignee' %}class="active"{% endif %}><a href="{% if filter_as_link %}{{ request.path }}?q={{ query }}&ord=assignee{% else %}#by_person{% endif %}" {% if not filter_as_link %}data-toggle="tab" {% endif %}>{% trans "Assigned To" %}</a></li>
+        <li {% if ord == 'title' %}class="active"{% endif %}><a href="{% if filter_as_link %}{{ request.path }}?q={{ query }}&ord=title{% else %}#by_title{% endif %}" {% if not filter_as_link %}data-toggle="tab" {% endif %}>{% trans "Title" %}</a></li>
+    </ul -->
+
+    <ul id="assignment-by-status" class="nav nav-tabs">    
+        <li {% if not status %}class="active"{% endif %} data-filter="all"><a href="{% if filter_as_link %}{{ request.path }}?q={{ query }}{% else %}#all{% endif %}" {% if not filter_as_link %}data-toggle="tab" {% endif %}>{% trans "All" %}</a></li>
+        <li {% if status == 'late' %}class="active"{% endif %} data-filter="late"><a href="{% if filter_as_link %}{{ request.path }}?q={{ query }}&status=late{% else %}#passed{% endif %}" {% if not filter_as_link %}data-toggle="tab" {% endif %}>{% trans "Late" %}</a></li>
+        <li {% if status == 'opened' %}class="active"{% endif %} data-filter="opened"><a href="{% if filter_as_link %}{{ request.path }}?q={{ query }}&status=opened{% else %}#opened{% endif %}" {% if not filter_as_link %}data-toggle="tab" {% endif %}>{% trans "Open" %}</a></li>
+        <li {% if status == 'completed' %}class="active"{% endif %} data-filter="completed"><a href="{% if filter_as_link %}{{ request.path }}?q={{ query }}&status=completed{% else %}#closed{% endif %}" {% if not filter_as_link %}data-toggle="tab" {% endif %}>{% trans "Completed" %}</a></li>
+    </ul>
+
+    
+    <div class="tab-content clearfix" style="clear: both; padding-top: 10px;">
+        {% for assgn in object_list %}
+            {% include 'issues/_assignment.html' %}
+        {% endfor %}    
+        {% include 'elements/pagination.html' %}
+    </div>
+
+{% endblock %}
+
+
+{% block scripts %}
+<script src="{{STATIC_URL}}js/jquery.tinysort.min.js"></script>
+<script>
+    function sort_assignments(by) {
+        if(by == '#by_due_date') {
+            $('.tab-content ul').tsort('li.order', {data: 'date'});     
+        } 
+        else if(by == '#by_title') {
+            $('.tab-content ul').tsort('li.order', {data: 'title'}); 
+        }
+        else if(by == '#by_person') {
+            $('.tab-content ul').tsort('li.order', {data: 'assignee'});     
+        }
+
+    }
+    $(function() {
+            /*
+            $('#assignment-order').on('click', 'a', function() {
+                sort_assignments($(this).attr('href'));
+            });
+            */
+        $('#assignment-by-status').on('click', 'a', function() {
+            if($(this).attr('href')[0] != '#') {
+                console.log($(this).attr('href')) 
+                return(true);
+            }
+            else {
+              var t = $(this).parent().data('filter');
+              if(t == 'all') {
+                 $('.assignment').show();
+              }
+              else {  
+                $('.assignment').hide();
+                $('.assignment li[data-status="' + t + '"]').closest('ul').show();
+              }
+          }});  
+    
+  });
+
+</script>
+
+{% endblock %}

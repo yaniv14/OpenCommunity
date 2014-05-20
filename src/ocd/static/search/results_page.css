@@ -1,0 +1,13 @@
+.highlighted_result {
+    color: red;
+    }
+
+.hidden-tag {
+  display: none;
+}
+a.marked {
+  background: #bbb;
+  color: #fff;
+  font-weight: bold;
+  padding: 3px;
+}

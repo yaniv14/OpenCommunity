@@ -5,10 +5,16 @@
 id="proposal-detail"
 {% endblock %}
 
+{% block title %}
+	<title>
+		{{ object.issue.community.name }} - {{ object.title }}  
+	</title>
+{% endblock %}
+
 {% block page_header %}
     {% if issue_frame %}
     <span class="visible-xs">
-        <a href="{% url 'issues' community.id %}" style="color: #6C6C6E;text-decoration: none;">{% trans "All Issues" %}</a>
+        <a href="{% url 'issues' community.id %}" style="color: #6C6C6E;text-decoration: none;">{% trans "All issues" %}</a>
     </span>
     {% endif%}
 {% endblock %}
@@ -23,7 +29,7 @@ id="proposal-detail"
 
     <div class="meeting_header">
     {% if not issue_frame %}
-        {% if meeting %}
+        {% if meeting_context %}
         <a class="three_dot_sentence level1" href="{{meeting_context.get_absolute_url}}">{% if meeting_context.title %}{{ meeting_context.title }}{% endif %} {% if meeting_context.held_at %}{% if meeting_context.title %} / {% endif %}{{ meeting_context.held_at|date:"j F Y" }}{% endif %}</a>
         {% else %}
             <a class="three_dot_sentence level1" href="{{object.issue.community.get_upcoming_absolute_url}}">{{object.issue.community.upcoming_meeting_title|default:_("Upcoming Meeting")}}{% if object.issue.community.upcoming_meeting_scheduled_at %} / {% endif %}{{object.issue.community.upcoming_meeting_scheduled_at|date:"j F Y"}}</a>

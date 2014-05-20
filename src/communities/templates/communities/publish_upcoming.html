@@ -3,7 +3,7 @@
 
 {% block page_header %}
     {% if object.upcoming_meeting_started %}
-      {% trans "Summary Draft" %}
+      {% trans "Summary draft" %}
     {% else %}
       {% trans "Publish" %}
     {% endif %}
@@ -17,7 +17,7 @@
 
 {% block nofooter %}
 <div class="modal-footer">
-	<button type="button" class="btn btn-info" data-toggle="collapse" data-target="#protocolPreview">
+	<button type="button" class="btn btn-info hidden-print pull-left" data-toggle="collapse" data-target="#protocolPreview">
 		{% if object.upcoming_meeting_started %}
 			{% trans "Preview protocol" %}
 		{% else %}
@@ -26,7 +26,17 @@
 	</button>
     <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Close" %}</button>
     <input type="submit" class="btn btn-oc" value="{% trans "Publish" %}">
-	<div id="protocolPreview" class="collapse"></div>
+	<div id="protocolPreview" class="collapse">
+		<button type="button" class="btn btn-default hidden-print protocol-print-btn" onclick="printProtocol();">
+  			<span class="glyphicon glyphicon-print"></span> 
+			{% if object.upcoming_meeting_started %}
+				{% trans "Print protocol" %}
+			{% else %}
+				{% trans "Print draft" %}
+			{% endif %}
+		</button>
+		<div id="protocolPreviewContent"></div>
+	</div>
 </div>
 {% endblock %}
 
@@ -36,16 +46,16 @@
 	$.ajax({
 		url : "protocol-preview/",
 		success : function(result) {
-			$("#protocolPreview").html(result);
+			$("#protocolPreviewContent").html(result);
 		}
-	}); 
+	});
 </script>
 {% else %}
 <script>
 	$.ajax({
 		url : "upcoming/publish/preview/",
 		success : function(result) {
-			$("#protocolPreview").html(result);
+			$("#protocolPreviewContent").html(result);
 		}
 	}); 
 </script>

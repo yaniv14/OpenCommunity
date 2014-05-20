@@ -1,9 +1,9 @@
 {% load i18n  %}
 <div class="vote-btns prop_votes text-center col-xs-12 col-sm-8 col-sm-offset-2">
 	<div class="col-xs-6">
-		<a class="btn btn-pro btn-block vote-action" href="{% url 'vote_on_proposal' community_id=community.id pk=proposal.id %}" id="vote-pro"> <span class="glyphicon glyphicon-thumbs-up">&nbsp&nbsp</span>{% trans "Pro" %}</a>
+		<a class="btn btn-pro btn-block vote-action" href="{% url 'vote_on_proposal' community_id=community.id pk=proposal.id %}" id="vote-pro"> <span class="glyphicon glyphicon-thumbs-up">&nbsp&nbsp</span>{% trans "For" %}</a>
 	</div>
 	<div class="col-xs-6">
-		<a class="btn btn-con btn-block vote-action" href="{% url 'vote_on_proposal' community_id=community.id pk=proposal.id %}" id="vote-con"> <span class="glyphicon glyphicon-thumbs-down">&nbsp&nbsp</span>{% trans "Con" %}</a>
+		<a class="btn btn-con btn-block vote-action" href="{% url 'vote_on_proposal' community_id=community.id pk=proposal.id %}" id="vote-con"> <span class="glyphicon glyphicon-thumbs-down">&nbsp&nbsp</span>{% trans "Against" %}</a>
 	</div>
 </div>

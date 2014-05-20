@@ -5,6 +5,7 @@
         {% csrf_token %}
         <button class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i> {% trans "Delete" %}</button>
     </form>
-    <span class="pull-left" style="line-height: 2em;">{{ object.email }}
-    ({{ object.get_default_group_name_display }})</span>
+    <span class="pull-left">{% if object.name %}{{ object.name }} {% endif %}({{ object.get_default_group_name_display }})
+    	<br /><span style="font-size: 12px;">{{ object.email }}</span>
+    </span>
 </li>

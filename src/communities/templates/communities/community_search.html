@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% load i18n highlight opencommunity %}
+
+{% block extrahead %}
+    <link href="{{ STATIC_URL }}search/results_page.css" rel="stylesheet">
+{% endblock %}
+
+{% block page_header %} {% trans "Search" %} {% endblock %}
+
+{% block content %}
+
+    <ul class="nav nav-tabs">
+      <li{% if not request.GET.models %} class="active"{% endif %}><a href="?q={{ query }}">{% trans "All" %}</a></li>
+      <li{% if request.GET.models == 'issues.issue' %} class="active"{% endif %}><a href="?q={{ query }}&amp;models=issues.issue">{% trans "Issues" %}</a></li>
+      <li{% if request.GET.models == 'issues.proposal' %} class="active"{% endif %}><a href="?q={{ query }}&amp;models=issues.proposal">{% trans "Proposals" %}</a></li>
+    </ul>
+
+        {% if query %}
+            <h3>{% trans "Results" %}</h3>
+
+            {% for result in page.object_list %}
+				<ul class="prop-table proposals">
+				    <a href="{{result.object.get_absolute_url}}" style="display: none;"></a>
+				    {% if result.content_type == 'issues.proposal' %}<li class="drag-icon {% if result.object.type == 1 %}task-icon{% elif result.object.type == 2 %}rule-icon{% elif result.object.type == 3 %}general-icon{% endif %}"</li>{% endif %}
+				    <li class="prop-title">
+				    	{{result.object.title}}
+				    </li>
+				    <li class="prop-content">
+				        {% if result.object.type == 1 %}
+				        <p class="assign">
+				            {% if result.object.assigned_to %}
+				            <b>{% trans "Assigned to" %}:</b> {{ result.object.assigned_to }}&nbsp;
+				            {% endif %}
+				            {% if result.object.due_by %}
+				            <b>{% trans "Due by" %}:</b> {{ result.object.due_by }}
+				            {% endif %}
+				        </p>
+				        {% endif %}
+				        {{result.object.content|userhtml}}
+	                    {% with result.text|striptags as stripped_result_text %}
+	                        {% highlight stripped_result_text with query css_class "highlighted_result" html_tag "span" %}
+	                    {% endwith %}
+				    </li>
+				</ul>
+            {% empty %}
+                <p>{% trans "No results found." %}</p>
+            {% endfor %}
+            {% if page.has_previous or page.has_next %}
+                <div>
+                    {% if not request.GET.models %}
+                    {% if page.has_previous %}<a href="?q={{ query }}&amp;page={{ page.previous_page_number }}">{% endif %}&laquo; {% trans "Previous" %}{% if page.has_previous %}</a>{% endif %}
+                    |
+                    {% if page.has_next %}<a href="?q={{ query }}&amp;page={{ page.next_page_number }}">{% endif %}{% trans "Next" %} &raquo;{% if page.has_next %}</a>{% endif %}
+                    {% endif %}
+                    {% if request.GET.models == 'issues.issue' %}
+                    {% if page.has_previous %}<a href="?q={{ query }}&amp;models=issues.issue&amp;page={{ page.previous_page_number }}">{% endif %}&laquo; {% trans "Previous" %}{% if page.has_previous %}</a>{% endif %}
+                    |
+                    {% if page.has_next %}<a href="?q={{ query }}&amp;models=issues.issue&amp;page={{ page.next_page_number }}">{% endif %}{% trans "Next" %} &raquo;{% if page.has_next %}</a>{% endif %}
+                    {% endif %}
+                    {% if request.GET.models == 'issues.proposal' %}
+                    {% if page.has_previous %}<a href="?q={{ query }}&amp;models=issues.proposal&amp;page={{ page.previous_page_number }}">{% endif %}&laquo; {% trans "Previous" %}{% if page.has_previous %}</a>{% endif %}
+                    |
+                    {% if page.has_next %}<a href="?q={{ query }}&amp;models=issues.proposal&amp;page={{ page.next_page_number }}">{% endif %}{% trans "Next" %} &raquo;{% if page.has_next %}</a>{% endif %}
+                    {% endif %}
+                </div>
+            {% endif %}
+        {% else %}
+            {# Show some example queries to run, maybe query syntax, something else? #}
+        {% endif %}
+{% endblock %}

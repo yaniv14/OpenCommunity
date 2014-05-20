@@ -1,4 +1,4 @@
-{% load i18n %}{% autoescape off %}*** {{community}}: {% trans "Upcoming Meeting" %} ***
+{% load i18n %}{% autoescape off %}*** {{community}}: {% trans "Upcoming meeting" %} ***
 
 {% trans "View online" %}: {{base_url}}{{community.get_absolute_url}}
 {% endautoescape %}

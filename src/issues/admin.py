@@ -140,7 +140,28 @@ class ProposalAdmin(admin.ModelAdmin):
 
 site.register(models.Issue, IssueAdmin)
 site.register(models.Proposal, ProposalAdmin)
-site.register(models.ProposalVote)
+
+class ProposalVoteAdmin(admin.ModelAdmin):
+
+    list_display = (
+                    'proposal',
+                    'user',
+                    'value'
+                    )
+
+    list_filter = (
+                    'proposal',
+                    'user',
+                    'value'
+                    )
+    list_display_links = (
+                        'proposal',
+                        'user',
+                        'value'
+                          )
+    ordering = ['proposal',]
+
+site.register(models.ProposalVote, ProposalVoteAdmin)
 
 class VoteResultAdmin(admin.ModelAdmin):
 

@@ -63,6 +63,9 @@ class MembershipList(MembershipMixin, ListView):
         d['form'] = InvitationForm(initial={'message':
                                             Invitation.DEFAULT_MESSAGE %
                                             self.community.get_board_name()})
+        d['board_list'] = Membership.objects.board().filter(community=self.community)
+        d['member_list'] = Membership.objects.none_board().filter(community=self.community)
+        d['board_name'] = self.community.board_name
 
         return d
 
@@ -197,9 +200,9 @@ class AutocompleteMemberName(MembershipMixin, ListView):
 
         return members
 
-        
+
     def get(self, request, *args, **kwargs):
-        
+
         def _cmp_func(a, b):
             res = cmp(a['board'], b['board']) * -1
             if res == 0:
@@ -207,25 +210,24 @@ class AutocompleteMemberName(MembershipMixin, ListView):
             else:
                 return res
 
-                
         members = self.get_queryset()
         if not members:
             return HttpResponse(json.dumps({}))
         else:
-            
             members = list(members.values('user__display_name', 'user__id',
                                             'default_group_name'))
             for m in members:
                 m['tokens'] = [m['user__display_name'],]
                 m['value'] = m['user__display_name']
                 m['board'] = m['default_group_name'] != 'member'
-                 
             members.sort(_cmp_func)
             context = self.get_context_data(object_list=members)
             return HttpResponse(json.dumps(members), {'content_type': 'application/json'})
 
         
 class MemberProfile(MembershipMixin, DetailView):
+    
+    required_permission = 'users.show_member_profile'
     
     model = models.Membership
     template_name = "users/member_profile.html"
@@ -234,6 +236,7 @@ class MemberProfile(MembershipMixin, DetailView):
        
         d = super(MemberProfile, self).get_context_data(**kwargs)
         d['form'] = ""
+        d['belongs_to_board'] = self.get_object().default_group_name != DefaultGroups.MEMBER
         return d
 
 
@@ -336,6 +339,21 @@ def oc_password_reset(request, is_admin_site=False,
         post_reset_redirect = reverse('django.contrib.auth.views.password_reset_done')
     if request.method == "POST":
         form = password_reset_form(request.POST)
+        if form.is_valid():
+            current_site = get_current_site(request)
+            from_email = "%s <%s>" % (current_site.name, settings.FROM_EMAIL)
+            opts = {
+                'use_https': request.is_secure(),
+                'token_generator': token_generator,
+                'from_email': from_email,
+                'email_template_name': email_template_name,
+                'subject_template_name': subject_template_name,
+                'request': request,
+            }
+            if is_admin_site:
+                opts = dict(opts, domain_override=request.get_host())
+            form.save(**opts)
+            return HttpResponseRedirect(post_reset_redirect)
         email = request.POST['email']
         try:
             invitation = Invitation.objects.get(email=email)
@@ -344,23 +362,10 @@ def oc_password_reset(request, is_admin_site=False,
                              }
             invitation.send(sender=invitation.created_by, 
                             recipient_name=invitation.name)
-
-        except Invitation.DoesNotExist:        
-            if form.is_valid():
-                current_site = get_current_site(request)
-                from_email = "%s <%s>" % (current_site.name, settings.FROM_EMAIL)
-                opts = {
-                    'use_https': request.is_secure(),
-                    'token_generator': token_generator,
-                    'from_email': from_email,
-                    'email_template_name': email_template_name,
-                    'subject_template_name': subject_template_name,
-                    'request': request,
-                }
-                if is_admin_site:
-                    opts = dict(opts, domain_override=request.get_host())
-                form.save(**opts)
-                return HttpResponseRedirect(post_reset_redirect)
+            # TODO: redirect to message 
+#             return HttpResponseRedirect(reverse('invitation_sent'))
+        except Invitation.DoesNotExist:
+            pass
     else:
         form = password_reset_form()
     context = {

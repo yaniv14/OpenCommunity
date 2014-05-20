@@ -19,15 +19,15 @@ EMAIL_SUBJECT_PREFIX = '[OpenCommunity] '
 FROM_EMAIL = "noreply@opencommunity.dev"
 HOST_URL = "http://localhost:8000"
 
-MANAGERS = ADMINS
+MANAGERS = (('Boaz Chen', 'boaz.chen@gmail.com'),)
 
 DATABASES = {
     'default': {
         # engines: '.postgresql_psycopg2', '.mysql', '.sqlite3' or '.oracle'.
-        'ENGINE': 'django.db.backends.postgresql_psycopg2', 
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'opencommunity',
-        'USER': 'opencommunity',
-        'PASSWORD': 'opencommunity',
+        'USER': 'postgres',
+        'PASSWORD': 'peta2drs',
         'HOST': 'localhost',
         'PORT': '',
     }
@@ -72,8 +72,8 @@ UPLOAD_PATH = ABSDIR('uploads')
 
 UPLOAD_ALLOWED_EXTS = [
                        'pdf', 'txt', 'doc', 'docx', 'xls', 'xlsx', 'csv',
-                       'jpg', 'jpeg', 'gif', 'png', 'tiff', 'ppt', 'pptx', 
-                       'rtf', 'mp3', 'wav', 'flac', 'm4a', 'wma', 'aac', 
+                       'jpg', 'jpeg', 'gif', 'png', 'tiff', 'ppt', 'pptx',
+                       'rtf', 'mp3', 'wav', 'flac', 'm4a', 'wma', 'aac',
                        'fla', 'mp4', 'mov', 'avi', 'wmv',
                       ]
 
@@ -161,7 +161,8 @@ INSTALLED_APPS = (
     'django_nose',
     'django_extensions',
     'debug_toolbar',
-
+    'taggit',
+    'haystack',
     'oc_util',
     'users',
     'communities',
@@ -173,6 +174,17 @@ INSTALLED_APPS = (
 
 
 AUTH_USER_MODEL = 'users.OCUser'
+
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'ocd.custom_whoosh_backend.MyWhooshEngine',
+        'PATH': os.path.join(PROJECT_DIR, 'whoosh_index'),
+    },
+}
+
+HAYSTACK_CUSTOM_HIGHLIGHTER = 'ocd.custom_highlighting.MyHighlighter'
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
@@ -211,7 +223,7 @@ LOGIN_URL = "/login/"
 LOGOUT_URL = "/logout/"
 
 FORMAT_MODULE_PATH = "ocd.formats"
-DATE_FORMAT_OCSHORTDATE = "M j"
+DATE_FORMAT_OCSHORTDATE = "j.n"
 DATE_FORMAT_OCSHORTTIME = "H:i"
 # DATETIME_FORMAT = '%d/%m/%Y %H:%M'
 
@@ -228,10 +240,25 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.tz',
     'django.core.context_processors.request',
     'django.contrib.messages.context_processors.messages',
+    'ocd.context_processors.analytics',
+    'ocd.context_processors.smart_404',
 )
 
 SESSION_REMEMBER_DAYS = 45
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+# Made accessible to templates via the analytics context processor `analytics`
+OPENCOMMUNITY_ANALYTICS = {
+    'piwik': {
+        'host': 'visitors.hasadna.org.il/',
+        'id': '3'
+    },
+    # Uncomment & configure for Google Analytics tracking
+    # 'ga': {
+    #     'id': 'UA-00000000-0'
+    #     'url': 'domain.com'
+    # }
+}
 
 version_file = os.path.join(STATIC_ROOT, 'version.txt')
 if os.path.exists(version_file):

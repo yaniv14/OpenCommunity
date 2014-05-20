@@ -6,28 +6,49 @@
 			<span class="sr-only">Toggle navigation</span>
 		</button>
 		<span class="navbar-brand"> {% if community %}
-		{{community}}{% if community.board_name %} - {{community.board_name}}{% endif %}
-		{% else %}
-		{% trans "Open Community" %}
-		{% endif %} </span>
+			{{community}}{% if community.board_name %} - {{community.board_name}}{% endif %}
+			{% else %}
+			{% trans "DemOS" %}
+			{% endif %} </span>
 	</div>
 	<div class="navbar-collapse collapse oc-panel">
 		<ul class="nav navbar-nav">
 			{% include '_community_panel.html' %}
 		</ul>
-		<ul class="nav navbar-nav navbar-right">
-		{% if user.is_authenticated %}
-			<li class="dropdown">
-				<a href="#" class="dropdown-toggle" data-toggle="dropdown">{% if user.display_name %}{{user.display_name}}{% else %}{% trans "Open Community" %}{% endif %} <b class="caret"></b></a>
-				<ul class="dropdown-menu">
-					{% include '_user_panel.html' %}
-				</ul>
-			</li>
-		{% else %}
-			<li id="login_navbar">
-            	<a href="{% url 'login' %}?next={{ request.path }}">{% trans "Login" %}</a>
-			</li>
+		{% if community.id %}
+		<form class="navbar-form navbar-left search_lg" role="search" method="get" action="{% url 'community_search' community.id %}">
+			<div class="form-group">
+				<input id="q" type="search" name="q" class="form-control input-sm general-search" placeholder="{% trans 'General search text...' %}" value="{{ query }}">
+			</div>
+		</form>
 		{% endif %}
-		</ul>
+	<ul class="nav navbar-nav navbar-right">
+		{% if community.id %}
+		<li class="search_sm">
+			<span class="search-icon"></span>
+		</li>
+		{% endif %}
+		{% if user.is_authenticated %}
+		<li class="dropdown">
+			<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="user-icon glyphicon glyphicon-user"></span> <span class="user-name">{% if user.display_name %}{{user.display_name}}{% else %}{% trans "DemOS" %}{% endif %}</span> <b class="caret"></b></a>
+			<ul class="dropdown-menu">
+				{% include '_user_panel.html' %}
+			</ul>
+		</li>
+		{% else %}
+		<li id="login_navbar">
+			<a href="{% url 'login' %}?next={{ request.path }}">{% trans "Login" %}</a>
+		</li>
+		{% endif %}
+	</ul>
 	</div>
+	{% if community.id %}
+	<div id="toggle-search" class="hidden pull-right">
+		<form role="search" method="get" action="{% url 'community_search' community.id %}">
+			<div class="form-group">
+				<input id="q" type="search" name="q" class="form-control input-sm general-search" placeholder="{% trans 'General search text...' %}" value="{{ query }}">
+			</div>
+		</form>
+	</div>
+	{% endif %}
 </nav>

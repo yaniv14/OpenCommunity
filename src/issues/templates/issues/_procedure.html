@@ -1,0 +1,22 @@
+{% load i18n %}
+{% load opencommunity highlight  %}
+
+<ul class="prop-table proposals procedure">
+    <li class="drag-icon rule-icon order"
+    data-title="{{p.object.title}}"
+    data-date="{{p.decided_at|date:'Y-m-d'}}"
+    data-tags="{{ p.object.tags.names|join:',' }}"></li>
+    <li class="prop-title">
+      <a href="{{p.object.get_absolute_url}}">{{ p.object.title }}</a>
+      <div class="pull-right tags"> {{ p.object.tags.names|join:', ' }}</div>
+    </li>
+    <li class="prop-content">
+        <div>{% trans 'Date' context 'rule creation date' %}: {{ p.decided_at|date:"DATE_FORMAT" }} </div>
+        <div>
+        {% with p.object.content as res %}
+            {% highlight res with query css_class "highlighted_result" html_tag "span" max_length "240" %}
+        {% endwith %}
+        </div>
+    </li>
+</ul>
+

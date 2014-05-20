@@ -96,13 +96,44 @@ class Meeting(UIDMixin):
 
     def get_title_or_date(self):
         return self.title or date_format(self.held_at)
- 
+
     def get_title_or_shortdate(self):
         return self.title or self.held_at.strftime('%d/%m/%Y')
-    
+
+    def get_title_and_shortdate(self):
+        if self.title:
+            return self.held_at.strftime('%d/%m/%Y') + " - " + self.title
+        else:
+            return self.held_at.strftime('%d/%m/%Y')
+        
     def get_participations(self):
         return self.participations.filter(is_absent=False)
-        
+
+    def get_participants(self):
+        participations = self.get_participations()
+        return [p.user for p in participations]
+
+    def meeting_participants(self):
+
+        meeting_participants = {'board': [], 'members': [], }
+
+        board_ids = [m.user.id for m in self.community.memberships.board()]
+
+        for p in self.get_participations():
+            if p.user.id in board_ids:
+                meeting_participants['board'].append(p.user)
+            else:
+                meeting_participants['members'].append(p.user)
+
+        # doing it simply like this, as I'd need to refactor models
+        # just to order in the way that is now required.
+        for index, item in enumerate(meeting_participants['board']):
+            if item.get_default_group(self) == DefaultGroups.CHAIRMAN:
+                meeting_participants['board'].insert(0,
+                    meeting_participants['board'].pop(index))
+
+        return meeting_participants
+
     @models.permalink
     def get_absolute_url(self):
         return ("meeting", (str(self.community.pk), str(self.pk),))
@@ -115,7 +146,7 @@ class BoardParticipantsManager(models.Manager):
                                     is_absent=True)
 
 class MeetingParticipant(models.Model):
-    meeting = models.ForeignKey(Meeting, verbose_name=_("Meeting"), 
+    meeting = models.ForeignKey(Meeting, verbose_name=_("Meeting"),
                                 related_name="participations")
     ordinal = models.PositiveIntegerField()
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
@@ -127,7 +158,7 @@ class MeetingParticipant(models.Model):
                                           null=True, blank=True)
     is_absent = models.BooleanField(_("Is Absent"), default=False)
     objects = BoardParticipantsManager()
-    
+
     class Meta:
         verbose_name = _("Meeting Participant")
         verbose_name_plural = _("Meeting Participants")

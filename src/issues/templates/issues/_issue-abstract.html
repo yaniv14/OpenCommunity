@@ -1,9 +1,10 @@
 {% load i18n opencommunity %}
 
 <div id="issue-abstract" style="clear: both;">
-        <div class="issue-abstract filter-upcoming filter">
-            <a class="filter" href="{{community.get_absolute_url}}">{% trans "Upcoming Meeting" %}</a>
-                {{object.abstract|default_if_none:""|userhtml}}
-        </div>
+{% if object.abstract %}
+    <div class="issue-abstract filter-upcoming filter">
+        <a class="filter filter-subtitle" href="{{community.get_absolute_url}}">{% trans "Upcoming meeting" %}</a>
+            {{object.abstract|default_if_none:""|userhtml}}
+    </div>
+{% endif %}
 </div>
-

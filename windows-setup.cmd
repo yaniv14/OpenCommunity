@@ -1,7 +1,7 @@
 @echo off
 
 echo Installing Pillow (PIL)
-easy_install Pillow
+easy_install pillow==2.3.0
 
 echo ===============================
 echo Installing win-psycopg

@@ -7,28 +7,34 @@
 
 {% block content %}
 
-    {% with community.issues_ready_to_close as issues %}
-
-        {% if not issues %}
-            <div>
-                {% trans "No decisions were made in this meeting."%}
-            </div>
+    <div class="alerts">
+        {% if no_participants %} 
+            <p>{% trans 'No participants selected for meeting' %}!</p>
         {% endif %}
+    </div>
 
+    {% with community.issues_ready_to_close as issues %}
         {{ form }}
-
     {% endwith %}
 
+     <div class="alerts">
+        <p><b>{% trans "Please note, editing the meeting's information is not possible after close" %}!</b></p>
+     </div>
 {% endblock %}
 
 {% block nofooter %}
 <div class="modal-footer">
-	<button type="button" class="btn btn-info" data-toggle="collapse" data-target="#protocolPreview">
+	<button type="button" class="btn btn-info pull-left" data-toggle="collapse" data-target="#protocolPreview">
 		{% trans "Preview protocol" %}
 	</button>
     <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}</button>
     <input type="submit" class="btn btn-oc" value="{% trans "Close meeting" %}">
-	<div id="protocolPreview" class="collapse"></div>
+	<div id="protocolPreview" class="collapse">
+		<button type="button" class="btn btn-default hidden-print protocol-print-btn" onclick="printProtocol();">
+  			<span class="glyphicon glyphicon-print"></span> {% trans "Print protocol" %}
+		</button>
+		<div id="protocolPreviewContent"></div>
+	</div>
 </div>
 {% endblock %}
 
@@ -37,7 +43,7 @@
 	$.ajax({
 		url : "protocol-preview/",
 		success : function(result) {
-			$("#protocolPreview").html(result);
+			$("#protocolPreviewContent").html(result);
 		}
 	}); 
 </script>

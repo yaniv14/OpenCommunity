@@ -1,8 +1,99 @@
 {% extends 'base.html' %}
 {% load i18n %}
 
+{% block title %}
+<title>{% trans "DemOS 404" %}</title>
+{% endblock %}
+
+{% block extrahead %}
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL}}css/error.css" />
+{% endblock %}
+
+{% block page_header %}{% endblock %}
+
 {% block content %}
 
-{% trans "Page not found" %}
+	{% if not_found.type %}
+
+		{% if not_found.type == 'no_community' %}
+		<div class="section_1">
+			<img src="{{ STATIC_URL }}images/404.png" >
+			<div id="t1">
+				{% trans "Oops..." %}
+			</div>
+			<div id="t2">
+				{% trans "We couldn't find the requested community" %}.
+				<br>
+				<span id="backBtn">{% trans "You can go to the" %}
+					<a id="ct1" href="{{ not_found.redirect_url }}"> {% trans "Main page" %}</a>.
+				</span>
+			</div>
+		</div>
+		{% endif %}
+
+		{% if not_found.type == 'no_community_route' %}
+		<div class="section_1">
+			<img src="{{ STATIC_URL }}images/404.png" >
+			<div id="t1">
+				{% trans "Oops..." %}
+			</div>
+			<div id="t2">
+				{% trans "We couldn't find exactly what you were looking for" %}.
+				<br>
+				<span id="backBtn">{% trans "You can go to the" %}
+					<a id="ct1" href="{{ not_found.redirect_url }}"> {% trans "Community page" %}</a>.
+				</span>
+			</div>
+		</div>
+		{% endif %}
+
+		{% if not_found.type == 'no_issue' %}
+		<div class="section_1">
+			<img src="{{ STATIC_URL }}images/404.png" >
+			<div id="t1">
+				{% trans "Oops..." %}
+			</div>
+			<div id="t2">
+				{% trans "We couldn't find the requested issue" %}.
+				<br>
+				<span id="backBtn">{% trans "You can go to the" %}
+					<a id="ct1" href="{{ not_found.redirect_url }}"> {% trans "Issues page" %}</a>.
+				</span>
+			</div>
+		</div>
+		{% endif %}
+
+		{% if not_found.type == 'no_procedure' %}
+		<div class="section_1">
+			<img src="{{ STATIC_URL }}images/404.png" >
+			<div id="t1">
+				{% trans "Oops..." %}
+			</div>
+			<div id="t2">
+				{% trans "We couldn't find the requested procedure" %}.
+				<br>
+				<span id="backBtn">{% trans "You can go to the" %}
+					<a id="ct1" href="{{ not_found.redirect_url }}"> {% trans "Procedures page" %}</a>.
+				</span>
+			</div>
+		</div>
+		{% endif %}
+
+	{% else %}
+	<div class="section_1">
+		<img src="{{ STATIC_URL }}images/404.png" >
+		<div id="t1">
+			{% trans "Oops..." %}
+		</div>
+		<div id="t2">
+			{% trans "We couldn't find the page you were looking for" %}.
+			<br>
+			<span id="backBtn">{% trans "You can go to" %}
+				<a id="ct1" href="{{ not_found.redirect_url }}">{% trans "Main page" %}</a>.
+			</span>
+		</div>
+	</div>
+	{% endif %}
 
 {% endblock %}
+

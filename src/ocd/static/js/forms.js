@@ -105,6 +105,7 @@ function initForm(modal, url, origin) {
                 if (replace) {
                     $(replace).html(resp);
                     $(modal).modal('hide');
+                    $('body').trigger('ocd.updated');
                     return;
                 }
 

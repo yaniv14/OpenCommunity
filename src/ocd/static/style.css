@@ -4,7 +4,7 @@ html {
 	font-family: "Alef", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 body {
-	background: url('images/background.jpg') repeat;
+	background: #666666;
 	/*{global-font-family}*/
 	font-family: "Alef", "Helvetica Neue", Helvetica, Arial, sans-serif;
 	margin-bottom: 50px;
@@ -23,22 +23,30 @@ h6,
 .h6 {
 	font-family: "Alef", "Helvetica Neue", Helvetica, Arial, sans-serif;
 	font-weight: bold;
-	color: #6C6C6E;
 }
 h1 {
-	font-size: 28px;
-	padding: 5px 0;
+	font-size: 30px;
+	/*padding: 5px 0;*/
 	margin: 0;
 	font-weight: normal;
 	word-break: break-word;
 }
 h2 {
-	font-size: 18px;
-	margin-top: 10px;
+	font-size: 22px;
+	margin-top: 20px;
+	font-weight: normal;
 }
 h5 {
 	margin-top: 5px;
 	margin-bottom: 5px;
+}
+.meeting_right_column h2 {
+	color: #fff;
+}
+.title_divider {
+	font-size: 14px;
+	/*border-bottom: 1px solid #cecfb3;*/
+	margin-bottom: 10px;
 }
 .modal-body h3 {
 	font-size: 18px;
@@ -82,18 +90,33 @@ ul.errorlist {
 ul.errorlist li {
 	color: red;
 }
+.help-text {
+	display: block;
+	margin-bottom: 5px;
+	margin-left: 17px;
+	color: #b94a48;
+	font-size: 13px;
+}
 
 /* Forms */
 
+#upcoming-meeting form {
+	display: inline-block;
+}
 .modal-body {
 	padding: 20px 20px 10px 20px;
 }
 .modal-content {
-	background: url('images/background.jpg') repeat;
+	background: #666666;
+	/*background: url('images/background.jpg') repeat;*/
 }
 .modal-header {
-	background-image: url('images/title_bg.png');
+	/*background-image: url('images/title_bg.png');*/
 	border-radius: 6px 6px 0 0;
+	color: #ffffff;
+}
+.modal-header.wide-header {
+	padding-bottom: 15px !important;
 }
 .modal-title {
 	color: #fff;
@@ -104,6 +127,7 @@ ul.errorlist li {
 }
 .modal-footer {
 	margin-top: 0;
+	border-top: 0;
 }
 .form-group {
 	margin-bottom: 10px;
@@ -112,12 +136,19 @@ ul.errorlist li {
 	list-style-type: none;
 }
 .form-group input.form-control.issue-search {
-	border-radius: 15px;
+	/*border-radius: 15px;*/
 	padding-right: 40px;
 	background-image: url('images/search.png');
 	background-repeat: no-repeat;
 	background-position: right;
 	font-size: 18px;
+}
+.form-group input.form-control.general-search {
+	padding-right: 35px;
+	background-image: url('images/search.png');
+	background-repeat: no-repeat;
+	background-position: right;
+	background-size: 35px;
 }
 .field-upcoming_meeting_participants ul {
 	list-style-type: none;
@@ -149,7 +180,9 @@ ul.errorlist li {
 .meeting-form-bg+.modal-dialog .modal-header,
 .issue-form-bg+.modal-dialog .modal-header,
 .proposal-form-bg+.modal-dialog .modal-header {
-	background-image: url('images/background.jpg');
+	background: #666666;
+	padding-bottom: 0;
+	/*background-image: url('images/background.jpg');*/
 }
 .meeting-form-bg+.modal-dialog .modal-title,
 .meeting-form-bg+.modal-dialog .modal-header .close,
@@ -157,7 +190,7 @@ ul.errorlist li {
 .issue-form-bg+.modal-dialog .modal-header .close,
 .proposal-form-bg+.modal-dialog .modal-title,
 .proposal-form-bg+.modal-dialog .modal-header .close {
-	color: #6C6C6E;
+	color: #fff;
 }
 .participants-body-form .list-group-item:first-child {
 	border-top: 0;
@@ -179,6 +212,9 @@ ul.errorlist li {
 #upcoming-meeting #issues-order.nav-tabs > li.active > a:hover,
 #upcoming-meeting #issues-order.nav-tabs > li.active > a:focus {
 	background: #f5f6de;
+}
+#upcoming-meeting.modal-open ul {
+	list-style-type: none;
 }
 
 /* General buttons */
@@ -268,7 +304,7 @@ ul.errorlist li {
 	margin-bottom: 10px;
 }
 .accept_reject_btns {
-    max-width: 300px;
+    max-width: 330px;
 }
 .edit-comment button {
 	background: url(images/comment_edit_pencil.png) no-repeat;
@@ -289,7 +325,7 @@ ul.errorlist li {
 }
 .btn-comment {
 	width: auto;
-	height: 20px;
+	height: 24px;
 	cursor: pointer;
 	border-radius: 0;
 }
@@ -311,7 +347,7 @@ nav.oc_navbar {
 .nav > li > a {
         padding: 10px 15px;
 }
-#issue-list .nav > li > a {
+#issue-list .nav.nav-tabs > li > a {
         padding: 10px;
 }
 #issue-list  .nav-tabs > li.active > a,
@@ -333,25 +369,26 @@ nav.oc_navbar {
 	font-size: 14px;
 }
 .navbar-toggle {
-        margin-top: 4px;
-        margin-bottom: 4px;
+    margin-top: 4px;
+    margin-bottom: 4px;
 }
 .navbar-brand {
-        padding: 10px 15px;
+    padding: 10px 15px;
 }
 .navbar-default .navbar-brand {
-        font-size: 16px;
-        font-weight: bold;
-        color: #666;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
 }
 .just_slash {
-        padding: 10px 0;
+    padding: 10px 0;
+    color: #ffffff;
 }
 .navbar-default .navbar-collapse {
-        background-color: transparent;
+    background-color: transparent;
 }
 .navbar-default .navbar-nav > li > a {
-        color: #333333;
+    color: #fff !important;
 }
 
 .oc_menu {
@@ -378,6 +415,39 @@ p.user_nav {
 #login-page #login_navbar {
 	display: none;
 }
+@media (min-width: 992px) {
+	.user-icon, .search_sm, #toggle-search {
+		display: none !important;
+	}
+}
+@media (min-width: 0px) and (max-width: 767px) {
+	.search_sm, .user-icon, #toggle-search {
+		display: none !important;
+	}
+}
+@media (min-width: 768px) and (max-width: 991px) {
+	.user-name {
+		display: none !important;
+	}
+}
+@media (min-width: 768px) and (max-width: 991px) {
+	.search_lg {
+		display: none !important;
+	}
+}
+.search-icon {
+	width: 30px;
+	height: 35px;
+	background: url('images/search1.png') no-repeat;
+	display: inline-block;
+	background-position: center;
+	cursor: pointer;
+	background-size: 20px;
+}
+.navbar-collapse.oc-panel {
+	max-height: 1000px;
+}
+
 /* List */
 
 .oc_li {
@@ -431,15 +501,26 @@ ul li.issue.oc_li a.addremove {
 	width: 100%;
 	height: 100%;
 }
-
-
+.available-issue-date {
+	width: 35px;
+	position: absolute;
+	height: 100%;
+	background: #999999;
+	color: #fff;
+	text-align: center;
+	padding: 10px 0;
+}
+#agenda .available-issue-date {
+  display: none;
+}
 #agenda li .grab {
     width: 40px;
     background: url('images/drag-handle.png') center no-repeat;
-    float: left;
+    /*float: left;*/
     cursor: move;
     position: absolute;
 	height: 100%;
+	left: 35px;
 }
 #ordered li .grab {
     width: 60px;
@@ -478,25 +559,35 @@ ul li.issue.oc_li a.addremove {
 #available .timer {
 	display: none;
 }
+.issue-info {
+    margin-left: 80px;
+    padding-bottom: 10px;
+}
 .timer {
-	position: absolute;
+	/*position: absolute;
 	top: 10px;
 	right: 45px;
+    font-weight: bold;*/
     background: transparent;
     color: #666;
     font-size: 14px;
-    font-weight: bold;
     cursor: pointer;
+    display: inline;
+}
+.timer_extra {
+	right: 100px;
 }
 .user_votes_on_issue {
-	position: absolute;
+	display: inline;
+	/*position: absolute;
 	top: 10px;
-	right: 45px;
+	right: 45px;*/
 }
 
 #agenda .icon-plus-minus, 
 #ordered .icon-plus-minus {
 	background: url('images/minus_action.png') no-repeat 50% 50%;
+	left: 0;
 }
 #available .icon-plus-minus,
 #voted_out .icon-plus-minus {
@@ -512,7 +603,7 @@ ul li.issue.oc_li a.addremove {
 	position: absolute;
 	width: 40px;
 	height: 100%;
-	border-left: 1px solid #ccc;
+	/*border-left: 1px solid #ccc;*/
 	top: 0;
 	right: 0;
 }
@@ -548,13 +639,12 @@ ul li.issue.oc_li a.addremove {
 }
 
 .issue-abstract {
-    padding: 5px 15px;
+    /*padding: 5px 15px;*/
     margin: 8px 0 5px 0;
 }
 
 .oc_detail_top {
 	padding: 0 15px;
-	border-bottom: 1px solid #d8d8d9;
 }
 
 .summary_box {
@@ -799,8 +889,17 @@ ul.prop-table {
 	width: 100%;
 	margin: 0;
 	padding: 0;
-	border: 1px solid #d8e0df;
+	border: 1px solid #edeed5;
 	background: #ffffff;
+	list-style-type: none;
+}
+ul.issue-table {
+	display: table;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	border: 1px solid #d8e0df;
+	background: #f5f6de;
 	list-style-type: none;
 }
 #issue-detail-siblings ul.prop-table,
@@ -819,16 +918,19 @@ ul.proposals li.drag-icon {
 	width: 48px;
 	background-color: #e3e3e3;
 }
-ul:nth-child(even).proposals li.drag-icon {
-	background-color: #cacccd;
-}
-ul:nth-child(odd).proposals li.drag-icon {
-	background-color: #dcddde;
-}
 ul.proposals li.prop-title {
 	padding: .7em 15px 0 15px;
 	word-break: break-word;
 	font-weight: bold;
+}
+li.prop-title a {
+  color: #333;
+}
+ul.proposals li.issue-title {
+	font-size: 18px;
+	padding: .7em 15px 0 15px;
+	word-break: break-word;
+	font-weight: normal;
 }
 a ul.proposals li.prop-title {
 	color: #6c6c6e;
@@ -888,6 +990,12 @@ ul.proposals li.prop-content p {
 /* Protocol & Agenda ajax preview */
 
 #protocolPreview {
+	text-align: center;
+	border-top: 1px solid #e5e5e5;
+	padding-top: 20px;
+	margin-top: 20px;
+}
+#protocolPreviewContent {
 	text-align: left;
 	padding-top: 20px;
 }
@@ -902,6 +1010,10 @@ ul.proposals li.prop-content p {
     border: 2px solid #777;
     padding: 1em 2em;
 }
+.alerts {
+   color: #b94a48;
+   font-weight: bold;
+}
 
 /* Issue detail comments */
 
@@ -915,7 +1027,7 @@ ul.proposals li.prop-content p {
 	/*background: #fff;*/
 	list-style-type: none;
 	margin-bottom: 1px;
-	border-bottom: 1px solid #ccc;
+	border-bottom: 1px solid #fff;
 }
 .comments .historic_comments > li:last-child,
 .comments > li:last-child {
@@ -955,6 +1067,9 @@ ul.proposals li.prop-content p {
 	padding-top: 10px;
 	padding-bottom: 10px;
 }
+.userhtml {
+	font-size: 16px;
+}
 .issue_attachments ul {
 	list-style-type: none;
 	padding-left: 0;
@@ -986,23 +1101,28 @@ form.delete-invitation {
 
 /* Images & Icons */
 
+h5 .fa {
+	margin-left: 2px;
+}
 .check_box {
 	display: table-cell;
 	width: 40px;
 	background: url(images/proposal-uncheck.png) no-repeat center;
-	border-left: 1px solid #d8e0df;
+	/*border-left: 1px solid #d8e0df;*/
 }
 .check_box_vote {
 	display: table-cell;
 	width: 40px;
 	vertical-align: middle;
-	border-left: 1px solid #d8e0df;
+	/*border-left: 1px solid #d8e0df;*/
 }
 .check_box.checked {
 	background: url(images/proposal-check.png) no-repeat center;
+	background-size: 20px;
 }
 .check_box.rejected {
 	background: url(images/proposal-rejected.png) no-repeat center;
+	background-size: 20px;
 }
 .nohal {
 	position: absolute;
@@ -1024,16 +1144,37 @@ form.delete-invitation {
 	background-image: url(images/general-icon.png);
 	background-repeat: no-repeat;
 	background-position: center;
+	background-color: #5A5757;
+}
+.prop-general-icon {
+	background-image: url(images/general-icon.png);
+	background-repeat: no-repeat;
+	background-position: center left;
+	padding-left: 26px;
 }
 .task-icon {
 	background-image: url(images/task-icon.png);
 	background-repeat: no-repeat;
 	background-position: center;
+	background-color: #5A5757;
+}
+.prop-task-icon {
+	background-image: url(images/task-icon.png);
+	background-repeat: no-repeat;
+	background-position: center left;
+	padding-left: 26px;
 }
 .rule-icon {
 	background-image: url(images/rule-icon.png);
 	background-repeat: no-repeat;
 	background-position: center;
+	background-color: #5A5757;
+}
+.prop-rule-icon {
+	background-image: url(images/rule-icon.png);
+	background-repeat: no-repeat;
+	background-position: center left;
+	padding-left: 26px;
 }
 .prop_back_icon {
 	background-image: url('images/prop-back.png');
@@ -1068,7 +1209,7 @@ form.delete-invitation {
 .piechart a {
    font-size: 1.1em;
    vertical-align: top;
-   color: #000;
+   color: #6C6C6E;
    text-decoration: none;
 }
 
@@ -1094,7 +1235,8 @@ form.delete-invitation {
 .chart_datetime {
 	border-bottom: 1px solid #d8e0df;
 	padding-bottom: 10px;
-	margin-bottom: 10px;	
+	margin-bottom: 10px;
+	color: #6C6C6E;	
 }
 
 /* Votes */
@@ -1105,6 +1247,9 @@ form.delete-invitation {
 	color: #666;
 	font-size: 16px;
 	font-weight: bold;
+}
+.vote_marked {
+	border: 2px solid #333;
 }
 .issue_proposal_vote .change_vote {
 	margin-top: -10px;
@@ -1314,7 +1459,7 @@ form.delete-invitation {
 .proposal-icon {
 	display: table-cell;
 	width: 40px;
-	background-color: #cacccd;
+	background-color: #5A5757;
 }
 #issue_frame .meeting_header {
 	padding: 0 0 0 2%;
@@ -1384,7 +1529,17 @@ li.btn-tab span {
 .active_proposal {
 	border-right: 20px solid #ffffff !important;
 }
-
+#proc_tags {
+  float: left;
+  line-height: 2em;
+}
+#proc_tags .title {
+   font-weight: bold;
+   margin-right: 3em;
+}
+.tags {
+	text-align: right;
+}
 .three_dot_sentence {
 	white-space: nowrap;
 	text-overflow: ellipsis;
@@ -1399,7 +1554,13 @@ li.btn-tab span {
 	padding: 5px 0 5px 5px;
 }
 #agenda li.issue.oc_li > a {
-	margin-right: 125px;
+	margin-left: 80px;
+	margin-right: 85px;
+	padding-bottom: 0;
+	font-size: 16px;
+}
+.empty-issue-info {
+	height: 10px;
 }
 .issues_list li,
 .meetings_list li {
@@ -1418,15 +1579,18 @@ li.btn-tab span {
 }
 .meetings_list li a,
 .issues_list li a {
-	color: #6C6C6E;
 	display: block;
 	margin-right: 15px;
-	border-bottom: 1px solid #d5d6c6;
+	border-bottom: 1px solid #cdcdcd;
 	padding: 10px 0 10px 10px;
 }
-.meetings_list li a:hover,
+.meetings_list li a,
+.meetings_list li a:hover {
+	color: #ffffff;
+}
+.issues_list li a,
 .issues_list li a:hover {
-	color: #6C6C6E;
+	color: #666;
 }
 .dropdown-menu > li > form {
 	display: block;
@@ -1451,6 +1615,10 @@ li.btn-tab span {
 	text-overflow: ellipsis;
 	overflow: hidden;
 	color: #555555;
+}
+#issue-detail .issue_left_column_inner .nav.nav-tabs .dropdown-menu {
+	right: 0;
+	left: auto;
 }
 .issue_left_column_inner .nav > li > a {
 	padding: 2px 15px;
@@ -1483,11 +1651,17 @@ li.btn-tab span {
 }
 #issue-detail-siblings .nav-tabs > li,
 #issue-detail .nav-tabs > li {
-	background: #eeeeee;
+	background: transparent;
 	margin: 0 1px;
 }
-#proposal-type li a {
+#proposal-type li.active a {
 	color: #6C6C6E;
+}
+#proposal-type li a {
+	color: #ffffff;
+}
+#upcoming-meeting #proposal-type li a {
+	color: #555555;
 }
 label[for=id_proposal-title] {
 	padding-top: 20px;
@@ -1498,6 +1672,7 @@ label[for=id_proposal-title] {
 .board_vote {
 	border: 1px solid #d8e0df;
 	padding: 10px;
+	clear: both;
 }
 .board_vote h4,
 .board_vote p {
@@ -1581,8 +1756,14 @@ label[for=id_proposal-title] {
 	padding: 10px;
 }
 .task_devider {
+	display: block;
 	border-bottom: 1px solid #dddddd;
 	margin-bottom: 10px;
+	color: #333333;
+}
+.task_devider:hover {
+	text-decoration: none;
+	color: #333333;
 }
 .task_devider:last-child {
 	border-bottom: 0;
@@ -1597,11 +1778,70 @@ label[for=id_proposal-title] {
 .all-con {
 	background: #d95e59;
 }
+.twitter-typeahead {
+	width: 100%;
+}
+.nav > li > a:hover, .nav > li > a:focus {
+	background-color: transparent;
+	border: 0;
+}
+
+/* Navbar */
+
+.nav-tabs {
+	border-bottom: 0;
+}
+.member_vote_part {
+	display: block;
+	margin-right: 5%;
+	background: #f5f6de;
+	padding: 5px;
+	text-decoration: none;
+	color: #6C6C6E;
+	position: relative;
+	margin-bottom: -20px;
+}
+ul.prop-table.prop-pad {
+	border: 0;
+}
+ul.prop-table .prop-content span {
+  font-weight: bold;
+}
+.indent-1 {
+  margin-left: 12px;  
+}
+.member_proposals_outer {
+	 background: #f5f6de;
+	 position: relative;
+	 margin-right: 5%;
+	 margin-bottom: 30px;
+}
+.member_proposals_inner {
+	 position: relative;
+	 left: 5%;
+	 bottom: -20px;
+}
 
 /* Footer */
 
 .version {
 	margin-top: 15px;
+}
+.footer {
+	padding-top: 30px;
+}
+/*.footer .container {
+  display: none;
+}*/
+@media (min-width: 768px) {
+	.hidden-footer {
+		display: inline;
+	}
+}
+@media (max-width: 767px) {
+	.hidden-footer {
+		display: none;
+	}
 }
 
 /* RESPONSIVE */
@@ -1690,7 +1930,7 @@ label[for=id_proposal-title] {
 	}
 	.navbar-default .navbar-nav > li > a,
 	.navbar-default p.navbar-text {
-		color: #666;
+		color: #fff;
 	}
 	i.fa + span {
 		display: inline;
@@ -1709,7 +1949,7 @@ label[for=id_proposal-title] {
 		padding-bottom: 10px;
 	}
 	li.issue.oc_li > a {
-		margin: 0 125px 0 40px;
+		margin: 0 85px 0 80px;
 		padding-left: 0;
 		padding-right: 0;
 	}
@@ -1747,6 +1987,10 @@ label[for=id_proposal-title] {
 	}
 	.issue_main .issue_left_column {
 		margin-top: 0;
+	}
+	.search_fix {
+		width: auto;
+		float: none;
 	}
 
 }

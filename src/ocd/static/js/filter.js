@@ -64,6 +64,9 @@ $(function () {
 
     } else {
         $('.filter').addClass('on');
+        $('body').on('ocd.updated', function () {
+            $('.filter-subtitle').hide();
+        });
         $('.filter-subtitle').hide();
         toggleTitles();
     }

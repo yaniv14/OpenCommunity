@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}
+<title>{% trans "DemOS 403" %}</title>
+{% endblock %}
+
+{% block extrahead %}
+<link type="text/css" rel="stylesheet" href="{{ STATIC_URL}}css/error.css" />
+{% endblock %}
+
+{% block content %}
+<div class="section_1">
+    <img src="{{ STATIC_URL }}images/403.png" >
+    <div id="t1">
+        {% trans "Sorry" %}
+    </div>
+    <div id="t2">
+        {% trans "You don't have permission to view that page" %}
+        <br>
+        <a id="backBtn"> <a id="ct1" href="https://www.demos.org.il/login/?next=/">{% trans "Login" %}</a>. </a>
+    </div>
+</div>
+{% endblock %}

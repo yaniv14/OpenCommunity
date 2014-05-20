@@ -16,9 +16,7 @@ class Migration(SchemaMigration):
 
     def backwards(self, orm):
         # Adding field 'ProposalVote.registered_by_chairman'
-        db.add_column(u'issues_proposalvote', 'registered_by_chairman',
-                      self.gf('django.db.models.fields.BooleanField')(default=False),
-                      keep_default=False)
+        db.delete_column(u'issues_proposalvote', 'registered_by')
 
 
     models = {
@@ -161,6 +159,13 @@ class Migration(SchemaMigration):
             'proposal': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['issues.Proposal']"}),
             'registered_by': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'reg_votes'", 'null': 'True', 'to': u"orm['users.OCUser']"}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'votes'", 'to': u"orm['users.OCUser']"}),
+            'value': ('django.db.models.fields.SmallIntegerField', [], {})
+        },
+        u'issues.proposalvoteboard': {
+            'Meta': {'unique_together': "(('proposal', 'user'),)", 'object_name': 'ProposalVoteBoard'},
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'proposal': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['issues.Proposal']"}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'board_votes'", 'to': u"orm['users.OCUser']"}),
             'value': ('django.db.models.fields.SmallIntegerField', [], {})
         },
         u'issues.voteresult': {

@@ -1,7 +1,7 @@
 {% load i18n %}
 
-{% trans "Summary Draft" as title_type %}
+{% trans "Summary draft" as title_type %}
 
-{% include 'emails/_protocol.html' with title=community.upcoming_meeting_title location=community.upcoming_meeting_location scheduled_at=meeting_time summary=community.upcoming_meeting_summary url=community.get_absolute_url participants=community.upcoming_meeting_participants.all guests=community.get_guest_list agenda=community.draft_agenda %}
+{% include 'emails/_protocol.html' with title=community.upcoming_meeting_title location=community.upcoming_meeting_location scheduled_at=meeting_time summary=community.upcoming_meeting_summary url=community.get_absolute_url  board_count=community.get_board_count participants=community.meeting_participants guests=community.get_guest_list agenda=community.draft_agenda %}
 
 

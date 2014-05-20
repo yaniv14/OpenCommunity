@@ -9,7 +9,7 @@ id="issue-detail-siblings"
 
 {% block page_header %}
 <span class="visible-xs">
-	<a href="{% url 'issues' community.id %}" style="color: #6C6C6E;text-decoration: none;">{% trans "All Issues" %}</a>
+	<a href="{% url 'issues' community.id %}" style="color: #6C6C6E;text-decoration: none;">{% trans "All issues" %}</a>
 </span>
 {% endblock %}
 
@@ -46,7 +46,7 @@ id="issue-detail-siblings"
                     {% else %}
                         {% if object.is_upcoming %}
                             {% if community.upcoming_meeting_is_published or cperms.communities.viewupcoming_draft %}
-                                --{% trans "In agenda" %}--
+                                --{% trans "In the agenda" %}--
                             {% endif %}
                         {% endif %}
                     {% endif %}

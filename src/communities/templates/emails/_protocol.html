@@ -4,7 +4,7 @@
     style="font-family: Arial, Helvetica, sans-serif{% if LANGUAGE_CODE == 'he' %};direction:rtl{% endif %}">
 
     <div style="border: 1px solid black">
-    
+
     	{% if community.logo %}
     	<div style="width: 100%">
     		<center>
@@ -14,7 +14,7 @@
     	{% endif %}
         <h1 style="margin:0 0 1em 0; text-align: center; padding: 4px">
           {{community}} - {{ community.board_name }} {% if community.official_identifier %} <br/> {{ community.official_identifier }}{% endif %}
-        </h1> 
+        </h1>
         <h1 style="margin:0; background: #ddd;padding: 4px">
             {% if title %}
               {{title}} -
@@ -23,14 +23,14 @@
         </h1>
 
         <div style="padding:3px 6px">
-            
+
           <p>
             {% if community.allow_links_in_emails %} <a href="{{base_url}}{{url}}">{% trans "View online" %}</a> {% endif %}
             </p>
-           
 
-            <div style="border: solid 1px #ccc; margin: 4px 0;padding: 0"> 
-                <h2 style="margin:0; background: #ddd;padding: 4px">{% trans "Meeting Details" %}</h2>
+
+            <div style="border: solid 1px #ccc; margin: 4px 0;padding: 0">
+                <h2 style="margin:0; background: #ddd;padding: 4px">{% trans "Meeting details" %}</h2>
 
                 <div style="margin:0; padding: 4px">
                     <b>{% trans "Scheduled at" %}:</b>
@@ -41,44 +41,56 @@
                     {% endif %}
                     {% if summary %}
                         <br/>
-                        <b>{% trans "Summary" %}:</b>    
+                        <b>{% trans "Summary" %}:</b>
                         <div>
                             {{summary|safe}}
                         </div>
                     {% endif %}
                 </div>
             </div>
-    
-            {% if participants or guests %}
-            <div style="border: solid 1px #ccc; margin: 4px 0;padding: 0"> 
+
+            <div style="border: solid 1px #ccc; margin: 4px 0;padding: 0">
                 <h2 style="margin:0; background: #ddd;padding: 4px">{% trans "Participants" %}</h2>
-    
                 <div style="margin:0; padding: 4px">
-                    {% for u in participants %}
-                        {{ u }}{% if not forloop.last %},{% endif %}
-                    {% endfor %}
-                    {% if guests %}
-                        <p>
-                            <b>{% trans "Guests" %}:</b>
+                    <p>
+                        <b>{{ community.board_name }}:</b>
+                        {% for u in participants.chairmen %}
+                          {{ u }},
+                        {% endfor %}
+                        {% for u in participants.board %}
+                            {{ u }}{% if not forloop.last %},{% endif %}
+                        {% endfor %}
+                        ({% trans 'from ' %}<b>{{ board_count }}</b>
+                        {% trans ' board members.' %})
+                    </p>
+                    {% if participants.members or guests %}
+                    <p>
+                        <b>{% trans "Guests" %}:</b>
+                        {% if participants.members %}
+                            {% for u in participants.members %}
+                                {{ u }}{% if not forloop.last or guests %},{% endif %}
+                            {% endfor %}
+                        {% endif %}
+                        {% if guests %}
                             {% for x in guests %}
                                 {{ x|remove_email }}{% if not forloop.last %},{% endif %}
                             {% endfor %}
-                        </p>
+                        {% endif %}
+                    </p>
                     {% endif %}
                 </div>
             </div>
-            {% endif %}
         </div>
-    
+
         <h2 style="margin:12px 0 0 0; background:#eee; padding:6px 3px 3px">
             {% trans "Issues & Decisions" %}
         </h2>
-    
+
         <div style="padding:12px 6px">
-    
+
             {% for a in agenda %}
                 <article style="border: solid 1px #ccc; margin-top: 12px;">
-    
+
                     <h3 style="margin:0; background: #ddd;padding: 4px; font-size: 20px;">
                         {% if community.allow_links_in_emails %}
                         <a href="{{base_url}}{{a.issue.get_absolute_url}}">
@@ -89,8 +101,7 @@
                         {% endif %}
                     </h3>
 
-                    {% if a.comments.count or a.issue.current_attachments.count %}
-
+                    {% if a.comments.count %}
                       {% if a.comments.count %}
                         {% for c in a.comments.all %}
                             <p style="padding:0; margin: 3px;">
@@ -103,26 +114,27 @@
                             </p>
                         {% endfor %}
                       {% endif %}
-                      
-                      {% if a.issue.current_attachments.count and community.allow_links_in_emails %}
-                         <div class="issue_attachments">
-                         <p>{% trans 'Related files' %}:</p>
-                         <ul>
-                         {% for att in a.issue.current_attachments.all %}
-                            <li>                      
-                                <a href="{{base_url}}{{ att.get_absolute_url }}" class="file_ext"><img height="16" src="{{base_url}}{{ STATIC_URL }}images/icons/{{ att.get_icon }}.png" /> {{att.title}}</a>
-                            </li>
-                         {% endfor %}
-                         </ul>
-                         </div>
-                      {% endif %}
+                    {% endif %}
 
+                    {% if attachments %}
+                     <div class="issue_attachments">
+                     <p>{% trans 'Related files' %}:</p>
+                     <ul>
+                     {% for att in attachments %}
+                        <li>
+                            <a href="{{base_url}}{{ att.get_absolute_url }}" class="file_ext">
+                                <img height="16" src="{{base_url}}{{ STATIC_URL }}images/icons/{{ att.get_icon }}.png" /> {{att.title}}
+                            </a>
+                        </li>
+                     {% endfor %}
+                     </ul>
+                     </div>
                     {% endif %}
 
                     {% if a.proposals %}
-                        {% if a.accepted_proposals %}  
+                        {% if a.accepted_proposals %}
                             <h4 style="margin:0; background: #eee; padding: 2px">
-                                {% trans "Accepted Proposals" %}
+                                {% trans "Accepted proposals" %}
                             </h4>
                             <ul>
                                 {% for p in a.accepted_proposals.all|dictsort:"created_at" %}
@@ -135,7 +147,7 @@
                                             {{p.title}}
                                         </a>
                                         {% else %}
-                                            {{p.title}} 
+                                            {{p.title}}
                                         {% endif %}
                                         {% if p.assigned_to %}
                                             &nbsp;
@@ -156,7 +168,7 @@
                         {% endif %}
                         {% if a.rejected_proposals %}
                             <h4 style="margin:0; background: #eee; padding: 2px">
-                                {% trans "Rejected Proposals" %}
+                                {% trans "Rejected proposals" %}
                             </h4>
                             <ul>
                                 {% for n in a.rejected_proposals.all|dictsort:"created_at" %}
@@ -178,9 +190,9 @@
 
                     {% endif %}
                 </article>
-    
+
             {% endfor %}
-    
+
         </div>
     </div>
 
@@ -198,5 +210,5 @@
         background-position: right;
         background-repeat: no-repeat;
     }
-    
+
 </style>

@@ -64,6 +64,7 @@ class MembershipAdmin(admin.ModelAdmin):
                     'community',
                     'default_group_name',
                     'user',
+                    'created_at',
                     )
     
     list_filter = ('community', 'default_group_name',)

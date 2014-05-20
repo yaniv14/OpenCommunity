@@ -28,6 +28,7 @@ class DefaultRoles(object):
                            'issues.viewopen_proposal',
                            'communities.viewupcoming_community',
                            'issues.vote',
+                           'issues.proposal_board_vote_self',
                            'issues.vote_ranking',
                           ]
 
@@ -35,6 +36,7 @@ class DefaultRoles(object):
                             'issues.view_proposal_in_discussion',
                             'communities.viewupcoming_draft',
                             'issues.view_referendum_results',
+                            'issues.view_update_status',
                           ]
      
     permissions[PROPOSER] = permissions[PARTICIPANT] + [
@@ -68,6 +70,8 @@ class DefaultRoles(object):
                            'issues.acceptopen_proposal',
                            'meetings.add_meeting',  # == Close Meeting
                            'issues.edit_referendum',
+                           'issues.chairman_vote',
+                           'users.show_member_profile',
                           ]
 
     permissions[MANAGER] = permissions[DECIDER] + [

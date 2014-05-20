@@ -1,3 +1,3 @@
-from django.db import models
+from oc_util.email_util import fix_garbled_mail
 
-# Create your models here.
+fix_garbled_mail()

@@ -7,6 +7,10 @@
 id="issue-detail"
 {% endblock %}
 
+{% block title %}
+	<title>{{ object.community.name }} - {{ object.title }}</title>
+{% endblock %}
+
 {% block page_header %}
 <!-- {% trans "Issue" %} -->
 {% endblock %}
@@ -84,7 +88,7 @@ id="issue-detail"
                               <li{% if meeting == ai.meeting %} class="active"{% endif %}>
                                   <a role="menuitem" href="#meeting-{{ai.meeting.id}}" data-toggle="filter"
                                       data-show=".filter-meeting-{{ai.meeting.id}}">
-                                      {{ai.meeting.get_title_or_shortdate}}
+                                      {{ai.meeting.get_title_and_shortdate}}
                                   </a>
                               </li>
                           {% endfor %}
@@ -104,15 +108,36 @@ id="issue-detail"
                     {% else %}
                         {% if object.is_upcoming %}
                             {% if community.upcoming_meeting_is_published or cperms.communities.viewupcoming_draft %}
-                                --{% trans "In agenda" %}--
+                                --{% trans "In the agenda" %}--
                             {% endif %}
                         {% endif %}
                     {% endif %}
                 </div>
             {% endif %}
+            {% if cperms.meetings.add_meeting %}
+                <div class="text-right col-xs-12 filter filter-upcoming" style="font-size: 14px;">
+					{% if object.completed and object.is_current or object.is_archived %}
+						<form id="issue-undo-complete"  method="post" action="{% url 'issue_complete' community.id issue.id %}">
+							{% csrf_token %}
+							<input name="undo_complete" type="hidden" value="1"/>
+							<button class="close-issue-btn btn btn-default btn-sm">
+								{% trans "Undo complete discussion" %}
+							</button>
+						</form>
+					{% elif not object.is_current and not object.is_archived and object.in_closed_meeting %}
+						<form id="issue-archive" method="post" action="{% url 'issue_complete' community.id issue.id %}">
+							{% csrf_token %}
+							<input name="archive" type="hidden" value="1"/>
+							<button class="close-issue-btn btn btn-default btn-sm">
+								{% trans "Archive issue" %}
+							</button>
+						</form>
+					{% endif %}
+                </div>
+            {% endif %}
 			{% for ai in object.agenda_items.all reversed %}
 			    <div class="text-right col-xs-12 filter-meeting-{{ai.meeting.id}} filter filter-all" style="font-size: 14px;padding-left: 40px;">
-			        <a href="{{ai.meeting.get_absolute_url}}">{{ai.meeting.get_title_or_shortdate}}</a>
+			        <a href="{{ai.meeting.get_absolute_url}}">{{ai.meeting.get_title_and_shortdate}}</a>
 			    </div>
 		    {% endfor %}
 

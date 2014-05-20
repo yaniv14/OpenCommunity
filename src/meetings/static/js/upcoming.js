@@ -85,7 +85,7 @@ $(function() {
         if (v == "") {
             v = '00:00';
         }
-        $(this).parent().append($('<input type="time" step="300" class="x" value="' + v + '"/><button>' + Save + '</button>'));
+        $(this).parent().append($('<input type="number" step="5" min="0" max="360" class="x" value="' + v + '"/><button>' + Save + '</button>'));
     });
 
     $('#agenda').on('click', '.timer button', function() {

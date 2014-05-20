@@ -14,7 +14,7 @@
     {% if user.id %}
 
           <h2>
-              {% trans "My Communities" %}
+              {% trans "My communities" %}
           </h2>
 
           {% if user.memberships.count %}
@@ -51,12 +51,4 @@
 
     {% endif %}
     
-    {% if version %}
-        <p class="version text-center">{% trans "Version" %}: 
-            <span dir="ltr">{{ version }}</span>
-        </p>
-    {% else %}
-        <p class="version text-center">DEVELOPMENT SERVER</p>
-    {% endif %}
-
 {% endblock %}

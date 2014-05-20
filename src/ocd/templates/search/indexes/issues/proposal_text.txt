@@ -1,0 +1,4 @@
+{% if object.title %}{{ object.title }}{% endif %}
+{% if object.content %}{{ object.content|striptags }}{% endif %}
+{% if object.assigned_to %}{{ object.assigned_to.display_name }}{% endif %}
+{{ object.tags.names|join:" " }}

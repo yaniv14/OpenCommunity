@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load opencommunity highlight %}
+
+{% block extra-page-id %}
+id="procedure-list"
+{% endblock %}
+
+{% block extrahead %}
+    <link href="{{ STATIC_URL }}search/results_page.css" rel="stylesheet">
+{% endblock %}
+
+
+{% block title %}
+	<title>{{ community.name }} - {% trans "Rule Book" %}</title>
+{% endblock %}
+
+{% block page_header %}
+{% endblock %}
+
+{% block content %}
+<h1>{% trans "Rule Book" %}</h1>
+  <form method="get" action=".">
+  <div class="row">
+      <div class="col-xs-12 form-group">
+          <input type="text" name="q" class="form-control issue-search" {% if query %} value="{{ query }}" 
+                                {% else %} placeholder="{% trans "Search by keywords" %}" {% endif %}>
+      </div>
+      <div class="col-xs-12 form-group" style="display:none;">
+         <input type="submit" value="Search">
+      </div>
+  </div>
+  </form>
+
+  {% if sorted_tags %}
+  <div class="row">
+      <div id="proc_tags" class="col-xs-12">
+          <span class="title">{% trans 'Tags' %} :</span>
+          <a id="all_tags" {% if not active_tag %}class="badge"{% endif %} href="{% if tags_as_links %}/{% else %}#{% endif %}">{% trans 'All' %}</a> /  
+          {% for t in sorted_tags %}
+             {% if forloop.counter > 10 %} <span class="hidden-tag"> {% endif %}  
+              <a 
+                  class="{% if active_tag == t.0 %}badge {% endif %}"
+                  href="{% if tags_as_links %}{{ request.path }}?t={{ t.0 }}{% else %}#{% endif %}" data-tag="{{ t.0 }}">{{ t.0 }}
+             </a>
+              {% if not forloop.last %} / {% endif %} 
+             {% if forloop.counter > 10 %} </span> {% endif %} 
+          {% endfor %}
+          {% if sorted_tags|length > 10 %}  
+             <a id="more_tags" href="#">{% trans 'more' %}...</a>
+          {% endif %}
+      </div>
+  </div>
+  {% endif %}
+
+    <ul id="procedure-order" class="nav nav-tabs">
+        <li class="pull-left"><span style="padding: 10px 0 0 2px; display:block; position: relative; font-weight: bold;">{% trans 'Sort by' %}:</span></li>
+        <li {% if ord == 'date' %}class="active"{% endif %}><a href="{% if is_paginated %}{{ request.path }}?q={{ query }}&ord=date{% else %}#by_date{% endif %}" {% if not is_paginated %}data-toggle="tab" {% endif %}>{% trans "Date" context "rule creation date" %}</a></li>
+        <li {% if ord == 'title' %}class="active"{% endif %}><a href="{% if is_paginated %}{{ request.path }}?q={{ query }}&ord=title{% else %}#by_title{% endif %}" {% if not is_paginated %}data-toggle="tab" {% endif %}>{% trans "Title" %}</a></li>
+    </ul>
+
+    
+    <div class="tab-content clearfix" style="clear: both; padding-top: 10px;">
+        {% if query %}
+            <h3>{% trans "Results" %}</h3>
+        {% endif %}
+
+        {% for p in object_list %}
+            {% include 'issues/_procedure.html' %} 
+        {% endfor %}    
+        {% include 'elements/pagination.html' %}
+    </div>
+
+{% endblock %}
+
+
+{% block scripts %}
+<script src="{{STATIC_URL}}js/jquery.tinysort.min.js"></script>
+<script>
+    function sort_procedures(by) {
+        if(by == '#by_tag') {
+            console.log('tag');
+        } 
+        else if(by == '#by_title') {
+            $('.tab-content ul').tsort('li.order', {data: 'title'}); 
+        }
+        else if(by == '#by_date') {
+            $('.tab-content ul').tsort('li.order', {data: 'date', order: 'desc', forceStrings: true});     
+        }
+
+    }
+
+    var TAGS_INCR_COUNT = 10
+    var visible_count = TAGS_INCR_COUNT;
+    $(function() {
+        {% if not is_paginated %}
+            $('#procedure-order').on('click', 'a', function() {
+                sort_procedures($(this).attr('href'));
+            });
+            {% if not tags_as_links %}    
+                $('#proc_tags').on('click', 'a:not(#more_tags)', function() {
+                    $('a.badge').removeClass('badge');
+                    $(this).addClass('badge');
+                    var t = $(this).data('tag');
+                    if(t) {
+                        $('.procedure').hide();
+                        $('.procedure li[data-tags*="' + t + '"]').closest('ul').show();
+                    }
+                });  
+                $('a#more_tags').click(function() {
+                    $('span.hidden-tag').slice(0,TAGS_INCR_COUNT).removeClass('hidden-tag');
+                    visible_count += TAGS_INCR_COUNT;                
+                    if($('span.hidden-tag').length == 0) {
+                        $(this).remove();
+                    }
+                });
+                $('a#all_tags').click(function() {
+                    $('a.badge').removeClass('badge');
+                    $(this).addClass('badge');
+                    $('.procedure').show();
+                });
+            
+            {% endif %}
+        {% endif %}
+  });
+
+</script>
+
+{% endblock %}

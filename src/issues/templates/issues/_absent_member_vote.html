@@ -1,0 +1,14 @@
+{% load i18n  %}
+<div class="vote-btns prop_votes text-center col-xs-12 col-sm-8 col-sm-offset-2">
+	<div class="row">
+		<div class="col-xs-4">
+			<a class="btn btn-pro btn-block vote-action" href="{% url 'vote_on_proposal' community_id=community.id pk=proposal.id %}" id="vote-for"> <span class="glyphicon glyphicon-thumbs-up"></span> {% trans "For" %}</a>
+		</div>
+		<div class="col-xs-4">
+			<a class="btn btn-default btn-block vote-action" href="{% url 'vote_on_proposal' community_id=community.id pk=proposal.id %}" id="vote-abstain">{% trans "Abstain" %}</a>
+		</div>
+		<div class="col-xs-4">
+			<a class="btn btn-con btn-block vote-action" href="{% url 'vote_on_proposal' community_id=community.id pk=proposal.id %}" id="vote-against"> <span class="glyphicon glyphicon-thumbs-down"></span> {% trans "Against" %}</a>
+		</div>
+	</div>
+</div>

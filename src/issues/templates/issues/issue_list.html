@@ -6,6 +6,10 @@
 id="issue-list"
 {% endblock %}
 
+{% block title %}
+	<title>{{ community.name }} - {% trans "Issues" %}</title>
+{% endblock %}
+
 {% block page_header %}
 {% endblock %}
 
@@ -17,17 +21,17 @@ id="issue-list"
         {% if cperms.issues.vote_ranking and is_member %}
             <li><a href="#my_vote" data-toggle="tab">{% trans "My vote" %}</a></li>
         {% endif %}
-        <li><a href="#by_rank" data-toggle="tab">{% trans "By rank" %}</a></li>
+        <li><a href="#by_rank" data-toggle="tab">{% trans "By priority" %}</a></li>
         {% if user.id and cperms.issues.add_issue %}
 		<li class="pull-right btn-tab">
-			<a href="{% url "issue_create" community.id %}" class="btn btn-oc" data-rel="form"> <i class="fa fa-plus"></i><span> {% trans "Create Issue" %}</span></a>
+			<a href="{% url "issue_create" community.id %}" class="btn btn-oc" data-rel="form"> <i class="fa fa-plus"></i><span> {% trans "New issue" %}</span></a>
 		</li>
 		{% endif %}
     </ul>
     {% endif %}
     {% if user.id and cperms.issues.add_issue and not community.issue_ranking_enabled %}
 		<div class="one_action_icon col-xs-2 pull-right" style="width: auto;line-height: 1;padding: 0;">
-			<a href="{% url "issue_create" community.id %}" class="btn btn-oc" data-rel="form"> <i class="fa fa-plus"></i><span> {% trans "Create Issue" %}</span></a>
+			<a href="{% url "issue_create" community.id %}" class="btn btn-oc" data-rel="form"> <i class="fa fa-plus"></i><span> {% trans "New issue" %}</span></a>
 		</div>
 	{% endif %}
     {% if community.issue_ranking_enabled %}
@@ -36,13 +40,13 @@ id="issue-list"
             <div class="row">
                 <!-- <h2 class="col-xs-3 col-sm-1">{% trans "Search" %}:</h2> -->
                 <div class="form-group {% if community.issue_ranking_enabled %}col-xs-12{% else %}col-xs-9 pull-left{% endif %}">
-                    <input type="text" class="form-control issue-search" placeholder="{% trans "Search in agenda list" %}">
+                    <input type="text" class="form-control issue-search" placeholder="{% trans "Search the agenda" %}">
                 </div>
             </div>
             <table class="table table-condensed issue-table">
             {% for object in object_list %}
                 <tr class="issue-list">
-                    <td class="issue_date">{{ object.created_at|date:"j M" }}</td>
+                    <td class="issue_date">{{ object.created_at|ocshortdate }}</td>
                     <td class="issue_title left_arrow"><a href="{{ object.get_absolute_url }}?s=1"> {{ object.title }}</a></td>
                 </tr>
             {% endfor %}
@@ -52,8 +56,8 @@ id="issue-list"
         {% if is_member and cperms.issues.vote_ranking %}
         <div id="my_vote" class="tab-pane">
             {% with can_sort=True %}
-            <h2> {% trans "My Agenda" %}
-            	<i class="fa fa-info-circle" style="font-size: 15px; color: #194e5c;" id="help" data-container="#help" data-trigger="hover" data-toggle="popover" data-placement="top" data-content="{% trans 'Please prioritize relevant issues in your perspective' %}"></i>
+            <h2> {% trans "My agenda" %}
+            	<i class="fa fa-info-circle" style="font-size: 15px; color: #194e5c;" id="help" data-container="#help" data-trigger="hover" data-toggle="popover" data-placement="top" data-content="{% trans 'The order of the items should reflect their importance, please prioritize.' %}"></i>
         	</h2>
 
             <ul id="ordered" class="nav nav-pills nav-stacked">
@@ -82,13 +86,13 @@ id="issue-list"
 
             <div class="row">
                 <div class="col-xs-12 form-group">
-                    <input type="text" class="form-control issue-search" placeholder="{% trans "Search in agenda list" %}">
+                    <input type="text" class="form-control issue-search" placeholder="{% trans "Search the agenda" %}">
                 </div>
             </div>
             <table id="voted_order" class="table table-condensed issue-table">
                 {% for object in sorted_issues %}
                     <tr class="issue-list">
-                        <td class="issue_date">{{ forloop.counter }}</td>
+                        <td class="issue_date">{{ object.order_by_votes|floatformat }}</td>
                         <td class="issue_title left_arrow"><a href="{{ object.get_absolute_url }}?s=1"> {{ object.title }}</a></td>
                     </tr>
                 {% endfor %}
@@ -101,7 +105,7 @@ id="issue-list"
         <div id="by_time"> 
             <div class="row">
                 <div class="form-group {% if not cperms.issues.add_issue %}col-xs-12{% else %}col-xs-9 pull-left{% endif %}">
-                    <input type="text" class="form-control issue-search" placeholder="{% trans "Search in agenda list" %}">
+                    <input type="text" class="form-control issue-search" placeholder="{% trans "Search the agenda" %}">
                 </div>
             </div>    
             <table class="table table-condensed issue-table">

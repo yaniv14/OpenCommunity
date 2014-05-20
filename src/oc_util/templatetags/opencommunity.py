@@ -182,14 +182,15 @@ def board_vote(proposal, val, participants):
 """
 
 def board_voters_on_proposal(proposal):
+    """ potential board voters """
     if proposal.decided_at_meeting:
         board_attn = proposal.decided_at_meeting.participations.board() 
     else:
         c = proposal.issue.community
         board_attn = c.memberships.board().filter(
                     user__in=c.upcoming_meeting_participants.all())
-        participants = [b.user for b in board_attn]
-    
+        
+    participants = [b.user for b in board_attn]
     return participants 
 
 
@@ -202,10 +203,13 @@ def board_votes_count(p):
 def board_by_vote(p, val):
     participants = board_voters_on_proposal(p)
     if val == 'neut':
+        """
         voter_ids = ProposalVoteBoard.objects.filter(proposal=p) \
                     .exclude(value=ProposalVoteValue.NEUTRAL) \
                     .values_list('user', flat=True)
         return [u for u in participants if u.id not in voter_ids]
+        """
+        vote = ProposalVoteValue.NEUTRAL
     elif val == 'pro':
         vote = ProposalVoteValue.PRO
     elif val == 'con':

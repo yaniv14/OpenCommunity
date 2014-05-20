@@ -1,0 +1,24 @@
+{% load i18n %}
+{% load opencommunity highlight  %}
+
+<ul class="prop-table proposals assignment">
+    <li class="drag-icon task-icon order"
+    data-title="{{assgn.title}}"
+    data-status="{% if assgn.object.task_completed %}completed{% elif assgn.id in late %}late{% else %}opened{% endif %}"
+    data-date="{{assgn.due_by|date:'Y-m-d'}}"
+    ></li>
+    <li class="prop-title">
+      <a href="{{assgn.object.get_absolute_url}}">{{ assgn.object.title }}</a>
+    </li>
+    <li class="prop-content">
+        <div>{% if assgn.due_by %}<span>{% trans 'Due Date' %}:</span> {{ assgn.due_by|date:"DATE_FORMAT" }}<span class="indent-1"></span> {% endif %}
+            {% if assgn.assignee %}<span>{% trans 'Assigned To' %}:</span> {{ assgn.assignee}}{% endif %}  
+       </div>
+        <div>
+        {% with assgn.object.content as res %}
+            {% highlight res with query css_class "highlighted_result" html_tag "span" max_length "240" %}
+        {% endwith %}
+        </div>
+    </li>
+</ul>
+

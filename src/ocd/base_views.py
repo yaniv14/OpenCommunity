@@ -41,7 +41,7 @@ class ProtectedMixin(object):
         if not has_community_perm(request.user, self.community, perm):
             if settings.DEBUG:
                 return HttpResponseForbidden("403 %s" % perm)
-            return HttpResponseForbidden("403 Unauthorized")
+            return HttpResponseForbidden("403 Unauthorized")  # TODO: raise PermissionDenied
 
         if request.method == "POST":
             if hasattr(self, 'get_required_permission_for_post'):

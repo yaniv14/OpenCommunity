@@ -2,6 +2,4 @@
 
 {% trans "Summary" as title_type %}
 
-{% include 'emails/_protocol.html' with title=object.title location=object.location scheduled_at=object.held_at summary=object.summary url=object.get_absolute_url participants=object.participants.all guests=object.get_guest_list agenda=object.agenda.all %}
-
-
+{% include 'emails/_protocol.html' with title=object.title location=object.location scheduled_at=object.held_at summary=object.summary url=object.get_absolute_url member_participants=object.meeting_participants.members participants=object.meeting_participants board_count=object.community.get_board_count guests=object.get_guest_list agenda=object.agenda.all %}

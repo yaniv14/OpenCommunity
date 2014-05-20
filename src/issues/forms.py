@@ -113,6 +113,7 @@ class CreateProposalBaseForm(forms.ModelForm):
                    'type',
                    'title',
                    'content',
+                   'tags',
                    'assigned_to_user',
                    'assigned_to',
                    'due_by',

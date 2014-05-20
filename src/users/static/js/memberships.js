@@ -25,7 +25,7 @@ $(function() {
                     alert('Server Error! please try again or reload the page.');
                 }
             }
-        })
+        });
 
 
     // Delete invitation form

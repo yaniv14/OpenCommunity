@@ -1,6 +1,12 @@
 {% extends "base.html" %}
 {% load i18n %}
 
+{% block title %}
+	<title>
+		{{ object_list.0.community.name }} - {% trans "Members" %}  
+	</title>
+{% endblock %}
+
 {% block extra-page-id %}
 id="members-list"
 {% endblock %}
@@ -13,13 +19,26 @@ id="members-list"
 {% if object_list %}
 
 <div class="col-xs-12 col-sm-6">
+	<h2>{{ board_name }}</h2>
+	<ul class="list-group">
+		{% for board in board_list %}
+		<li class="list-group-item">
+			<a href="{{ board.get_absolute_url }}" style="color: #333333;">
+				{{ board.user.display_name }}
+				({{ board.get_default_group_name_display }})<br />
+				<span style="font-size: 12px;">{{ board.user.email }}</span>
+			</a>
+		</li>
+		{% endfor %}
+	</ul>
 	<h2>{% trans "Members" %}</h2>
 	<ul class="list-group">
-		{% for object in object_list %}
+		{% for member in member_list %}
 		<li class="list-group-item">
-			{# <a href="{{ object.get_absolute_url }}" style="color: #333333;"> #}
-				{{ object.user.display_name }}
-				({{ object.get_default_group_name_display }})
+			{# <a href="{{ member.get_absolute_url }}" style="color: #333333;"> #}
+				{{ member.user.display_name }}
+				({{ member.get_default_group_name_display }})<br />
+				<span style="font-size: 12px;">{{ member.user.email }}</span>
 			{# </a> #}
 		</li>
 		{% endfor %}

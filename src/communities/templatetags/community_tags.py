@@ -1,11 +1,8 @@
 from django import template
-from django.shortcuts import get_object_or_404
-from django.core.urlresolvers import reverse
-from django.utils.translation import ugettext, ugettext_lazy as _
-from datetime import datetime, time
 from django.utils import timezone
-
+from django.utils.translation import ugettext_lazy as _
 from users.models import Membership
+
 
 register = template.Library()
 
@@ -14,7 +11,7 @@ def display_upcoming_time(community):
     """ display only date if hour information if not set (remains at default '00:00)
     """
     if not community.upcoming_meeting_scheduled_at:
-        return _("Not set yet")
+        return _("--/--/--")
     when = timezone.localtime(community.upcoming_meeting_scheduled_at)
     t = when.timetz()
     if t.hour == 0 and t.minute == 0:
@@ -53,9 +50,9 @@ def upcoming_status(community):
         if community.upcoming_meeting_is_published:
             if community.straw_voting_enabled:
                 if community.straw_vote_ended:
-                    rows[0] = _("Straw Vote Ended")
+                    rows[0] = _("Straw vote ended")
                 else:
-                    rows[0] = _("Active Straw Vote")
+                    rows[0] = _("Active straw vote")
                 rows[1] = meeting_version
             else:
                 rows[0] = _("Published")
@@ -67,4 +64,4 @@ def upcoming_status(community):
 
 @register.filter
 def remove_email(args):
-    return args.split(' [')[0]
+    return args.split('[')[0]

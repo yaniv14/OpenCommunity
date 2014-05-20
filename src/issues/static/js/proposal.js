@@ -21,13 +21,27 @@ $(function () {
         });
     }
 
-    function do_vote(vote_url, vote_value, elem) {
-        $.post(vote_url, {
-            val: vote_value
-        }, function (data) {
+    function do_vote(vote_url, vote_value, elem, is_board) {
+        var params = {
+          'val': vote_value
+        };
+        if(is_board) {
+          params['board'] = '1';
+        }
+        $.post(vote_url, params, function (data) {
             if (data['result'] == 'ok') {
                 var btn_div = elem.closest('div.vote-btns');
-                btn_div.replaceWith(data['html']);
+                if(is_board) {
+                    var current = $('.vote_marked');
+                    if(current.length) {
+                        current.removeClass('vote_marked');
+                    }
+                    elem.addClass('vote_marked');
+                    $('.board_vote').replaceWith(data['html']);
+                }
+                else {
+                    btn_div.replaceWith(data['html']);
+                }
             }
         });
     }
@@ -51,7 +65,8 @@ $(function () {
         event.preventDefault();
         var vote_value = $(this).attr('id').substr(5);
         var target = $(this).attr('href');
-        do_vote(target, vote_value, $(this));
+        var is_board = $(this).closest('.vote-btns').attr('id') == 'board_vote_btns';
+        do_vote(target, vote_value, $(this), is_board);
     });
 
     window.onbeforeunload = function () {
@@ -77,19 +92,19 @@ $(function () {
         $('.proposal_right_column,.proposal_left_column').css('height', 'auto');
         if (!$('.proposal_right_column').is(":visible")) {
             return;
-        }
+        };
         var issue_h = $('.proposal_right_column').outerHeight();
         var proposal_h = $('.proposal_left_column').outerHeight();
         if ((issue_h + 20) < proposal_h) {
             $('.proposal_right_column').outerHeight(proposal_h - 20);
             return;
-        }
+        };
         if (issue_h > proposal_h) {
             $('.proposal_left_column').outerHeight(issue_h + 20);
             return;
-        }
+        };
 
-    }
+    };
 
     $('body').on('ocd.show', function () {
         fixHeights();
@@ -97,6 +112,6 @@ $(function () {
 
     $(window).resize(function () {
         fixHeights();
-    })
+    });
 
 });

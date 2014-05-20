@@ -1,9 +1,9 @@
 {% load i18n %}
 {% trans 'Hello' %} {{ recipient_name|default:'' }},
 
-{% blocktrans with u=object.created_by.display_name c=object.community.name|safe %}You were invited by {{u}} to join {{c}}.{% endblocktrans %}
+{% blocktrans with u=object.created_by.display_name|safe c=object.community.name|safe %}You were invited by {{u}} to join {{c}}.{% endblocktrans %}
 {% if object.message %}
-{{object.message}}
+{{object.message|safe}}
 {% endif %}
 {% blocktrans %}Click here to join this community:{% endblocktrans %}
 {{base_url}}{{object.get_absolute_url}}

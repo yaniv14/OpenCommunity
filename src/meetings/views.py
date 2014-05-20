@@ -1,3 +1,4 @@
+from itertools import chain
 from django.contrib import messages
 from django.http.response import HttpResponse
 from django.utils import timezone
@@ -6,6 +7,7 @@ from django.views.generic.base import RedirectView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView
 from issues.views import CommunityMixin
+from issues.models import Issue, IssueStatus
 from meetings import models
 from meetings.forms import CloseMeetingForm
 from ocd.base_views import AjaxFormView
@@ -44,8 +46,17 @@ class MeetingProtocolView(MeetingMixin, DetailView):
     required_permission = 'meetings.view_meeting'
     template_name = "emails/protocol.html"
 
+    def get_context_data(self, **kwargs):
+        context = super(MeetingProtocolView, self).get_context_data(**kwargs)
+        agenda_items = context['object'].agenda.all()
+        item_attachments = [item.issue.current_attachments(item) for item in agenda_items]
+        context['attachments'] = list(chain.from_iterable(item_attachments))
+        return context
+
 
 class MeetingCreateView(AjaxFormView, MeetingMixin, CreateView):
+    """actualy, this view handles the "close meeting" form.
+       meeting objects are created only after this act """
 
     required_permission = 'meetings.add_meeting'
 
@@ -60,13 +71,24 @@ class MeetingCreateView(AjaxFormView, MeetingMixin, CreateView):
         d["held_at"] = dt
         return d
 
+    def get_context_data(self, **kwargs):
+        d = super(MeetingCreateView, self).get_context_data(**kwargs)
+        participants = self.community.upcoming_meeting_participants.all()
+        d['no_participants'] = True if not participants else False
+        return d
+
+    def get_form_kwargs(self):
+        kwargs = super(MeetingCreateView, self).get_form_kwargs()
+        kwargs['issues'] = self.community.upcoming_issues()
+        return kwargs
+
+
     def form_valid(self, form):
-
+        # archive selected issues
         m = self.community.close_meeting(form.instance, self.request.user)
-
+        Issue.objects.filter(id__in=form.cleaned_data['issues']).update(
+                  completed=True, status=IssueStatus.ARCHIVED)
         total = self.community.send_mail('protocol', self.request.user,
                             form.cleaned_data['send_to'], {'object': m})
-
         messages.info(self.request, _("Sending to %d users") % total)
-
         return HttpResponse(m.get_absolute_url())

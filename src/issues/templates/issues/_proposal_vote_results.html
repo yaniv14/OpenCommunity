@@ -7,7 +7,7 @@
         {% if meeting %}
         {% with next_link=proposal|next_straw_results_link:meeting.id prev_link=proposal|prev_straw_results_link:meeting.id %}
             {% if prev_link %}
-                <a href="{{ prev_link }}" class="glyphicon glyphicon-circle-arrow-right" id="results_prev"  style="vertical-align: sub"></a>
+                <a href="{{ prev_link }}" class="glyphicon glyphicon-circle-arrow-{% if LANGUAGE_CODE == 'he' %}right{% else %}left{% endif %}" id="results_prev"  style="vertical-align: sub"></a>
             {% endif %}
             {% if meeting.held_at %}{{ meeting.held_at }}
             {% else %}
@@ -18,7 +18,7 @@
                 {% endif %}
             {% endif %}
             {% if next_link %}
-                <a href="{{ next_link }}" class="glyphicon glyphicon-circle-arrow-left" id="results_next"  style="vertical-align: sub"></a>
+                <a href="{{ next_link }}" class="glyphicon glyphicon-circle-arrow-{% if LANGUAGE_CODE == 'he' %}left{% else %}right{% endif %}" id="results_next"  style="vertical-align: sub"></a>
             {% endif %}
         {% endwith %}
         {% endif %}
@@ -26,9 +26,9 @@
 
 	<div class="col-xs-6">
 		<p>
-			<span class="for glyphicon glyphicon-stop"></span><span> <span>{% trans "For" %}</span>:{{ res.votes_pro }}</span>
+			<span class="for glyphicon glyphicon-stop"></span> {% trans "For" %}: {{ res.votes_pro }}
 			<br>
-			<span class="against glyphicon glyphicon-stop"></span><span> <span>{% trans "Against" %}</span>: {{ res.votes_con }}</span>
+			<span class="against glyphicon glyphicon-stop"></span> {% trans "Against" %}: {{ res.votes_con }}
 			<br>
 			<div class="chart_divider"></div>
 			<span>{% trans "Voted" %}: {{ res.votes_pro|add:res.votes_con }} ({{ res|vote_percentage|floatformat:"0" }}%)</span><br>

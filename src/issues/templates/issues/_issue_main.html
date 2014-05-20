@@ -15,8 +15,8 @@
                 {% if cperms.issues.editopen_issue or object.created_by == user %}
                     <div class="filter filter-upcoming pull-right">
                         <h5>
-                            <i class="fa fa-edit"></i> <a data-rel="form" data-replace="#issue-abstract" href="{% url 'issue_edit_abstract' object.community.id object.id %}" title='{% trans "Edit Abstract" %}' style="color: #6C6C6E;">{% trans "Edit Abstract" %}</a>
-                            <i class="fa fa-paperclip"></i> <a id="add-attachment" data-rel="form" href="{% url 'add_attachment' community.id object.id %}" title='{% trans "Add attachment" %}' style="color: #6C6C6E;">{% trans "Add attachment" %}</a>
+                            <i class="fa fa-edit"></i> <a data-rel="form" data-replace="#issue-abstract" href="{% url 'issue_edit_abstract' object.community.id object.id %}" title='{% trans "Edit abstract" %}' style="color: #6C6C6E;">{% trans "Edit abstract" %}</a>
+                            <i class="fa fa-paperclip"></i> <a id="add-attachment" data-rel="form" href="{% url 'add_attachment' community.id object.id %}" title='{% trans "Attach files" %}' style="color: #6C6C6E;">{% trans "Attach files" %}</a>
                         </h5>
                     </div>
                 {% endif %}
@@ -24,7 +24,7 @@
 
             {% for ai in object.agenda_items.all %}
                 {% if ai.background or ai.attachments.count %}
-                    <div class="issue-abstract on filter-meeting-{{ai.meeting.id}} filter" style="clear: both;" popo="p">
+                    <div class="issue-abstract on filter-meeting-{{ai.meeting.id}} filter" style="clear: both;">
                         <a class="filter filter-subtitle" href="{{ai.meeting.get_absolute_url}}">{{ai.meeting.get_title_or_date}}:</a>
                         {{ai.background|default_if_none:""|userhtml}}
                     </div>
@@ -42,14 +42,8 @@
                     {% endif %}
                {% endif %}
             {% endfor %}
-          <div id="issue-abstract" style="clear: both;">
-           {% if object.abstract %}
-                <div class="issue-abstract filter-upcoming filter">
-                    <a class="filter" href="{{community.get_absolute_url}}">{% trans "Upcoming Meeting" %}</a>
-                        {{object.abstract|default_if_none:""|userhtml}}
-                </div>
-            {% endif %}
-          </div> 
+
+          {% include "issues/_issue-abstract.html" %}
 
           {% if object.current_attachments.count %}
             <ul style="clear: both; margin:0; list-style-type: none; padding: 0;">
@@ -92,15 +86,19 @@
                 {% include 'issues/_proposal.html' %}
                 {% if can_straw_vote and not proposal.decided and cperms.issues.vote and user|member_of:community %}
                     <div class="issue_proposal_vote">
-                        {% include 'issues/_vote.html' %}
+                        {% include 'issues/_straw_vote.html' %}
                     </div>
-                {% endif %}
+                {% elif can_board_vote_self %}
+	                <div class="issue_proposal_vote">
+			            {% include 'issues/_board_vote_self.html' %}
+		            </div>
+        		{% endif %}
             {% endfor %}
         </div>
 
         {% if cperms.issues.add_proposal and not object.is_archived %}
             <div class="narrow clear filter filter-upcoming">
-                <a class="btn btn-oc btn-lg btn-block" data-rel="form" data-append-to=".open-proposals" href="{% url "proposal_create" community.id object.id %}">{% trans "Add Proposal" %}</a>
+                <a class="btn btn-oc btn-lg btn-block" data-rel="form" data-append-to=".open-proposals" href="{% url "proposal_create" community.id object.id %}">{% trans "Add a proposal" %}</a>
             </div>
         {% endif %}
     </div>
@@ -137,6 +135,8 @@
         </ul>
     </div>
     {% endif %}
+    
+    {% comment %}
     {% if cperms.meetings.add_meeting %}
         {% if object.is_current and not object.completed %}
         <form id="issue-complete" method="post" action="{% url 'issue_complete' community.id issue.id %}">
@@ -149,31 +149,7 @@
           </div>
         </form>
         <br/>
-        
-        {% elif object.completed and object.is_current or object.is_archived %}
-        <form id="issue-undo-complete"  method="post" action="{% url 'issue_complete' community.id issue.id %}">
-          {% csrf_token %}
-          <input name="undo_complete" type="hidden" value="1"/>
-          <div class="narrow">
-              <button class="close-issue-btn btn btn-oc btn-block btn-lg">
-                {% trans "Undo complete discussion" %}
-              </button>
-          </div>
-        </form>
-        <br/>
-        
-        {% elif not object.is_archived and object.in_closed_meeting %}
-        <form id="issue-archive" method="post" action="{% url 'issue_complete' community.id issue.id %}">
-          {% csrf_token %}
-          <input name="archive" type="hidden" value="1"/>
-          <div class="narrow">
-              <button class="close-issue-btn btn btn-oc btn-block btn-lg">
-                  {% trans "Archive issue" %}
-              </button>
-          </div>
-        </form>
-        <br/>
         {% endif %}
-
     {% endif %}
+    {% endcomment %}
 </div>

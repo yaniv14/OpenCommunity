@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block page_header %}
-    {% trans "Create Issue" %}
+    {% trans "New issue" %}
 {% endblock %}
 
 {% block form_name %}
@@ -18,7 +18,7 @@
 {% block content %}
     {% csrf_token %}
     {{form}}
-    <h3>{% trans "New Proposal" %}</h3>
+    <h3>{% trans "New proposal" %}</h3>
     <ul id="proposal-type" class="nav nav-tabs">
 		<li class="active"><a href="#">{% trans "None" %}</a></li>
 		<li><a href="#">{% trans "General" %}</a></li>
