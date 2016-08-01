@@ -5,7 +5,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.contrib.auth.models import Group
-from users.models import OCUser, Membership, Invitation
+from users.models import OCUser, Invitation, CommunityMembership
 
 
 class UserCreationForm(forms.ModelForm):
@@ -57,30 +57,25 @@ class UserChangeForm(forms.ModelForm):
 
 
 class UserMembershipInline(admin.TabularInline):
-    model = Membership
+    model = CommunityMembership
     fk_name = 'user'
 
 
-class MembershipAdmin(admin.ModelAdmin):
+class CommunityMembershipAdmin(admin.ModelAdmin):
     list_display = (
         'community',
-        'display_group_name',
         'display_user_email',
         'user',
         'created_at',
     )
 
-    list_filter = ('community', 'group_name', 'user__email', 'user')
+    list_filter = ('community', 'user__email', 'user')
     ordering = ['community', ]
 
     def display_user_email(self, obj):
         return obj.user.email
 
-    def display_group_name(self, obj):
-        return obj.group_name.title
-
     display_user_email.short_description = _('Email')
-    display_group_name.short_description = _('Group')
 
 
 class OCUserAdmin(UserAdmin):
@@ -91,7 +86,7 @@ class OCUserAdmin(UserAdmin):
     # The fields to be used in displaying the User model.
     # These override the definitions on the base UserAdmin
     # that reference specific fields on auth.User.
-    list_display = ('email', 'display_name', 'get_groups')
+    list_display = ('email', 'display_name')
     list_filter = ()
     fieldsets = (
         (None, {'fields': ('email', 'password', 'is_active')}),
@@ -111,21 +106,21 @@ class OCUserAdmin(UserAdmin):
 
     inlines = [UserMembershipInline]
 
-    def get_groups(self, obj):
-        memberships = obj.memberships.all().values_list('group_name_id', flat=True)
-        groups = CommunityGroupRole.objects.filter(group_id__in=memberships)
-        l = []
-        for g in groups:
-            l.append(u'{0}: {1}'.format(g.group.title, g.committee.name))
-        return " | ".join(l)
-
-    get_groups.short_description = _('Committee & Groups')
+    # def get_groups(self, obj):
+    #     memberships = obj.memberships.all().values_list('group_name_id', flat=True)
+    #     groups = CommunityGroupRole.objects.filter(group_id__in=memberships)
+    #     l = []
+    #     for g in groups:
+    #         l.append(u'{0}: {1}'.format(g.group.title, g.committee.name))
+    #     return " | ".join(l)
+    #
+    # get_groups.short_description = _('Committee & Groups')
 
 
 admin.site.register(OCUser, OCUserAdmin)
 admin.site.unregister(Group)
 
-admin.site.register(Membership, MembershipAdmin)
+admin.site.register(CommunityMembership, CommunityMembershipAdmin)
 
 
 class InvitationAdmin(admin.ModelAdmin):

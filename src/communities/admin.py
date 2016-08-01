@@ -1,7 +1,7 @@
 from communities import models
 from django.contrib.admin import site
 from django.contrib.admin.options import ModelAdmin, TabularInline
-from users.models import Membership
+from users.models import CommunityMembership
 
 
 class CommunityConfidentialReasonInline(TabularInline):
@@ -27,7 +27,7 @@ class CommitteeInline(TabularInline):
 
 
 class CommunityMembershipInline(TabularInline):
-    model = Membership
+    model = CommunityMembership
     fk_name = 'community'
     extra = 0
 

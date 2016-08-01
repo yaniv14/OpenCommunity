@@ -9,7 +9,7 @@ from django.template.loader import render_to_string
 from django.utils import translation
 import django_rq
 from issues.models import IssueStatus
-from users.models import Membership
+from users.models import CommitteeMembership
 
 logger = logging.getLogger(__name__)
 
@@ -73,7 +73,7 @@ def _base_send_mail(committee, notification_type, sender, send_to, data=None,
         r.append(sender)
 
     if send_to:
-        r += [m.user for m in Membership.objects.filter(group_name_id__in=send_to)]
+        r += [m.user for m in CommitteeMembership.objects.filter(group_name_id__in=send_to)]
 
     # elif send_to == SendToOption.ONLY_ATTENDEES:
     #     r = [user for user in committee.upcoming_meeting_participants.all()]

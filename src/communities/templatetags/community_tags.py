@@ -1,7 +1,7 @@
 from django import template
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
-from users.models import Membership
+from users.models import CommunityMembership
 
 register = template.Library()
 
@@ -22,7 +22,7 @@ def display_upcoming_time(committee):
 
 @register.filter
 def member_of(u, community):
-    res = Membership.objects.filter(user=u)
+    res = CommunityMembership.objects.filter(user=u)
     for membership in res:
         if membership.community == community:
             return True

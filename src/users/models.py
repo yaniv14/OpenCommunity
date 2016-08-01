@@ -116,42 +116,75 @@ class OCUser(AbstractBaseUser, PermissionsMixin):
         send_mail(subject, message, from_email, [self.email])
 
 
-class MembershipManager(models.Manager):
-    def board(self):
-        return self.get_queryset().exclude(
-            default_group_name=DefaultGroups.MEMBER)
-
-    def none_board(self):
-        return self.get_queryset().filter(
-            default_group_name=DefaultGroups.MEMBER)
+# class MembershipManager(models.Manager):
+#     def board(self):
+#         return self.get_queryset().exclude(
+#             default_group_name=DefaultGroups.MEMBER)
+#
+#     def none_board(self):
+#         return self.get_queryset().filter(
+#             default_group_name=DefaultGroups.MEMBER)
 
 
 @python_2_unicode_compatible
-class Membership(models.Model):
+class CommunityMembership(models.Model):
     community = models.ForeignKey('communities.Community', on_delete=models.CASCADE, verbose_name=_("Community"),
-                                  related_name='memberships')
-    user = models.ForeignKey(OCUser, on_delete=models.CASCADE, verbose_name=_("User"), related_name='memberships')
-    group_name = models.ForeignKey('communities.CommunityGroup', on_delete=models.CASCADE, verbose_name=_('Group'),
-                                   related_name='memberships')
-    default_group_name = models.CharField(_('Old group'), max_length=50, choices=DefaultGroups.CHOICES, blank=True,
-                                          null=True)
+                                  related_name='community_memberships')
+    user = models.ForeignKey(OCUser, on_delete=models.CASCADE, verbose_name=_("User"),
+                             related_name='community_memberships')
+    is_manager = models.BooleanField(verbose_name=_('Is community manager?'), default=False)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Created at"))
     invited_by = models.ForeignKey(settings.AUTH_USER_MODEL,
                                    on_delete=models.CASCADE,
                                    verbose_name=_("Invited by"),
-                                   related_name="members_invited", null=True,
+                                   related_name="community_members_invited", null=True,
                                    blank=True)
-    in_position_since = models.DateField(default=timezone.now, verbose_name=_("In position since"))
-    objects = MembershipManager()
 
     class Meta:
-        unique_together = ("community", "user", "group_name")
+        unique_together = ("community", "user")
         verbose_name = _("Community Member")
         verbose_name_plural = _("Community Members")
         ordering = ['community']
 
     def __str__(self):
-        return "%s: %s (%s)" % (self.community.name, self.user.display_name, self.group_name.title)
+        return "%s: %s (%s)" % (self.community.name, self.user.display_name, self.is_manager)
+
+    @models.permalink
+    def get_absolute_url(self):
+        return "member_profile", (self.community.slug, self.id)
+
+    def get_committee_permissions(self, committee):
+        committee_perms = self.get_permissions(committee.community)
+        committee_perms.update(self.group_name.group_roles.get(committee=committee).role.all_perms())
+        return committee_perms
+
+
+@python_2_unicode_compatible
+class CommitteeMembership(models.Model):
+    committee = models.ForeignKey('communities.Committee', on_delete=models.CASCADE, verbose_name=_("Committee"),
+                                  related_name='committee_memberships')
+    user = models.ForeignKey(OCUser, on_delete=models.CASCADE, verbose_name=_("User"),
+                             related_name='committee_memberships')
+    role = models.ForeignKey('acl.Role', on_delete=models.CASCADE, verbose_name=_('Role'),
+                             related_name='committee_memberships')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Created at"))
+    invited_by = models.ForeignKey(settings.AUTH_USER_MODEL,
+                                   on_delete=models.CASCADE,
+                                   verbose_name=_("Invited by"),
+                                   related_name="committee_members_invited", null=True,
+                                   blank=True)
+    in_position_since = models.DateField(default=timezone.now, verbose_name=_("In position since"))
+
+    # objects = CommitteeMembershipManager()
+
+    class Meta:
+        unique_together = ("committee", "user")
+        verbose_name = _("Committee Member")
+        verbose_name_plural = _("Committee Members")
+        ordering = ['committee']
+
+    def __str__(self):
+        return "%s: %s (%s)" % (self.committee.name, self.user.display_name, self.role)
 
     @models.permalink
     def get_absolute_url(self):

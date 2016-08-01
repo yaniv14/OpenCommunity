@@ -1,12 +1,12 @@
-from communities.models import CommunityGroup
+from communities.models import CommunityGroup, GroupUser
 from django.contrib.auth.forms import PasswordResetForm, SetPasswordForm
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _, gettext
 from ocd.formfields import HTMLArea, GroupCheckboxSelectMultiple
-from users.models import Invitation, OCUser, Membership
 import floppyforms.__future__ as forms
+from users.models import Invitation, OCUser
 
 LOGIN_ERROR = _("Please enter a correct %(username)s and password. "
                 "Note that both fields may be case-sensitive.")
@@ -34,7 +34,7 @@ class InvitationForm(forms.ModelForm):
         cleaned_data = super(InvitationForm, self).clean()
         groups = cleaned_data.get("groups")
         email = cleaned_data.get("email")
-        if Membership.objects.filter(user__email=email, group_name__in=groups).exists():
+        if GroupUser.objects.filter(user__email=email, group_id__in=groups).exists():
             raise forms.ValidationError(_("This user already a member of this community."))
         if Invitation.objects.filter(email=email, groups__in=groups).exists():
             raise forms.ValidationError(_("This user is already invited to this community."))

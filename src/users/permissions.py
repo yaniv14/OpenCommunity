@@ -6,24 +6,41 @@ part of the OCUser model.
 """
 
 
-def load_community_permissions(user, community, committee=None):
-    from users.models import Membership
+def load_community_permissions(user, community):
+    from users.models import CommunityMembership
     if user.is_authenticated():
         try:
             all_perms = set()
-            memberships = user.memberships.filter(community=community)
-            for m in memberships:
-                if committee:
-                    perms = m.get_committee_group_permissions(committee)
-                else:
-                    perms = m.get_permissions(community)
-                all_perms.update(perms)
+            membership = CommunityMembership.objects.get(community=community, user=user)
+            if membership:
+                if membership.is_manager:
+                    all_perms.update('invite_member')
             return all_perms
-        except Membership.DoesNotExist:
+        except CommunityMembership.DoesNotExist:
             pass
 
     if community.is_public:
-        return DefaultGroups.permissions[DefaultGroups.MEMBER]
+        # todo: some basic permissions for community?
+        return set(['access_community'])
+
+    return []
+
+
+def load_committee_permissions(user, committee):
+    from users.models import CommitteeMembership
+    if user.is_authenticated():
+        try:
+            all_perms = set()
+            membership = CommitteeMembership.objects.get(committee=committee, user=user)
+            if membership:
+                all_perms.update(membership.role.all_perms())
+            return all_perms
+        except CommitteeMembership.DoesNotExist:
+            pass
+
+    if committee.is_public:
+        # todo: some basic permissions for committee?
+        pass
 
     return []
 
@@ -35,7 +52,7 @@ def get_community_permissions(user, community, committee=None):
         user._community_permissions_cache = {}
 
     if community.id not in user._community_permissions_cache:
-        perms = load_community_permissions(user, community, committee)
+        perms = load_community_permissions(user, community)
         user._community_permissions_cache[community.id] = perms
 
     return user._community_permissions_cache[community.id]
@@ -48,7 +65,7 @@ def get_committee_permissions(user, committee):
         user._committee_permissions_cache = {}
 
     if committee.id not in user._committee_permissions_cache:
-        perms = load_community_permissions(user, committee.community, committee)
+        perms = load_committee_permissions(user, committee)
         user._committee_permissions_cache[committee.id] = perms
 
     return user._committee_permissions_cache[committee.id]

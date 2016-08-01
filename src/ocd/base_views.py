@@ -8,7 +8,7 @@ from django.core.exceptions import PermissionDenied
 from django.http.response import HttpResponseForbidden, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
-from users.models import Membership
+from users.models import CommunityMembership
 from users.permissions import has_community_perm, get_community_perms, has_committee_perm, get_committee_perms
 
 
@@ -80,7 +80,7 @@ class CommunityMixin(ProtectedMixin):
     def get_context_data(self, **kwargs):
         context = super(CommunityMixin, self).get_context_data(**kwargs)
         context['community'] = self.community
-        context['is_member'] = Membership.objects.filter(community=self.community,
+        context['is_member'] = CommunityMembership.objects.filter(community=self.community,
                                                          user=self.request.user).exists() if self.request.user.id else False
         return context
 

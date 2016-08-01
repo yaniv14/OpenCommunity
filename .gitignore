@@ -45,6 +45,7 @@ Boaz-Chen_OPEN-COMMUNITY/
 /.idea/
 build
 whoosh_index/
+selenium/
 
 # editor files
 *.sublime-project

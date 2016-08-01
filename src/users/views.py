@@ -23,18 +23,18 @@ from users import models
 from acl.default_roles import DefaultGroups
 from users.forms import InvitationForm, QuickSignupForm, ImportInvitationsForm, MembersGroupsForm, \
     MembersCommunityRemoveForm
-from users.models import Invitation, OCUser, Membership
+from users.models import Invitation, OCUser, CommunityMembership
 
 
 class MembershipMixin(CommunityMixin):
-    model = models.Membership
+    model = models.CommunityMembership
 
     def get_queryset(self):
-        return models.Membership.objects.filter(community=self.community)
+        return models.CommunityMembership.objects.filter(community=self.community)
 
     def validate_invitation(self, email):
         # somewhat of a privacy problem next line. should probably fail silently
-        if Membership.objects.filter(community=self.community, user__email=email).exists():
+        if CommunityMembership.objects.filter(community=self.community, user__email=email).exists():
             return HttpResponseBadRequest(_("This user already a member of this community."))
 
         if Invitation.objects.filter(community=self.community, email=email).exists():
@@ -54,7 +54,7 @@ class MembershipList(MembershipMixin, ListView):
                                                 self.community.name})
         d['form'].fields['groups'].queryset = CommunityGroup.objects.filter(community=self.community).exclude(
             title='administrator')
-        d['members'] = Membership.objects.filter(community=self.community).order_by('group_name')
+        d['members'] = CommunityMembership.objects.filter(community=self.community).order_by('group_name')
         # d['board_list'] = Membership.objects.board().filter(community=self.community)
         # d['member_list'] = Membership.objects.none_board().filter(community=self.community)
         # d['board_name'] = self.community.name
@@ -135,7 +135,7 @@ class AcceptInvitationView(DetailView):
         def create_membership(user):
             # Create selected membership type
             for group in i.groups.all():
-                obj, created = Membership.objects.get_or_create(user=user, community=i.community, group_name=group)
+                obj, created = CommunityMembership.objects.get_or_create(user=user, community=i.community, group_name=group)
                 if created:
                     obj.invited_by = i.created_by
                     obj.save()
@@ -143,7 +143,7 @@ class AcceptInvitationView(DetailView):
             # TODO: Fix this process. !!!!!
             try:
                 member_group = CommunityGroup.objects.get(community=i.community, title=gettext('member'))
-                obj, created = Membership.objects.get_or_create(user=user, community=i.community,
+                obj, created = CommunityMembership.objects.get_or_create(user=user, community=i.community,
                                                                 group_name=member_group)
                 if created:
                     obj.invited_by = i.created_by
@@ -224,7 +224,7 @@ class AutocompleteMemberName(MembershipMixin, ListView):
 class MemberProfile(MembershipMixin, DetailView):
     required_permission = 'show_member_profile'
 
-    model = models.Membership
+    model = models.CommunityMembership
     template_name = "users/member_profile.html"
 
     def get_context_data(self, **kwargs):
@@ -457,11 +457,11 @@ class MembersCommunityRemoveView(AjaxFormView, CommunityMixin, FormView):
 
         for u in members:
             try:
-                objs = Membership.objects.filter(user_id=int(u), community=self.community)
+                objs = CommunityMembership.objects.filter(user_id=int(u), community=self.community)
                 for obj in objs:
                     obj.delete()
             except:
-                Membership.DoesNotExist
+                CommunityMembership.DoesNotExist
 
         return super(MembersCommunityRemoveView, self).form_valid(form)
 

@@ -16,7 +16,7 @@ from issues.models import ProposalStatus, IssueStatus, VoteResult
 from meetings.models import MeetingParticipant, Meeting
 from ocd.base_models import HTMLField, UIDMixin
 from acl.default_roles import DefaultGroups
-from users.models import OCUser, Membership
+from users.models import OCUser, CommitteeMembership
 import issues.models as issues_models
 import meetings.models as meetings_models
 
@@ -103,25 +103,7 @@ class Community(UIDMixin):
         return "community", (self.slug,)
 
     def get_members(self):
-        return OCUser.objects.filter(memberships__community=self)
-
-    def get_board_members(self):
-        board_memberships = Membership.objects.filter(community=self).exclude(default_group_name=DefaultGroups.MEMBER)
-
-        # doing it simply like this, as I'd need to refactor models
-        # just to order in the way that is now required.
-        board = [m.user for m in board_memberships]
-        for index, item in enumerate(board):
-            if item.get_default_group(self) == DefaultGroups.MEMBER:
-                board.insert(0, board.pop(index))
-
-        return board
-
-    def get_board_count(self):
-        return len(self.get_board_members())
-
-    def get_none_board_members(self):
-        return Membership.objects.filter(community=self, default_group_name=DefaultGroups.MEMBER)
+        return OCUser.objects.filter(community_memberships__community=self)
 
     def has_straw_votes(self, user=None, community=None):
         if not self.straw_voting_enabled or self.straw_vote_ended:
@@ -144,6 +126,8 @@ class Committee(UIDMixin):
                                   related_name="committees", null=True)
     name = models.CharField(max_length=200, verbose_name=_("Name"))
     slug = models.SlugField(_('Friendly URL'), max_length=200, blank=True, null=True)
+    community_role = models.ForeignKey('acl.Role', on_delete=models.CASCADE, verbose_name=_("Community role"),
+                                       related_name='community_role', blank=True, null=True)
     is_public = models.BooleanField(_("Public community"), default=False,
                                     db_index=True)
     logo = models.ImageField(_("Committee logo"), upload_to='committee_logo',
@@ -339,34 +323,15 @@ class Committee(UIDMixin):
         prev_guests.difference_update(upcoming_guests.splitlines())
         return prev_guests
 
-    def get_board_members(self):
-        board_memberships = Membership.objects.filter(community=self.community) \
-            .exclude(default_group_name=DefaultGroups.MEMBER)
-
-        # doing it simply like this, as I'd need to refactor models
-        # just to order in the way that is now required.
-        board = [m.user for m in board_memberships]
-        for index, item in enumerate(board):
-            if item.get_default_group(self.community) == DefaultGroups.MEMBER:
-                board.insert(0, board.pop(index))
-
-        return board
-
     # Need to check this function, for now its replacing def get_board_members()
-    def get_community_participant_members(self):
-        board_memberships = Membership.objects.filter(community=self.community)
-        board = []
-        for m in board_memberships:
-            if 'view_meeting' in m.get_committee_group_permissions(self):
-                board.append(m.user)
-        return board
-
-    def get_board_count(self):
-        return len(self.get_board_members())
-
-    def get_none_board_members(self):
-        return Membership.objects.filter(community=self.community,
-                                         default_group_name=DefaultGroups.MEMBER)
+    def get_committee_participant_members(self):
+        # board_memberships = Membership.objects.filter(community=self.community)
+        # board = []
+        # for m in board_memberships:
+        #     if 'view_meeting' in m.get_committee_group_permissions(self):
+        #         board.append(m.user)
+        # return board
+        return None
 
     def get_guest_list(self):
         if not self.upcoming_meeting_guests:
@@ -431,21 +396,21 @@ class Committee(UIDMixin):
                 return True
         return False
 
-    def _register_absents(self, meeting, meeting_participants):
-        board_members = [mm.user for mm in Membership.objects.board() \
-            .filter(community=self.community, user__is_active=True)]
-        absents = set(board_members) - set(meeting_participants)
-        ordinal_base = len(meeting_participants)
-        for i, a in enumerate(absents):
-            try:
-                mm = a.memberships.get(community=self.community)
-            except Membership.DoesNotExist:
-                mm = None
-            MeetingParticipant.objects.create(meeting=meeting, user=a,
-                                              display_name=a.display_name,
-                                              ordinal=ordinal_base + i,
-                                              is_absent=True,
-                                              default_group_name=mm.default_group_name if mm else None)
+    # def _register_absents(self, meeting, meeting_participants):
+    #     board_members = [mm.user for mm in Membership.objects.board() \
+    #         .filter(community=self.community, user__is_active=True)]
+    #     absents = set(board_members) - set(meeting_participants)
+    #     ordinal_base = len(meeting_participants)
+    #     for i, a in enumerate(absents):
+    #         try:
+    #             mm = a.memberships.get(community=self.community)
+    #         except Membership.DoesNotExist:
+    #             mm = None
+    #         MeetingParticipant.objects.create(meeting=meeting, user=a,
+    #                                           display_name=a.display_name,
+    #                                           ordinal=ordinal_base + i,
+    #                                           is_absent=True,
+    #                                           default_group_name=mm.default_group_name if mm else None)
 
     def close_meeting(self, m, user, committee):
         """
@@ -525,8 +490,8 @@ class Committee(UIDMixin):
             meeting_participants = self.upcoming_meeting_participants.all()
             for i, p in enumerate(meeting_participants):
                 try:
-                    mm = p.memberships.filter(community=self.community).first()
-                except Membership.DoesNotExist:
+                    mm = p.memberships.filter(committee_membership=self)
+                except CommitteeMembership.DoesNotExist:
                     mm = None
 
                 MeetingParticipant.objects.create(meeting=m, ordinal=i,
@@ -636,6 +601,28 @@ class CommunityGroup(models.Model):
 
 
 @python_2_unicode_compatible
+class GroupUser(models.Model):
+    group = models.ForeignKey(CommunityGroup, on_delete=models.CASCADE, related_name='group_users',
+                              verbose_name=_("Group user"))
+    user = models.ForeignKey(OCUser, on_delete=models.CASCADE, verbose_name=_("User"),
+                             related_name='group_users')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Created at"))
+    created_by = models.ForeignKey(OCUser, on_delete=models.CASCADE, verbose_name=_("Created by"),
+                                   related_name='group_users_created_by', blank=True, null=True)
+
+    class Meta:
+        verbose_name = _('Group User')
+        verbose_name_plural = _('Group Users')
+        unique_together = (
+            ('group', 'user'),
+        )
+        ordering = ['group']
+
+    def __str__(self):
+        return u"{}: {}".format(self.group.title, self.user)
+
+
+@python_2_unicode_compatible
 class CommunityGroupRole(models.Model):
     group = models.ForeignKey(CommunityGroup, on_delete=models.CASCADE, related_name='group_roles',
                               verbose_name=_("Group"))
@@ -647,7 +634,7 @@ class CommunityGroupRole(models.Model):
         verbose_name = _('Group Role')
         verbose_name_plural = _('Group Roles')
         unique_together = (
-            ('group', 'role', 'committee'),
+            ('group', 'committee'),
         )
         ordering = ['committee']
 
