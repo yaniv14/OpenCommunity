@@ -23,7 +23,7 @@ from communities.forms import EditUpcomingMeetingForm, \
 from communities.notifications import send_mail
 from issues.models import IssueStatus, Issue, Proposal
 from meetings.models import Meeting
-from ocd.base_views import ProtectedMixin, AjaxFormView, CommunityMixin
+from ocd.base_views import ProtectedMixin, AjaxFormView, CommunityMixin, CommitteeProtectedMixin
 from ocd.base_managers import ConfidentialSearchQuerySet
 from users.permissions import has_committee_perm
 from django.views.generic.base import RedirectView
@@ -58,7 +58,7 @@ class CommunityModelMixin(ProtectedMixin):
         return self.get_object()
 
 
-class CommitteeModelMixin(ProtectedMixin):
+class CommitteeModelMixin(CommitteeProtectedMixin):
     model = models.Committee
 
     def get_object(self):
@@ -101,7 +101,7 @@ class CommunityDetailView(CommunityModelMixin, DetailView):
 class UpcomingMeetingView(CommitteeModelMixin, DetailView):
     # TODO show empty page to 'issues.viewopen_issue'
     # TODO: show draft only to those allowed to manage it.
-    required_permission = 'access_community'
+    required_permission = 'access_committee'
 
     template_name = "communities/upcoming.html"
 

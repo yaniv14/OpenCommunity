@@ -198,6 +198,13 @@ INSTALLED_APPS = (
     'debug_toolbar',
     'taggit',
     'haystack',
+    # 'oc_util',
+    # 'acl',
+    # 'users',
+    # 'communities',
+    # 'issues',
+    # 'meetings',
+    # 'shultze'
 )
 
 AUTH_USER_MODEL = 'users.OCUser'

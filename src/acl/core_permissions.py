@@ -7,9 +7,19 @@ PERMISSIONS = (
         ()
     ),
     (
+        'access_committee',
+        _('Access Committee'),
+        ()
+    ),
+    (
         'viewupcoming_community',
         _('View Upcoming Meeting'),
         ('access_community',)
+    ),
+    (
+        'viewupcoming_committee',
+        _('View Upcoming Meeting'),
+        ('access_committee',)
     ),
     (
         'viewupcoming_draft',

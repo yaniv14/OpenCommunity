@@ -41,7 +41,7 @@ id="members-groups"
 
                 <div class="checkbox form-control members-list-abc">
                     <label>
-                        <input type="checkbox" name="members" value="{{ member.user.id }}" data-groups="{{ member.user|get_user_community_groups:community }}"> {{ member.user.display_name }}
+                        <input type="checkbox" name="members" value="{{ member.user.id }}" data-groups="{% comment %}{{ member.user|get_user_community_groups:community }}{% endcomment %}"> {{ member.user.display_name }}
                     </label>
                 </div>
             </div>

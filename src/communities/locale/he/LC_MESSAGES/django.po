@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open Community\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-17 13:11+0300\n"
-"PO-Revision-Date: 2016-07-17 11:39+0300\n"
+"POT-Creation-Date: 2016-08-04 14:21+0300\n"
+"PO-Revision-Date: 2016-08-04 14:23+0300\n"
 "Last-Translator: Yaniv Mirel <yanivmirel@gmail.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -22,7 +22,7 @@ msgstr ""
 msgid "Communities & Committees"
 msgstr "קהילות וועדות"
 
-#: .\forms.py:35 .\models.py:621
+#: .\forms.py:35 .\models.py:595
 msgid "Title"
 msgstr "כותרת"
 
@@ -44,217 +44,245 @@ msgstr "רקע"
 msgid "Me only"
 msgstr "רק לי (לבדיקה)"
 
-#: .\models.py:33 .\models.py:40
+#: .\models.py:28 .\models.py:35
 msgid "Me only (review)"
 msgstr "רק לי (לבדיקה)"
 
-#: .\models.py:34
+#: .\models.py:29
 msgid "Only attendees"
 msgstr "למשתתפים בפגישה בלבד"
 
-#: .\models.py:35 .\models.py:41
+#: .\models.py:30 .\models.py:36
 msgid "The board"
 msgstr "לועד בלבד"
 
-#: .\models.py:36 .\models.py:42
+#: .\models.py:31 .\models.py:37
 msgid "All members"
 msgstr "לכל חברי הקהילה"
 
-#: .\models.py:48 .\models.py:145 .\models.py:609
+#: .\models.py:43 .\models.py:123 .\models.py:583
 #: .\templates\communities\participants_form.html:70
 msgid "Name"
 msgstr "שם"
 
-#: .\models.py:49 .\models.py:146
+#: .\models.py:44 .\models.py:124
 msgid "Friendly URL"
 msgstr "URL ידידותי"
 
-#: .\models.py:50 .\models.py:147
+#: .\models.py:45 .\models.py:127
 msgid "Public community"
 msgstr "פתוחה לציבור"
 
-#: .\models.py:52
+#: .\models.py:47
 msgid "Community logo"
 msgstr "לוגו קהילה"
 
-#: .\models.py:54
+#: .\models.py:49
 msgid "Community identifier"
 msgstr "מזהה קהילה"
 
-#: .\models.py:58 .\models.py:187
+#: .\models.py:53 .\models.py:167
 msgid "Straw voting enabled"
 msgstr "אפשר הצבעת קש"
 
-#: .\models.py:62 .\models.py:191
+#: .\models.py:57 .\models.py:171
 msgid "Issue ranking votes enabled"
 msgstr "אפשר תיעדוף נושאים"
 
-#: .\models.py:64 .\models.py:193
+#: .\models.py:59 .\models.py:173
 msgid "Straw Vote ends at"
 msgstr "הצבעת שבשבת עד"
 
-#: .\models.py:67 .\models.py:196
+#: .\models.py:62 .\models.py:176
 msgid "Referendum started"
 msgstr "משאל התחיל"
 
-#: .\models.py:70 .\models.py:199
+#: .\models.py:65 .\models.py:179
 msgid "Referendum started at"
 msgstr "משאל התחיל ב"
 
-#: .\models.py:73 .\models.py:202
+#: .\models.py:68 .\models.py:182
 msgid "Referendum ends at"
 msgstr "משאל הסתיים ב"
 
-#: .\models.py:76 .\models.py:205
+#: .\models.py:71 .\models.py:185
 msgid "Default quorum"
 msgstr ""
 
-#: .\models.py:80 .\models.py:209
+#: .\models.py:75 .\models.py:189
 msgid "Allow links inside emails"
 msgstr "אפשר קישורים בתוך אימייל"
 
-#: .\models.py:82 .\models.py:211
+#: .\models.py:77 .\models.py:191
 msgid "Send mails to invitees"
 msgstr "שלח מייל למוזמנים"
 
-#: .\models.py:86 .\models.py:215
+#: .\models.py:81 .\models.py:195
 msgid "Register missing board members"
 msgstr "רישום חברי ועד חסרים"
 
-#: .\models.py:89 .\models.py:218
+#: .\models.py:84 .\models.py:198
 msgid "Inform System Manager"
 msgstr "להודיע למנהל המערכת"
 
-#: .\models.py:92
+#: .\models.py:87
 msgid "Community without meetings?"
 msgstr "קהילות ללא פגישות?"
 
-#: .\models.py:95 .\models.py:143 .\models.py:620
+#: .\models.py:90 .\models.py:121 .\models.py:594
 msgid "Community"
 msgstr "קהילה"
 
-#: .\models.py:96
+#: .\models.py:91
 msgid "Communities"
 msgstr "קהילות"
 
-#: .\models.py:149
+#: .\models.py:125
+msgid "Community role"
+msgstr "הרשאות לחברי קהילה"
+
+#: .\models.py:129
 msgid "Committee logo"
 msgstr "לוגו ועדה"
 
-#: .\models.py:151
+#: .\models.py:131
 msgid "Committee identifier"
 msgstr "מזהה ועדה"
 
-#: .\models.py:155
+#: .\models.py:135
 msgid "Meeting started"
 msgstr "הפגישה התחילה"
 
-#: .\models.py:157
+#: .\models.py:137
 msgid "Upcoming meeting title"
 msgstr "כותרת הפגישה הקרובה"
 
-#: .\models.py:161
+#: .\models.py:141
 msgid "Upcoming meeting scheduled at"
 msgstr "מועד הפגישה הקרובה"
 
-#: .\models.py:163
+#: .\models.py:143
 msgid "Upcoming meeting location"
 msgstr "מיקום הפגישה הקרובה"
 
-#: .\models.py:164
+#: .\models.py:144
 msgid "Upcoming meeting background"
 msgstr "רקע לפגישה הקרובה"
 
-#: .\models.py:169
+#: .\models.py:149
 msgid "Participants in upcoming meeting"
 msgstr "משתתפים בפגישה הקרובה"
 
-#: .\models.py:172
+#: .\models.py:152
 msgid "Guests in upcoming meeting"
 msgstr "אורחים בפגישה הקרובה"
 
-#: .\models.py:173
+#: .\models.py:153
 msgid "Enter each guest in a separate line"
 msgstr "נא לרשום כל שם בשורה נפרדת"
 
-#: .\models.py:176
+#: .\models.py:156
 msgid "Upcoming meeting version"
 msgstr "מספר גרסת נתוני הפגישה הקרובה"
 
-#: .\models.py:179
+#: .\models.py:159
 msgid "Upcoming meeting is published"
 msgstr "האם הפגישה הקרובה פורסמה?"
 
-#: .\models.py:182
+#: .\models.py:162
 msgid "Upcoming meeting published at"
 msgstr "מועד פרסום הפגישה הקרובה"
 
-#: .\models.py:184
+#: .\models.py:164
 msgid "Upcoming meeting summary"
 msgstr "סיכום הפגישה הקרובה"
 
-#: .\models.py:221
+#: .\models.py:201
 msgid "Committee without meetings?"
 msgstr "ועדה ללא פגישות?"
 
-#: .\models.py:224 .\models.py:644
+#: .\models.py:204 .\models.py:640
 #: .\templates\communities\communitygrouprole_list.html:14
 msgid "Committee"
 msgstr "ועדה"
 
-#: .\models.py:225 .\templates\_committee_panel.html:6
+#: .\models.py:205 .\templates\_committee_panel.html:6
 #: .\templates\_community_panel.html:13
 #: .\templates\communities\communitygroup_list.html:31
 msgid "Committees"
 msgstr "ועדות"
 
-#: .\models.py:597
+#: .\models.py:571
 msgid "Confidential Reason"
 msgstr "סיבה עבור נושא חסוי"
 
-#: .\models.py:598
+#: .\models.py:572
 msgid "Confidential Reasons"
 msgstr "סיבות עבור נושאים חסויים"
 
-#: .\models.py:605
+#: .\models.py:579
 msgid ""
 "A reason that can be used for marking items as confidential in your "
 "community."
 msgstr "הגדרת סיבה עבור נושאים חסויים"
 
-#: .\models.py:611
+#: .\models.py:585
 msgid "The title to give this reason."
 msgstr "כותרת עבור סיבה זו"
 
-#: .\models.py:624 .\models.py:641
+#: .\models.py:598 .\models.py:615 .\models.py:637
 #: .\templates\communities\communitygrouprole_list.html:15
 msgid "Group"
 msgstr "קבוצה"
 
-#: .\models.py:625 .\templates\communities\communitygroup_detail.html:4
+#: .\models.py:599 .\templates\communities\communitygroup_detail.html:4
 #: .\templates\communities\communitygroup_list.html:10
 #: .\templates\communities\communitygroup_list.html:45
 #: .\templates\communities\communitygrouprole_list.html:4
 msgid "Groups"
 msgstr "קבוצות"
 
-#: .\models.py:642 .\templates\communities\communitygrouprole_list.html:16
+#: .\models.py:606
+msgid "from community"
+msgstr "מקהילה"
+
+#: .\models.py:616
+msgid "User"
+msgstr "משתמש"
+
+#: .\models.py:618
+msgid "Created at"
+msgstr "נוצר בתאריך"
+
+#: .\models.py:619
+msgid "Created by"
+msgstr "נוצר על ידי"
+
+#: .\models.py:623
+msgid "Group User"
+msgstr "קבוצה למשתמש"
+
+#: .\models.py:624
+msgid "Group Users"
+msgstr "קבוצות למשתמשים"
+
+#: .\models.py:638 .\templates\communities\communitygrouprole_list.html:16
 msgid "Role"
 msgstr "הרשאות"
 
-#: .\models.py:647
+#: .\models.py:643
 msgid "Group Role"
 msgstr "קבוצת Role"
 
-#: .\models.py:648
+#: .\models.py:644
 msgid "Group Roles"
 msgstr "קבוצות Role"
 
-#: .\models.py:664
+#: .\models.py:660
 msgid "Group, Role & Committee need to be from same community"
 msgstr "קבוצות, הרשאות וועדות צריכים להיות מאותה קהילה"
 
-#: .\models.py:678
+#: .\models.py:674
 #: .\south_migrations\0011_auto__add_field_community_register_missing_board_members__chg_field_co.py:17
 msgid "Board"
 msgstr "ועד"
@@ -990,9 +1018,6 @@ msgstr "קבוצה בשם זה כבר קיימת"
 #~ msgid " members of"
 #~ msgstr "חברי"
 
-#~ msgid "Create"
-#~ msgstr "צור"
-
 #~ msgid "Board name"
 #~ msgstr "שם הועד"
 
@@ -1115,9 +1140,6 @@ msgstr "קבוצה בשם זה כבר קיימת"
 
 #~ msgid "Send to All Members"
 #~ msgstr "שלח לכל חברי הקהילה"
-
-#~ msgid "User"
-#~ msgstr "משתמש"
 
 #~ msgid "Is Chairman"
 #~ msgstr "יו'ר"

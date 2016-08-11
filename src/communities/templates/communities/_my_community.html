@@ -1,4 +1,5 @@
-{% for m in user.memberships.all %}
+{% load i18n %}
+{% for m in user.community_memberships.all %}
 
     {% ifchanged m.community %}
         {% if not forloop.first %}
@@ -14,12 +15,12 @@
 
         <b>{{ m.community.name }}</b>
 
-        {% if m.get_default_group_name_display %}
-            ({{ m.get_default_group_name_display }})
+        {% if m.is_manager %}
+            ({% trans 'Logistic manager' %})
         {% endif %}
     {% else %}
-        {% if m.get_default_group_name_display %}
-            ({{ m.get_default_group_name_display }})
+        {% if m.is_manager %}
+            ({% trans 'Logistic manager' %})
         {% endif %}
     {% endifchanged %}
 

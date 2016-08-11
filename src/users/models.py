@@ -8,7 +8,6 @@ from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
-from issues.models import Proposal, ProposalVoteValue, ProposalStatus
 from meetings.models import MeetingParticipant
 from acl.default_roles import DefaultGroups
 import datetime
@@ -98,15 +97,17 @@ class OCUser(AbstractBaseUser, PermissionsMixin):
         return self.display_name
 
     def get_default_group(self, community):
+        from users.models import CommunityMembership
         try:
             return self.memberships.get(community=community).default_group_name
-        except Membership.DoesNotExist:
+        except CommunityMembership.DoesNotExist:
             return ""
 
     def get_related_groups(self, community):
+        from users.models import CommunityMembership
         try:
             return [x.group_name_id for x in self.memberships.filter(community=community)]
-        except Membership.DoesNotExist:
+        except CommunityMembership.DoesNotExist:
             return None
 
     def email_user(self, subject, message, from_email=None):
@@ -130,7 +131,7 @@ class OCUser(AbstractBaseUser, PermissionsMixin):
 class CommunityMembership(models.Model):
     community = models.ForeignKey('communities.Community', on_delete=models.CASCADE, verbose_name=_("Community"),
                                   related_name='community_memberships')
-    user = models.ForeignKey(OCUser, on_delete=models.CASCADE, verbose_name=_("User"),
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name=_("User"),
                              related_name='community_memberships')
     is_manager = models.BooleanField(verbose_name=_('Is community manager?'), default=False)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Created at"))
@@ -163,7 +164,7 @@ class CommunityMembership(models.Model):
 class CommitteeMembership(models.Model):
     committee = models.ForeignKey('communities.Committee', on_delete=models.CASCADE, verbose_name=_("Committee"),
                                   related_name='committee_memberships')
-    user = models.ForeignKey(OCUser, on_delete=models.CASCADE, verbose_name=_("User"),
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name=_("User"),
                              related_name='committee_memberships')
     role = models.ForeignKey('acl.Role', on_delete=models.CASCADE, verbose_name=_('Role'),
                              related_name='committee_memberships')
@@ -215,6 +216,7 @@ class CommitteeMembership(models.Model):
         return round((float(self.meetings_participation()) / float(self.total_meetings())) * 100.0)
 
     def member_open_tasks(self, user=None, community=None):
+        from issues.models import Proposal, ProposalStatus
         return Proposal.objects.object_access_control(
             user=user, community=community).filter(status=ProposalStatus.ACCEPTED, assigned_to_user=self.user,
                                                    active=True, task_completed=False).exclude(
@@ -222,16 +224,19 @@ class CommitteeMembership(models.Model):
 
     def member_close_tasks(self, user=None, community=None):
         """ Need to create a field to determine closed tasks """
+        from issues.models import Proposal, ProposalStatus
         return Proposal.objects.object_access_control(
             user=user, community=community).filter(status=ProposalStatus.ACCEPTED, assigned_to_user=self.user,
                                                    active=True, task_completed=True)
 
     def member_late_tasks(self, user=None, community=None):
+        from issues.models import Proposal, ProposalStatus
         return Proposal.objects.object_access_control(
             user=user, community=community).filter(status=ProposalStatus.ACCEPTED, assigned_to_user=self.user,
                                                    due_by__lte=datetime.date.today(), active=True, task_completed=False)
 
     def member_votes_dict(self):
+        from issues.models import ProposalVoteValue, ProposalStatus
         res = {'pro': {}, 'neut': {}, 'con': {}}
         pro_count = 0
         con_count = 0
@@ -270,14 +275,17 @@ class CommitteeMembership(models.Model):
                                                                        proposal__decided_at_meeting__held_at__gte=self.in_position_since)
 
     def member_proposal_pro_votes_accepted(self):
+        from issues.models import ProposalVoteValue, ProposalStatus
         return self._user_board_votes().filter(value=ProposalVoteValue.PRO,
                                                proposal__status=ProposalStatus.ACCEPTED)
 
     def member_proposal_con_votes_rejected(self):
+        from issues.models import ProposalVoteValue, ProposalStatus
         return self._user_board_votes().filter(value=ProposalVoteValue.CON,
                                                proposal__status=ProposalStatus.REJECTED)
 
     def member_proposal_nut_votes_accepted(self):
+        from issues.models import ProposalVoteValue, ProposalStatus
         return self._user_board_votes().filter(value=ProposalVoteValue.NEUTRAL,
                                                proposal__status=ProposalStatus.ACCEPTED)
 
@@ -323,7 +331,7 @@ class Invitation(models.Model):
 
     code = models.CharField(max_length=CODE_LENGTH, default=create_code)
 
-    user = models.ForeignKey(OCUser, verbose_name=_("User"), on_delete=models.CASCADE,
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_("User"), on_delete=models.CASCADE,
                              related_name='invitations', null=True, blank=True)
 
     groups = models.ManyToManyField('communities.CommunityGroup', verbose_name=_('Groups'),

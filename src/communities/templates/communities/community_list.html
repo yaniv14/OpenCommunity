@@ -19,7 +19,7 @@
                     {% trans "My communities" %}
                 </h2>
 
-                {% if user.memberships.count %}
+                {% if user.community_memberships.all.count %}
                     <ul class="community_home nav nav-pills nav-stacked">
                         {% include 'communities/_my_community.html' %}
                     </ul>

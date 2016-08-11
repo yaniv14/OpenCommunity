@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open Community\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-17 13:11+0300\n"
+"POT-Creation-Date: 2016-08-04 14:21+0300\n"
 "PO-Revision-Date: 2015-06-17 21:56+0200\n"
 "Last-Translator: Yaniv Mirel <yanivmirel@gmail.com>\n"
 "Language-Team: \n"
@@ -31,35 +31,35 @@ msgid ""
 "pass onconfidentiality."
 msgstr ""
 
-#: .\settings.py:288
+#: .\settings.py:295
 msgid "admin"
 msgstr "מנהל קהילה"
 
-#: .\settings.py:289 .\settings.py:295
+#: .\settings.py:296 .\settings.py:302
 msgid "chairman"
 msgstr "יושב ראש"
 
-#: .\settings.py:290 .\settings.py:296
+#: .\settings.py:297 .\settings.py:303
 msgid "board"
 msgstr "חבר ועד"
 
-#: .\settings.py:291 .\settings.py:297
+#: .\settings.py:298 .\settings.py:304
 msgid "member"
 msgstr "חבר קהילה"
 
-#: .\settings.py:307
+#: .\settings.py:314
 msgid "Privacy"
 msgstr "פרטיות"
 
-#: .\settings.py:308
+#: .\settings.py:315
 msgid "Commercial"
 msgstr "מסחרי"
 
-#: .\settings.py:309
+#: .\settings.py:316
 msgid "Security"
 msgstr "ביטחון"
 
-#: .\settings.py:310
+#: .\settings.py:317
 msgid "Legal"
 msgstr "משפטי"
 

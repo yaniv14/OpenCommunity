@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open Community\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-17 13:11+0300\n"
-"PO-Revision-Date: 2016-07-17 11:40+0300\n"
+"POT-Creation-Date: 2016-08-04 14:21+0300\n"
+"PO-Revision-Date: 2016-08-04 14:24+0300\n"
 "Last-Translator: Yaniv Mirel <yanivmirel@gmail.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -31,18 +31,9 @@ msgstr ""
 "סיסמאות אינם נשמרות כטקסט, אז אין אפשרות לראות את הסיסמא של המשתמש, אבל ניתן "
 "לשנות סיסמא בעזרת <a href=\"password/\">הקישור הזה</a>."
 
-#: .\admin.py:82 .\models.py:288 .\templates\users\member_profile.html:24
+#: .\admin.py:78 .\models.py:329 .\templates\users\member_profile.html:24
 msgid "Email"
 msgstr "דואל"
-
-#: .\admin.py:83 .\models.py:134 .\models.py:300 .\models.py:303
-#: .\templates\users\member_update_form.html:9
-msgid "Group"
-msgstr "קבוצה"
-
-#: .\admin.py:122
-msgid "Committee & Groups"
-msgstr "ועדות וקבוצות"
 
 #: .\apps.py:8
 msgid "Users, memberships & rolls"
@@ -83,119 +74,139 @@ msgstr "העלאת קובץ csv"
 msgid "Choose groups"
 msgstr "בחר קבוצות"
 
-#: .\models.py:70
+#: .\models.py:69
 msgid "email address"
 msgstr "כתובת דואל"
 
-#: .\models.py:73
+#: .\models.py:72
 msgid "Your name"
 msgstr "שמך"
 
-#: .\models.py:75
+#: .\models.py:74
 msgid "staff status"
 msgstr "חבר בצוות האתר"
 
-#: .\models.py:76
+#: .\models.py:75
 msgid "Designates whether the user can log into this admin site."
 msgstr "יכול להכנס לאדמין"
 
-#: .\models.py:78
+#: .\models.py:77
 msgid "date joined"
 msgstr "תאריך הצטרפות"
 
-#: .\models.py:86
+#: .\models.py:85
 msgid "user"
 msgstr "משתמש"
 
-#: .\models.py:87
+#: .\models.py:86
 msgid "users"
 msgstr "משתמשים"
 
-#: .\models.py:131 .\models.py:278
+#: .\models.py:132 .\models.py:319
 msgid "Community"
 msgstr "קהילה"
 
-#: .\models.py:133 .\models.py:293
+#: .\models.py:134 .\models.py:167 .\models.py:334
 msgid "User"
 msgstr "משתמש"
 
 #: .\models.py:136
-msgid "Old group"
-msgstr "קבוצה ישנה"
+msgid "Is community manager?"
+msgstr "האם מנהל לוגיסטי לקהילה?"
 
-#: .\models.py:138 .\models.py:281
+#: .\models.py:137 .\models.py:171 .\models.py:322
 msgid "Created at"
 msgstr "נוצר בתאריך"
 
-#: .\models.py:141
+#: .\models.py:140 .\models.py:174
 msgid "Invited by"
 msgstr "הוזמן על ידי"
 
-#: .\models.py:144
-msgid "In position since"
-msgstr "מכהן מתאריך"
-
-#: .\models.py:149
+#: .\models.py:146
 msgid "Community Member"
 msgstr "חבר קהילה"
 
-#: .\models.py:150
+#: .\models.py:147
 msgid "Community Members"
 msgstr "חברי קהילה"
 
-#: .\models.py:268
+#: .\models.py:165
+msgid "Committee"
+msgstr "ועדה"
+
+#: .\models.py:169
+msgid "Role"
+msgstr "הרשאה"
+
+#: .\models.py:177
+msgid "In position since"
+msgstr "מכהן מתאריך"
+
+#: .\models.py:183
+msgid "Committee Member"
+msgstr "חבר ועדה"
+
+#: .\models.py:184
+msgid "Committee Members"
+msgstr "חברי ועדה"
+
+#: .\models.py:309
 msgid "Pending"
 msgstr "ממתין למשלוח"
 
-#: .\models.py:269
+#: .\models.py:310
 msgid "Sent"
 msgstr "נשלח"
 
-#: .\models.py:270
+#: .\models.py:311
 msgid "Failed"
 msgstr "נכשל"
 
-#: .\models.py:284
+#: .\models.py:325
 msgid "Created by"
 msgstr "נוצר על ידי"
 
-#: .\models.py:287
+#: .\models.py:328
 msgid "Name"
 msgstr "שם"
 
-#: .\models.py:289
+#: .\models.py:330
 msgid "Message"
 msgstr "הודעה"
 
-#: .\models.py:296
+#: .\models.py:337
 msgid "Groups"
 msgstr "קבוצות"
 
-#: .\models.py:306
+#: .\models.py:341 .\models.py:344 .\templates\users\member_update_form.html:9
+msgid "Group"
+msgstr "קבוצה"
+
+#: .\models.py:347
 msgid "Status"
 msgstr "סטאטוס"
 
-#: .\models.py:308
+#: .\models.py:349
 msgid "Times Sent"
 msgstr "מספר הפעמים שההזמנה נשלחה"
 
-#: .\models.py:309
+#: .\models.py:350
 msgid "Error count"
 msgstr "מספר הפעימים שהמשלוח נכשל"
 
-#: .\models.py:310
+#: .\models.py:351
 msgid "Sent at"
 msgstr "נשלח לאחרונה ב"
 
-#: .\models.py:315
+#: .\models.py:356
 msgid "Invitation"
 msgstr "הזמנה"
 
-#: .\models.py:316
+#: .\models.py:357
 msgid "Invitations"
 msgstr "הזמנות"
 
-#: .\models.py:318
+#: .\models.py:359
 #, python-format
 msgid ""
 "The system will allow you to take part in the decision making process of %s. "
@@ -207,7 +218,7 @@ msgstr ""
 "אחרי אישור ההצטרפות ניתן לראות את הנושאים לדיון, את סדר היום לישיבה הקרובה, "
 "ואת סיכום ההחלטות מהישיבות הקודמות, ובעתיד ניתן יהיה גם לדון ולהשפיע עליהם."
 
-#: .\models.py:333
+#: .\models.py:374
 #, python-format
 msgid "Invitation to %s"
 msgstr "הזמנה לקהילה %s"
@@ -463,6 +474,9 @@ msgstr "אופס. משהו השתבש. אנה נסה שוב."
 #, python-format
 msgid "%d Invitations sent"
 msgstr "%d הזמנות נשלחו"
+
+#~ msgid "Old group"
+#~ msgstr "קבוצה ישנה"
 
 #~ msgid "Add to list"
 #~ msgstr "הוסף לרשימה"

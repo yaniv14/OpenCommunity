@@ -4,7 +4,6 @@ from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.formats import date_format
 from django.utils.translation import ugettext_lazy as _
-from issues.models import Issue, ProposalStatus
 from ocd.base_models import UIDMixin, HTMLField, ConfidentialByRelationMixin
 from ocd.base_managers import ConfidentialManager
 from acl.default_roles import DefaultGroups
@@ -18,8 +17,8 @@ class AgendaItemManager(ConfidentialManager):
 class AgendaItem(ConfidentialByRelationMixin):
     confidential_from = 'issue'
     objects = ConfidentialManager()
-    meeting = models.ForeignKey('Meeting', on_delete=models.CASCADE, verbose_name=_("Meeting"), related_name="agenda")
-    issue = models.ForeignKey(Issue, on_delete=models.CASCADE, verbose_name=_("Issue"), related_name="agenda_items")
+    meeting = models.ForeignKey('meetings.Meeting', on_delete=models.CASCADE, verbose_name=_("Meeting"), related_name="agenda")
+    issue = models.ForeignKey('issues.Issue', on_delete=models.CASCADE, verbose_name=_("Issue"), related_name="agenda_items")
     background = HTMLField(_("Background"), null=True, blank=True)
     order = models.PositiveIntegerField(default=100, verbose_name=_("Order"))
     closed = models.BooleanField(_('Closed'), default=True)
@@ -51,10 +50,12 @@ class AgendaItem(ConfidentialByRelationMixin):
         return rv
 
     def accepted_proposals(self, user=None, committee=None):
+        from issues.models import ProposalStatus
         rv = self.proposals(user=user, committee=committee).filter(status=ProposalStatus.ACCEPTED)
         return rv
 
     def rejected_proposals(self, user=None, committee=None):
+        from issues.models import ProposalStatus
         rv = self.proposals(user=user, committee=committee).filter(status=ProposalStatus.REJECTED)
         return rv
 
@@ -73,7 +74,7 @@ class Meeting(UIDMixin):
     location = models.CharField(_("Location"), max_length=300, null=True, blank=True)
     comments = models.TextField(_("Comments"), null=True, blank=True)
     summary = models.TextField(_("Summary"), null=True, blank=True)
-    agenda_items = models.ManyToManyField(Issue, through=AgendaItem,
+    agenda_items = models.ManyToManyField('issues.Issue', through=AgendaItem,
                                           blank=True,
                                           related_name='meetings',
                                           verbose_name=_("Agenda items"))

@@ -28,6 +28,7 @@ class DefaultRoles(object):
 
     permissions[VIEWER] = [
         'access_community',
+        'access_committee',
         'viewclosed_issue',
         'viewclosed_proposal',
         'view_meeting',

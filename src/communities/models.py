@@ -12,13 +12,8 @@ from django.dispatch import receiver
 from django.utils import timezone
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext, ugettext_lazy as _
-from issues.models import ProposalStatus, IssueStatus, VoteResult
-from meetings.models import MeetingParticipant, Meeting
 from ocd.base_models import HTMLField, UIDMixin
 from acl.default_roles import DefaultGroups
-from users.models import OCUser, CommitteeMembership
-import issues.models as issues_models
-import meetings.models as meetings_models
 
 logger = logging.getLogger(__name__)
 
@@ -103,6 +98,7 @@ class Community(UIDMixin):
         return "community", (self.slug,)
 
     def get_members(self):
+        from users.models import OCUser
         return OCUser.objects.filter(community_memberships__community=self)
 
     def has_straw_votes(self, user=None, community=None):
@@ -225,6 +221,7 @@ class Committee(UIDMixin):
         return "committee", (self.community.slug, self.slug)
 
     def upcoming_issues(self, user=None, committee=None, upcoming=True):
+        import issues.models as issues_models
         l = issues_models.IssueStatus.IS_UPCOMING if upcoming else \
             issues_models.IssueStatus.NOT_IS_UPCOMING
 
@@ -238,6 +235,7 @@ class Committee(UIDMixin):
         return rv
 
     def available_issues(self, user=None, committee=None):
+        import issues.models as issues_models
         if self.issues.all():
             rv = self.issues.object_access_control(
                 user=user, committee=committee).filter(
@@ -248,11 +246,13 @@ class Committee(UIDMixin):
         return rv
 
     def available_issues_by_rank(self):
+        import issues.models as issues_models
         return self.issues.filter(active=True,
                                   status=issues_models.IssueStatus.OPEN
                                   ).order_by('order_by_votes')
 
     def issues_ready_to_close(self, user=None, committee=None):
+        from issues.models import ProposalStatus
         if self.upcoming_issues(user=user, committee=committee):
             rv = self.upcoming_issues(user=user, committee=committee).filter(
                 proposals__active=True,
@@ -267,6 +267,7 @@ class Committee(UIDMixin):
         return rv
 
     def get_members(self):
+        from users.models import OCUser
         return OCUser.objects.filter(memberships__community=self.community)
 
     def meeting_participants(self):
@@ -305,6 +306,7 @@ class Committee(UIDMixin):
     #
 
     def previous_members_participations(self):
+        from meetings.models import MeetingParticipant
         participations = MeetingParticipant.objects.filter(
             default_group_name=DefaultGroups.MEMBER,
             meeting__committee=self).order_by('-meeting__held_at')
@@ -312,6 +314,7 @@ class Committee(UIDMixin):
         return list(set([p.user for p in participations]) - set(self.upcoming_meeting_participants.all()))
 
     def previous_guests_participations(self):
+        from meetings.models import Meeting
         guests_list = Meeting.objects.filter(committee=self) \
             .values_list('guests', flat=True)
 
@@ -360,6 +363,8 @@ class Committee(UIDMixin):
                                            committee=committee)
 
     def sum_vote_results(self, only_when_over=True):
+        from issues.models import ProposalStatus, IssueStatus
+        import issues.models as issues_models
         if not self.voting_ends_at:
             return
         time_till_close = self.voting_ends_at - timezone.now()
@@ -422,6 +427,9 @@ class Committee(UIDMixin):
         """
 
         with transaction.atomic():
+            from issues.models import ProposalStatus, VoteResult
+            from meetings.models import MeetingParticipant
+            from users.models import CommitteeMembership
             m.committee = self
             m.community = self.community
             m.created_by = user
@@ -525,6 +533,7 @@ class Committee(UIDMixin):
         # The values are querysets
 
         def as_agenda_item(obj):
+            from issues.models import ProposalStatus
             return {
                 'issue': obj['issue'],
                 'proposals': obj['proposals'].filter(
@@ -594,7 +603,7 @@ class CommunityGroup(models.Model):
         )
 
     def __str__(self):
-        return u"{}: {}".format(self.community, self.title)
+        return u"{0} [{1}: {2}]".format(self.title, _('from community'), self.community.name)
 
     def get_absolute_url(self):
         return reverse("group:detail", args=(self.community.slug, self.pk))
@@ -603,11 +612,11 @@ class CommunityGroup(models.Model):
 @python_2_unicode_compatible
 class GroupUser(models.Model):
     group = models.ForeignKey(CommunityGroup, on_delete=models.CASCADE, related_name='group_users',
-                              verbose_name=_("Group user"))
-    user = models.ForeignKey(OCUser, on_delete=models.CASCADE, verbose_name=_("User"),
+                              verbose_name=_("Group"))
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name=_("User"),
                              related_name='group_users')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Created at"))
-    created_by = models.ForeignKey(OCUser, on_delete=models.CASCADE, verbose_name=_("Created by"),
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name=_("Created by"),
                                    related_name='group_users_created_by', blank=True, null=True)
 
     class Meta:

@@ -1,7 +1,7 @@
 from communities import models
 from django.contrib.admin import site
 from django.contrib.admin.options import ModelAdmin, TabularInline
-from users.models import CommunityMembership
+from users.models import CommunityMembership, CommitteeMembership
 
 
 class CommunityConfidentialReasonInline(TabularInline):
@@ -32,6 +32,12 @@ class CommunityMembershipInline(TabularInline):
     extra = 0
 
 
+class CommitteeMembershipInline(TabularInline):
+    model = CommitteeMembership
+    fk_name = 'committee'
+    extra = 0
+
+
 class CommunityAdmin(ModelAdmin):
 
     fields = ('name', 'slug', 'official_identifier', 'logo', 'is_public',
@@ -50,7 +56,7 @@ class CommitteeAdmin(ModelAdmin):
               'allow_links_in_emails', 'register_missing_board_members',
               'email_invitees', 'inform_system_manager', 'no_meetings_committee')
 
-    inlines = [CommunityGroupRoleInline]
+    inlines = [CommitteeMembershipInline]
 
 
 class CommunityGroupRoleAdmin(ModelAdmin):
@@ -63,7 +69,13 @@ class CommunityGroupAdmin(ModelAdmin):
     list_display_links = ['community', 'title']
 
 
+class GroupUserAdmin(ModelAdmin):
+    list_display = ['group', 'user']
+    list_display_links = ['group', 'user']
+
+
 site.register(models.Community, CommunityAdmin)
 site.register(models.Committee, CommitteeAdmin)
 site.register(models.CommunityGroup, CommunityGroupAdmin)
 site.register(models.CommunityGroupRole, CommunityGroupRoleAdmin)
+site.register(models.GroupUser, GroupUserAdmin)

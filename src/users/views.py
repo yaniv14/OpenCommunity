@@ -376,15 +376,14 @@ class MembershipGroupList(MembershipMixin, ListView):
     context_object_name = 'members'
 
     def get_queryset(self):
-        return models.Membership.objects.filter(community=self.community).order_by('user__display_name').distinct(
+        return models.CommunityMembership.objects.filter(community=self.community).order_by('user__display_name').distinct(
             'user__display_name')
 
     def get_context_data(self, **kwargs):
         d = super(MembershipGroupList, self).get_context_data(**kwargs)
         d['form'] = InvitationForm(initial={'message': Invitation.DEFAULT_MESSAGE % self.community.name})
         d['form'].fields['groups'].choices = ((x.id, gettext(x.title)) for x in
-                                              CommunityGroup.objects.filter(community=self.community).exclude(
-                                                  title='administrator'))
+                                              CommunityGroup.objects.filter(community=self.community))
         return d
 
     def post(self, request, *args, **kwargs):
