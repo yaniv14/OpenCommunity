@@ -5,7 +5,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.contrib.auth.models import Group
-from users.models import OCUser, Invitation, CommunityMembership
+from users.models import OCUser, Invitation, CommunityMembership, CommitteeMembership
 
 
 class UserCreationForm(forms.ModelForm):
@@ -56,9 +56,16 @@ class UserChangeForm(forms.ModelForm):
         return self.initial["password"]
 
 
-class UserMembershipInline(admin.TabularInline):
+class UserCommunityMembershipInline(admin.TabularInline):
     model = CommunityMembership
     fk_name = 'user'
+    extra = 1
+
+
+class UserCommitteeMembershipInline(admin.TabularInline):
+    model = CommitteeMembership
+    fk_name = 'user'
+    extra = 1
 
 
 class CommunityMembershipAdmin(admin.ModelAdmin):
@@ -76,6 +83,39 @@ class CommunityMembershipAdmin(admin.ModelAdmin):
         return obj.user.email
 
     display_user_email.short_description = _('Email')
+
+
+class CommitteeMembershipAdmin(admin.ModelAdmin):
+    list_display = (
+        'committee',
+        'display_user_email',
+        'user',
+        'display_group',
+        'display_role',
+        'created_at',
+    )
+
+    list_filter = ('committee', 'user__email', 'user')
+    ordering = ['committee', ]
+
+    def display_user_email(self, obj):
+        return obj.user.email
+
+    display_user_email.short_description = _('Email')
+
+    def display_role(self, obj):
+        return obj.role.title
+
+    display_role.short_description = _('Role')
+
+    def display_group(self, obj):
+        try:
+            cgr = CommunityGroupRole.objects.get(role=obj.role, committee=obj.committee)
+        except CommunityGroupRole.DoesNotExist:
+            cgr = None
+        return cgr.group.title if cgr else ''
+
+    display_group.short_description = _('Group')
 
 
 class OCUserAdmin(UserAdmin):
@@ -104,7 +144,7 @@ class OCUserAdmin(UserAdmin):
     ordering = ('email',)
     filter_horizontal = ()
 
-    inlines = [UserMembershipInline]
+    inlines = [UserCommunityMembershipInline, UserCommitteeMembershipInline]
 
     # def get_groups(self, obj):
     #     memberships = obj.memberships.all().values_list('group_name_id', flat=True)
@@ -121,6 +161,7 @@ admin.site.register(OCUser, OCUserAdmin)
 admin.site.unregister(Group)
 
 admin.site.register(CommunityMembership, CommunityMembershipAdmin)
+admin.site.register(CommitteeMembership, CommitteeMembershipAdmin)
 
 
 class InvitationAdmin(admin.ModelAdmin):

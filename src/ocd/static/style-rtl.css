@@ -2391,6 +2391,7 @@ ul.prop-table .prop-content span {
     .ios-chrome .modal-backdrop {
         display: none;
     }
+
     .welcome-video {
         margin-top: 20px;
     }
@@ -2589,12 +2590,88 @@ label[for=id_proposal-confidential_reason] {
 @media (min-width: 1200px) {
 
 }
+
 .checkbox.form-control.members-list-abc {
     margin-top: 0;
     height: 44px;
     padding: 11px 12px;
 }
+
 .letter-sort {
     margin: 20px auto;
     text-align: center;
+}
+
+/* Tinymce */
+.mce-menu {
+    right: auto !important;
+    left: 0;
+}
+
+.mce-panel {
+    border: 0 !important;
+    background-color: transparent !important;
+}
+
+div.mce-edit-area {
+    border: 1px solid rgb(204, 204, 204) !important;
+}
+
+.mce-btn {
+    border-color: #b1b1b1 !important;
+    background-color: #fff;
+}
+
+.mce-btn-group .mce-btn {
+    margin-right: 1px !important;
+}
+
+.mce-toolbar .mce-btn button {
+    background-color: #fff !important;
+}
+
+.mce-btn-group:not(:first-child) {
+    border-right: 0 !important;
+    padding-right: 0 !important;
+    margin-right: 10px !important;
+}
+
+.mce-window {
+    left: 0;
+    right: auto !important;
+    background-color: #fff !important;
+}
+
+body .mce-label.mce-abs-layout-item.mce-first {
+    right: 0 !important;
+    left: auto !important;
+}
+
+body .mce-abs-layout-item.mce-last.mce-listbox.mce-btn-has-text,
+body .mce-abs-layout-item.mce-last {
+    left: auto !important;
+    right: 101px !important;
+}
+
+body .mce-abs-layout-item.mce-last.mce-formitem {
+    right: 20px !important;
+}
+
+body .mce-container.mce-form.mce-abs-layout-item.mce-first.mce-last {
+    right: 0 !important;
+}
+
+.mce-floatpanel.mce-fixed {
+    border: 1px solid #ccc !important;
+    background-color: #fff !important;
+}
+
+.mce-primary.mce-btn-has-text {
+    right: 356px;
+    left: auto !important;
+}
+
+body .mce-abs-layout-item.mce-last.mce-btn-has-text {
+    left: auto !important;
+    right: 411px !important;
 }

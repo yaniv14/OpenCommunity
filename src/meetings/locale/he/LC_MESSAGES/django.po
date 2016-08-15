@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open Community\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-04 14:21+0300\n"
+"POT-Creation-Date: 2016-08-15 09:00+0300\n"
 "PO-Revision-Date: 2015-05-14 13:18+0200\n"
 "Last-Translator: Yaniv Mirel <yanivmirel@gmail.com>\n"
 "Language-Team: \n"
@@ -22,133 +22,129 @@ msgstr ""
 msgid "Meetings & participants"
 msgstr "פגישות ומשתתפים"
 
-#: .\forms.py:17
-msgid "Send to"
-msgstr "שלח אל"
-
-#: .\forms.py:20
+#: .\forms.py:18
 msgid "The selected issues will be archived"
 msgstr "הנושאים המסומנים יועברו לארכיון"
 
-#: .\forms.py:38
+#: .\forms.py:36
 msgid "Issue was not modified in this meeting"
 msgstr "לא התבצעו שינויים בנושא זה במהלך הפגישה"
 
-#: .\forms.py:41
+#: .\forms.py:39
 msgid "Undecided proposals"
 msgstr "הצעות ללא החלטה"
 
-#: .\models.py:20 .\models.py:88 .\models.py:156 .\models.py:183
+#: .\models.py:20 .\models.py:90 .\models.py:159 .\models.py:185
 msgid "Meeting"
 msgstr "פגישה"
 
-#: .\models.py:21
+#: .\models.py:22
 msgid "Issue"
 msgstr "נושא"
 
-#: .\models.py:22
+#: .\models.py:24
 msgid "Background"
 msgstr "רקע"
 
-#: .\models.py:23
+#: .\models.py:25
 msgid "Order"
 msgstr "סדר"
 
-#: .\models.py:24
+#: .\models.py:26
 msgid "Closed"
 msgstr "סגור"
 
-#: .\models.py:28
+#: .\models.py:30
 msgid "Agenda Item"
 msgstr "פריט על סדר היום"
 
-#: .\models.py:29
+#: .\models.py:31
 msgid "Agenda Items"
 msgstr "פריטים על סדר היום"
 
-#: .\models.py:66
+#: .\models.py:68
 msgid "Committee"
 msgstr "ועדה"
 
-#: .\models.py:67
+#: .\models.py:69
 msgid "Created at"
 msgstr "נוצר ב"
 
-#: .\models.py:70
+#: .\models.py:72
 msgid "Created by"
 msgstr "נוצר על ידי"
 
-#: .\models.py:71
+#: .\models.py:73
 msgid "Held at"
 msgstr "מועד קיום הפגישה"
 
-#: .\models.py:72
+#: .\models.py:74
 msgid "Title"
 msgstr "כותרת"
 
-#: .\models.py:73
+#: .\models.py:75
 msgid "Scheduled at"
 msgstr "מועד"
 
-#: .\models.py:74
+#: .\models.py:76
 msgid "Location"
 msgstr "מקום"
 
-#: .\models.py:75
+#: .\models.py:77
 msgid "Comments"
 msgstr "הערות"
 
-#: .\models.py:76 .\templates\meetings\meeting_detail.html:8
+#: .\models.py:78 .\templates\meetings\meeting_detail.html:8
 #: .\templates\meetings\meeting_detail.html:50
 msgid "Summary"
 msgstr "סיכום הפגישה"
 
-#: .\models.py:80
+#: .\models.py:82
 msgid "Agenda items"
 msgstr "סדר יום"
 
-#: .\models.py:83 .\templates\meetings\meeting_detail.html:64
+#: .\models.py:85 .\templates\meetings\meeting_detail.html:64
 #: .\templates\meetings\meeting_detail.html:127
 msgid "Participants"
 msgstr "משתתפים"
 
-#: .\models.py:85
+#: .\models.py:87
 msgid "Guests"
 msgstr "אורחים"
 
-#: .\models.py:85
+#: .\models.py:87
 msgid "Enter each guest in a separate line"
 msgstr "רשום כל אורח בשורה נפקדת"
 
-#: .\models.py:89 .\templates\meetings\meeting_list.html:9
+#: .\models.py:91 .\templates\meetings\meeting_list.html:9
 msgid "Meetings"
 msgstr "פגישות"
 
-#: .\models.py:160 .\models.py:184
+#: .\models.py:164 .\models.py:186
 msgid "Name"
 msgstr "שם"
 
-#: .\models.py:161
+#: .\models.py:165
 msgid "Group"
 msgstr "קבוצה"
 
-#: .\models.py:164
+#: .\models.py:166
 msgid "Is Absent"
 msgstr "נעדר"
 
-#: .\models.py:168
+#: .\models.py:170
 msgid "Meeting Participant"
 msgstr "משתתף בפגישה"
 
-#: .\models.py:169
+#: .\models.py:171
 msgid "Meeting Participants"
 msgstr "משתתפים בפגישה"
 
-#: .\models.py:187
+#: .\models.py:189
 msgid "Meeting External Participant"
 msgstr "משתתף חיצוני"
 
-#: .\models.py:188
+#: .\models.py:190
 msgid "Meeting External Participants"
 msgstr "משתתפים חיצוניים"
 
@@ -276,10 +272,13 @@ msgstr "ט"
 msgid "j"
 msgstr "י"
 
-#: .\views.py:110
+#: .\views.py:111
 #, python-format
 msgid "Sending to %d users"
 msgstr "שולח ל-%d משתמשים"
+
+#~ msgid "Send to"
+#~ msgstr "שלח אל"
 
 #~ msgid "Community"
 #~ msgstr "קהילה"

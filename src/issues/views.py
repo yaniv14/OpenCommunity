@@ -699,13 +699,10 @@ class ProposalVoteView(ProposalVoteMixin, DetailView):
 
         is_board = request.POST.get('board', False)
         user_id = request.POST.get('user', request.user.id)
-        voter_id = request.user.id
-        voter_group = 'board' if has_committee_perm(request.user, self.committee, 'proposal_board_vote') else ''
-        # voter_group = request.user.get_default_group(self.committee.community) \
-        #     if request.user.is_authenticated() \
-        #     else ''
-        val = request.POST['val']
-        if is_board:
+        voter = request.user
+        voter_group = 'board' if has_committee_perm(voter, self.committee, 'proposal_board_vote') else ''
+        val = request.POST.get('val', None)
+        if is_board == '1':
             # vote for board member by chairman or board member
             vote_class = ProposalVoteBoard
         else:
@@ -750,8 +747,7 @@ class ProposalVoteView(ProposalVoteMixin, DetailView):
         if value == None:
             return HttpResponseBadRequest('vote value not valid')
 
-        vote, valid = self._do_vote(vote_class, proposal, user_id, value,
-                                    is_board, voter_group)
+        vote, valid = self._do_vote(vote_class, proposal, user_id, value, is_board, voter_group)
         if valid == ProposalVoteMixin.VOTE_OK:
             vote_response['html'] = render_to_string(res_panel_tpl,
                                                      {

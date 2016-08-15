@@ -66,8 +66,6 @@ class IssueStatus(object):
 class Issue(UIDMixin, ConfidentialMixin):
     objects = IssueManager()
     active = models.BooleanField(_("Active"), default=True)
-    # community = models.ForeignKey('communities.Community',
-    # related_name="issues")
     committee = models.ForeignKey('communities.Committee', on_delete=models.CASCADE, related_name="issues", null=True)
     created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name=_("Created by"),
@@ -604,6 +602,7 @@ class Proposal(UIDMixin, ConfidentialMixin):
         return [j[i] for k, g in groups for i, j in enumerate(g)]
 
 
+@python_2_unicode_compatible
 class ProposalVote(models.Model):
     proposal = models.ForeignKey(Proposal, on_delete=models.CASCADE, related_name='votes')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name=_("User"), related_name="votes")

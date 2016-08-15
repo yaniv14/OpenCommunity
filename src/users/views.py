@@ -1,6 +1,6 @@
 import json
 
-from communities.models import CommunityGroup
+from communities.models import CommunityGroup, GroupUser
 from django.contrib import messages
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import permission_required
@@ -133,23 +133,18 @@ class AcceptInvitationView(DetailView):
         i = self.get_object()
 
         def create_membership(user):
-            # Create selected membership type
+            # Create community membership
+            obj, created = CommunityMembership.objects.get_or_create(user=user, community=i.community)
+            if created:
+                obj.invited_by = i.created_by
+                obj.save()
+            # Create all group user & committee membership
             for group in i.groups.all():
-                obj, created = CommunityMembership.objects.get_or_create(user=user, community=i.community, group_name=group)
-                if created:
-                    obj.invited_by = i.created_by
-                    obj.save()
-            # Create all member group
-            # TODO: Fix this process. !!!!!
-            try:
-                member_group = CommunityGroup.objects.get(community=i.community, title=gettext('member'))
-                obj, created = CommunityMembership.objects.get_or_create(user=user, community=i.community,
-                                                                group_name=member_group)
-                if created:
-                    obj.invited_by = i.created_by
-                    obj.save()
-            except:
-                pass
+                group_user_obj, group_user_created = GroupUser.objects.get_or_create(group=group, user=user)
+                if group_user_created:
+                    group_user_obj.created_by = i.created_by
+                    group_user_obj.save()
+                # TODO: assign member to committee?
             i.delete()
             return obj
 
@@ -210,12 +205,11 @@ class AutocompleteMemberName(MembershipMixin, ListView):
         if not members:
             return HttpResponse(json.dumps({}))
         else:
-            members = list(members.values('user__display_name', 'user__id',
-                                          'default_group_name'))
+            members = list(members.values('user__display_name', 'user__id'))
             for m in members:
                 m['tokens'] = [m['user__display_name'], ]
                 m['value'] = m['user__display_name']
-                m['board'] = m['default_group_name'] != 'member'
+                # m['board'] = m['default_group_name'] != 'member'
             members.sort(_cmp_func)
             # context = self.get_context_data(object_list=members)
             return HttpResponse(json.dumps(members), {'content_type': 'application/json'})

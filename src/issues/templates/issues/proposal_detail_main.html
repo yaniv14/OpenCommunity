@@ -138,8 +138,8 @@
 	{% endwith %}
 	
 	{% if show_board_vote_result %}
-			<h2 class="clear">{% trans "Vote by the" %} {{ object.issue.committee.name|default:_("Board") }}</h2>
-			{% include 'issues/_board_vote_res.html' %}
+        <h2 class="clear">{% trans "Vote by the" %} {{ object.issue.committee.name|default:_("Board") }}</h2>
+        {% include 'issues/_board_vote_res.html' %}
 	{% endif %}
   {% if 'proposal_board_vote' in cperms and chairman_can_vote %}
   <h2 class="clear" style="margin-right: 10px;"><input type="checkbox" id="reg_board_vote" 

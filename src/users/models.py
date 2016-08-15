@@ -15,6 +15,8 @@ import logging
 import random
 import string
 
+from users.permissions import has_committee_perm
+
 CODE_LENGTH = 48
 
 logger = logging.getLogger(__name__)
@@ -117,14 +119,14 @@ class OCUser(AbstractBaseUser, PermissionsMixin):
         send_mail(subject, message, from_email, [self.email])
 
 
-# class MembershipManager(models.Manager):
-#     def board(self):
-#         return self.get_queryset().exclude(
-#             default_group_name=DefaultGroups.MEMBER)
-#
-#     def none_board(self):
-#         return self.get_queryset().filter(
-#             default_group_name=DefaultGroups.MEMBER)
+class CommitteeMembershipManager(models.Manager):
+    def board(self, perm):
+        return self.get_queryset().filter(
+            id__in=[x.id for x in self.get_queryset() if has_committee_perm(x.user, x.committee, perm)])
+
+    def none_board(self, perm):
+        return self.get_queryset().exclude(
+            id__in=[x.id for x in self.get_queryset() if has_committee_perm(x.user, x.committee, perm)])
 
 
 @python_2_unicode_compatible
@@ -154,6 +156,9 @@ class CommunityMembership(models.Model):
     def get_absolute_url(self):
         return "member_profile", (self.community.slug, self.id)
 
+    def get_membership_groups(self):
+        return self.user.group_users.filter(group__community=self.community)
+
     def get_committee_permissions(self, committee):
         committee_perms = self.get_permissions(committee.community)
         committee_perms.update(self.group_name.group_roles.get(committee=committee).role.all_perms())
@@ -176,7 +181,7 @@ class CommitteeMembership(models.Model):
                                    blank=True)
     in_position_since = models.DateField(default=timezone.now, verbose_name=_("In position since"))
 
-    # objects = CommitteeMembershipManager()
+    objects = CommitteeMembershipManager()
 
     class Meta:
         unique_together = ("committee", "user")

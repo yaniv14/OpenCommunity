@@ -10,13 +10,11 @@ import floppyforms.__future__ as forms
 class CloseMeetingForm(forms.ModelForm):
     send_to_options = list(SendToOption.choices[2:])
 
-    # On QA servers, allow users to prevent sending of protocols
-    if settings.QA_SERVER:
-        send_to_options.insert(0, SendToOption.choices[0])
+    # # On QA servers, allow users to prevent sending of protocols
+    # if settings.QA_SERVER:
+    #     send_to_options.insert(0, SendToOption.choices[0])
 
-    send_to = forms.TypedChoiceField(label=_("Send to"), coerce=int,
-                                     choices=send_to_options,
-                                     widget=forms.RadioSelect)
+    send_to = forms.ModelMultipleChoiceField(queryset=None, widget=forms.CheckboxSelectMultiple)
     issues = forms.MultipleChoiceField(label=_("The selected issues will be archived"),
                                        choices=[],
                                        widget=forms.CheckboxSelectMultiple,
@@ -43,6 +41,7 @@ class CloseMeetingForm(forms.ModelForm):
             return None
 
     def __init__(self, *args, **kwargs):
+        community = kwargs.pop('community')
         issues = kwargs.pop('issues')
         super(CloseMeetingForm, self).__init__(*args, **kwargs)
         issues_op = []
@@ -58,3 +57,8 @@ class CloseMeetingForm(forms.ModelForm):
             issues_op.append((issue.id, mark_safe(choice_txt),))
         self.fields['issues'].choices = issues_op
         self.fields['issues'].initial = init_vals
+        self.fields['send_to'].queryset = community.groups.all()
+        # On QA servers, allow users to prevent sending of protocols
+        if settings.QA_SERVER or settings.DEBUG:
+            self.fields['send_to'].required = False
+

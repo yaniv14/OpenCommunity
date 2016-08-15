@@ -156,13 +156,13 @@ class GroupForm(forms.ModelForm):
 
     def is_valid(self):
         valid = super(GroupForm, self).is_valid()
-        if self.data.get('group') == '' or self.data.get('role') == '' or self.data.get('committee') == '':
+        if not self.data.get('group') or not self.data.get('role') or not self.data.get('committee'):
             return valid
         return self.group_role.is_valid() and valid
 
     def save(self, commit=True):
         o = super(GroupForm, self).save(commit)
-        if self.data.get('committee') != '' and self.data.get('role') != '':
+        if self.data.get('committee') and self.data.get('role'):
             self.group_role.instance.group = o
             self.group_role.save()
         return o

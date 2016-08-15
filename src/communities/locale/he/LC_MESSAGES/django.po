@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open Community\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-04 14:21+0300\n"
+"POT-Creation-Date: 2016-08-15 09:00+0300\n"
 "PO-Revision-Date: 2016-08-04 14:23+0300\n"
 "Last-Translator: Yaniv Mirel <yanivmirel@gmail.com>\n"
 "Language-Team: \n"
@@ -22,7 +22,7 @@ msgstr ""
 msgid "Communities & Committees"
 msgstr "קהילות וועדות"
 
-#: .\forms.py:35 .\models.py:595
+#: .\forms.py:35 .\models.py:598
 msgid "Title"
 msgstr "כותרת"
 
@@ -60,7 +60,7 @@ msgstr "לועד בלבד"
 msgid "All members"
 msgstr "לכל חברי הקהילה"
 
-#: .\models.py:43 .\models.py:123 .\models.py:583
+#: .\models.py:43 .\models.py:123 .\models.py:586
 #: .\templates\communities\participants_form.html:70
 msgid "Name"
 msgstr "שם"
@@ -129,7 +129,7 @@ msgstr "להודיע למנהל המערכת"
 msgid "Community without meetings?"
 msgstr "קהילות ללא פגישות?"
 
-#: .\models.py:90 .\models.py:121 .\models.py:594
+#: .\models.py:90 .\models.py:121 .\models.py:597
 msgid "Community"
 msgstr "קהילה"
 
@@ -201,7 +201,7 @@ msgstr "סיכום הפגישה הקרובה"
 msgid "Committee without meetings?"
 msgstr "ועדה ללא פגישות?"
 
-#: .\models.py:204 .\models.py:640
+#: .\models.py:204 .\models.py:643
 #: .\templates\communities\communitygrouprole_list.html:14
 msgid "Committee"
 msgstr "ועדה"
@@ -212,77 +212,77 @@ msgstr "ועדה"
 msgid "Committees"
 msgstr "ועדות"
 
-#: .\models.py:571
+#: .\models.py:574
 msgid "Confidential Reason"
 msgstr "סיבה עבור נושא חסוי"
 
-#: .\models.py:572
+#: .\models.py:575
 msgid "Confidential Reasons"
 msgstr "סיבות עבור נושאים חסויים"
 
-#: .\models.py:579
+#: .\models.py:582
 msgid ""
 "A reason that can be used for marking items as confidential in your "
 "community."
 msgstr "הגדרת סיבה עבור נושאים חסויים"
 
-#: .\models.py:585
+#: .\models.py:588
 msgid "The title to give this reason."
 msgstr "כותרת עבור סיבה זו"
 
-#: .\models.py:598 .\models.py:615 .\models.py:637
+#: .\models.py:601 .\models.py:618 .\models.py:640
 #: .\templates\communities\communitygrouprole_list.html:15
 msgid "Group"
 msgstr "קבוצה"
 
-#: .\models.py:599 .\templates\communities\communitygroup_detail.html:4
+#: .\models.py:602 .\templates\communities\communitygroup_detail.html:4
 #: .\templates\communities\communitygroup_list.html:10
 #: .\templates\communities\communitygroup_list.html:45
 #: .\templates\communities\communitygrouprole_list.html:4
 msgid "Groups"
 msgstr "קבוצות"
 
-#: .\models.py:606
+#: .\models.py:609
 msgid "from community"
 msgstr "מקהילה"
 
-#: .\models.py:616
+#: .\models.py:619
 msgid "User"
 msgstr "משתמש"
 
-#: .\models.py:618
+#: .\models.py:621
 msgid "Created at"
 msgstr "נוצר בתאריך"
 
-#: .\models.py:619
+#: .\models.py:622
 msgid "Created by"
 msgstr "נוצר על ידי"
 
-#: .\models.py:623
+#: .\models.py:626
 msgid "Group User"
 msgstr "קבוצה למשתמש"
 
-#: .\models.py:624
+#: .\models.py:627
 msgid "Group Users"
 msgstr "קבוצות למשתמשים"
 
-#: .\models.py:638 .\templates\communities\communitygrouprole_list.html:16
+#: .\models.py:641 .\templates\communities\communitygrouprole_list.html:16
 msgid "Role"
 msgstr "הרשאות"
 
-#: .\models.py:643
+#: .\models.py:646
 msgid "Group Role"
 msgstr "קבוצת Role"
 
-#: .\models.py:644
+#: .\models.py:647
 msgid "Group Roles"
 msgstr "קבוצות Role"
 
-#: .\models.py:660
+#: .\models.py:663
 msgid "Group, Role & Committee need to be from same community"
 msgstr "קבוצות, הרשאות וועדות צריכים להיות מאותה קהילה"
 
-#: .\models.py:674
+#: .\models.py:677
 #: .\south_migrations\0011_auto__add_field_community_register_missing_board_members__chg_field_co.py:17
 msgid "Board"
 msgstr "ועד"
@@ -349,6 +349,11 @@ msgstr "כניסה"
 #: .\templates\communities\_issue.html:37
 msgid "Issue in discussion"
 msgstr "נושא בדיון"
+
+#: .\templates\communities\_my_community.html:19
+#: .\templates\communities\_my_community.html:23
+msgid "Logistic manager"
+msgstr ""
 
 #: .\templates\communities\base_meeting.html:31
 #: .\templates\communities\upcoming.html:37

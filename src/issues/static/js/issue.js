@@ -3,12 +3,13 @@
 // Auto save comment form
 function autoSaveComment() {
     var timeoutId;
-    $('.wysihtml5-sandbox').contents().find('body').on('input properychange change', function () {
+    var editor = $('.htmlarea textarea');
+    $('#id_content').on('input properychange change', function () {
         clearTimeout(timeoutId);
         timeoutId = setTimeout(function () {
             $('#add-comment').ajaxForm({
                 beforeSubmit: function (arr, form) {
-                    if (!editor.getValue()) {
+                    if (!editor.val()) {
                         return false;
                     }
                     $('.add-comment-btn').prop('disabled', true);
@@ -37,10 +38,10 @@ $(function () {
     }
 
     if ($('.htmlarea textarea').length) {
-        var editor = $('.htmlarea textarea').ocdEditor().data('wysihtml5').editor;
+        var editor = $('.htmlarea textarea');
 
         editor.on('input', function () {
-            refreshButtons(editor.getValue().trim() == '');
+            refreshButtons(editor.val().trim() == '');
         });
     }
 
@@ -50,7 +51,7 @@ $(function () {
         var nextIssue = $(this).data('next-issue');
         $('#add-comment').ajaxForm({
             beforeSubmit: function (arr, form) {
-                if (!editor.getValue()) {
+                if (!editor.val()) {
                     return false;
                 }
             },

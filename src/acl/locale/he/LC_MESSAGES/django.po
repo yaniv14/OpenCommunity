@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-04 14:21+0300\n"
+"POT-Creation-Date: 2016-08-15 09:00+0300\n"
 "PO-Revision-Date: 2016-06-07 11:27+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -27,154 +27,160 @@ msgid "Access Community"
 msgstr "גישה לקהילה"
 
 #: .\core_permissions.py:11
+#, fuzzy
+#| msgid "Access Community"
+msgid "Access Committee"
+msgstr "גישה לקהילה"
+
+#: .\core_permissions.py:16 .\core_permissions.py:21
 msgid "View Upcoming Meeting"
 msgstr "צפייה בפגישה הקרובה"
 
-#: .\core_permissions.py:16
+#: .\core_permissions.py:26
 msgid "View Upcoming Meeting Before Published"
 msgstr "צפייה בפגישה הקרובה לפני פירסום"
 
-#: .\core_permissions.py:21
+#: .\core_permissions.py:31
 msgid "Edit Upcoming Agenda"
 msgstr "עריכת סדר יום בפגישה הקרובה"
 
-#: .\core_permissions.py:26
+#: .\core_permissions.py:36
 msgid "Manage Upcoming Meeting Participants"
 msgstr "ניהול משתתפים בפגישה הקרובה"
 
-#: .\core_permissions.py:31
+#: .\core_permissions.py:41
 msgid "Edit Summary"
 msgstr "עריכת תקציר הפגישה"
 
-#: .\core_permissions.py:36
+#: .\core_permissions.py:46
 msgid "Edit Upcoming"
 msgstr "עריכת הפגישה"
 
-#: .\core_permissions.py:41
+#: .\core_permissions.py:51
 msgid "Invite Member"
 msgstr "הזמנת חברים לקהילה"
 
-#: .\core_permissions.py:46
+#: .\core_permissions.py:56
 msgid "Acceptclosed Proposal"
 msgstr "קבל/דחה הצעה"
 
-#: .\core_permissions.py:51
+#: .\core_permissions.py:61
 msgid "Acceptopen Proposal"
 msgstr "קבל/פתח הצעה"
 
-#: .\core_permissions.py:56
+#: .\core_permissions.py:66
 msgid "Add Issue"
 msgstr "הוספת נושא"
 
-#: .\core_permissions.py:61
+#: .\core_permissions.py:71
 msgid "Add Issuecomment"
 msgstr "הוספת הערה לנושא"
 
-#: .\core_permissions.py:66
+#: .\core_permissions.py:76
 msgid "Add Proposal"
 msgstr "הוספת הצעה"
 
-#: .\core_permissions.py:71
+#: .\core_permissions.py:81
 msgid "Chairman Vote"
 msgstr "הצבעת ועד"
 
-#: .\core_permissions.py:76
+#: .\core_permissions.py:86
 msgid "Edit Referendum"
 msgstr "ערוך משאל"
 
-#: .\core_permissions.py:81
+#: .\core_permissions.py:91
 msgid "Edit Closed Issue"
 msgstr "ערוך/סגור נושא"
 
-#: .\core_permissions.py:86
+#: .\core_permissions.py:96
 msgid "Edit Closed Issuecomment"
 msgstr "ערוך/סגור הערה על נושא"
 
-#: .\core_permissions.py:91
+#: .\core_permissions.py:101
 msgid "Edit Closed Proposal"
 msgstr "ערוך/סגור הצעה"
 
-#: .\core_permissions.py:96
+#: .\core_permissions.py:106
 msgid "Edit Open Issue"
 msgstr "ערוך/פתח נושא"
 
-#: .\core_permissions.py:101
+#: .\core_permissions.py:111
 msgid "Edit Open Issuecomment"
 msgstr "ערוך/פתח הערה על נושא"
 
-#: .\core_permissions.py:106
+#: .\core_permissions.py:116
 msgid "Edit Open Proposal"
 msgstr "ערוך/פתח הצעה"
 
-#: .\core_permissions.py:111
+#: .\core_permissions.py:121
 msgid "Edit Task Proposal"
 msgstr "ערוך הצעת משימה"
 
-#: .\core_permissions.py:116
+#: .\core_permissions.py:126
 msgid "Move To Referendum"
 msgstr "עבור למשאל"
 
-#: .\core_permissions.py:121
+#: .\core_permissions.py:131
 msgid "Proposal Board Vote"
 msgstr "הצבעת ועד על החלטה"
 
-#: .\core_permissions.py:126
+#: .\core_permissions.py:136
 msgid "Proposal Board Vote Self"
 msgstr "הצבעת ועד אישית"
 
-#: .\core_permissions.py:131
+#: .\core_permissions.py:141
 msgid "View Proposal In Discussion"
 msgstr "צפייה בהחלטה במהלך דיון"
 
-#: .\core_permissions.py:136
+#: .\core_permissions.py:146
 msgid "View Referendum Results"
 msgstr "צפייה בתוצאות המשאל"
 
-#: .\core_permissions.py:141
+#: .\core_permissions.py:151
 msgid "View Update Status"
 msgstr "צפייה ועריכת סטטוס"
 
-#: .\core_permissions.py:146
+#: .\core_permissions.py:156
 msgid "View straw vote result"
 msgstr "צפייה בתוצאות הצבעת שבשבת"
 
-#: .\core_permissions.py:151
+#: .\core_permissions.py:161
 msgid "View Closed Issue"
 msgstr "צפייה בנושא סגור"
 
-#: .\core_permissions.py:156
+#: .\core_permissions.py:166
 msgid "View Closed Proposal"
 msgstr "צפייה בהצעה סגורה"
 
-#: .\core_permissions.py:161
+#: .\core_permissions.py:171
 msgid "View Open Issue"
 msgstr "צפייה בנושא פתוח"
 
-#: .\core_permissions.py:166
+#: .\core_permissions.py:176
 msgid "View Open Proposal"
 msgstr "צפייה בהצעה פתוחה"
 
-#: .\core_permissions.py:171
+#: .\core_permissions.py:181
 msgid "Vote"
 msgstr "הצבעה"
 
-#: .\core_permissions.py:176
+#: .\core_permissions.py:186
 msgid "Vote Ranking"
 msgstr "דירוג הצבעות"
 
-#: .\core_permissions.py:181
+#: .\core_permissions.py:191
 msgid "Add Meeting"
 msgstr "הוספת פגישה"
 
-#: .\core_permissions.py:186
+#: .\core_permissions.py:196
 msgid "View Meeting"
 msgstr "צפייה בפגישה"
 
-#: .\core_permissions.py:191
+#: .\core_permissions.py:201
 msgid "Show Member Profile"
 msgstr "צפייה בפרופיל משתמש"
 
-#: .\core_permissions.py:196
+#: .\core_permissions.py:206
 msgid "Can view confidential Issue/Proposal"
 msgstr "יכול לצפות בנושאים/הצעות חסויות"
 
@@ -214,19 +220,19 @@ msgstr "מחליט"
 msgid "Manager"
 msgstr "מנהל"
 
-#: .\default_roles.py:119
+#: .\default_roles.py:120
 msgid "member"
 msgstr "חבר קהילה"
 
-#: .\default_roles.py:120
+#: .\default_roles.py:121
 msgid "board"
 msgstr "חבר ועד"
 
-#: .\default_roles.py:121
+#: .\default_roles.py:122
 msgid "secretary"
 msgstr "מזכיר"
 
-#: .\default_roles.py:122
+#: .\default_roles.py:123
 msgid "chairman"
 msgstr "יושב ראש"
 

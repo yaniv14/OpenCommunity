@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open Community\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-04 14:21+0300\n"
+"POT-Creation-Date: 2016-08-15 09:00+0300\n"
 "PO-Revision-Date: 2015-06-17 21:56+0200\n"
 "Last-Translator: Yaniv Mirel <yanivmirel@gmail.com>\n"
 "Language-Team: \n"
@@ -163,35 +163,35 @@ msgstr "קהילה פתוחה: פאנל ניהול"
 msgid "Home"
 msgstr "בית"
 
-#: .\templates\base.html:42
+#: .\templates\base.html:43
 msgid "Page title"
 msgstr "כותרת עמוד"
 
-#: .\templates\base.html:52
+#: .\templates\base.html:53
 msgid "Attention"
 msgstr "שים לב"
 
-#: .\templates\base.html:59 .\templates\dialog.html:24
+#: .\templates\base.html:60 .\templates\dialog.html:24
 msgid "Close"
 msgstr "סגור"
 
-#: .\templates\base.html:72
+#: .\templates\base.html:73
 msgid "About"
 msgstr "אודות"
 
-#: .\templates\base.html:74
+#: .\templates\base.html:75
 msgid "Back to top"
 msgstr "לראש העמוד"
 
-#: .\templates\base.html:77
+#: .\templates\base.html:78
 msgid "An eKnight"
 msgstr "חשמביר"
 
-#: .\templates\base.html:77
+#: .\templates\base.html:78
 msgid "from Hasadna"
 msgstr "מבית הסדנא"
 
-#: .\templates\base.html:82
+#: .\templates\base.html:83
 msgid "Version"
 msgstr "גרסא"
 

@@ -267,8 +267,7 @@ class Committee(UIDMixin):
         return rv
 
     def get_members(self):
-        from users.models import OCUser
-        return OCUser.objects.filter(memberships__community=self.community)
+        return self.community.community_memberships.all()
 
     def meeting_participants(self):
 
@@ -401,21 +400,23 @@ class Committee(UIDMixin):
                 return True
         return False
 
-    # def _register_absents(self, meeting, meeting_participants):
-    #     board_members = [mm.user for mm in Membership.objects.board() \
-    #         .filter(community=self.community, user__is_active=True)]
-    #     absents = set(board_members) - set(meeting_participants)
-    #     ordinal_base = len(meeting_participants)
-    #     for i, a in enumerate(absents):
-    #         try:
-    #             mm = a.memberships.get(community=self.community)
-    #         except Membership.DoesNotExist:
-    #             mm = None
-    #         MeetingParticipant.objects.create(meeting=meeting, user=a,
-    #                                           display_name=a.display_name,
-    #                                           ordinal=ordinal_base + i,
-    #                                           is_absent=True,
-    #                                           default_group_name=mm.default_group_name if mm else None)
+    def _register_absents(self, meeting, meeting_participants):
+        from meetings.models import MeetingParticipant
+        from users.models import CommitteeMembership
+        board_members = [mm.user for mm in Membership.objects.board().filter(community=self.community, user__is_active=True)]
+        absents = set(board_members) - set(meeting_participants)
+        ordinal_base = len(meeting_participants)
+        for i, a in enumerate(absents):
+            try:
+                _mm = a.community_memberships.get(community=self.community)
+                mm = _mm.get_membership_groups().first()
+            except CommitteeMembership.DoesNotExist:
+                mm = None
+            MeetingParticipant.objects.create(meeting=meeting, user=a,
+                                              display_name=a.display_name,
+                                              ordinal=ordinal_base + i,
+                                              is_absent=True,
+                                              group_name=mm.group.title if mm else None)
 
     def close_meeting(self, m, user, committee):
         """
@@ -482,6 +483,7 @@ class Committee(UIDMixin):
                     c.meeting = m
                     c.save()
 
+                import meetings.models as meetings_models
                 ai = meetings_models.AgendaItem.objects.create(
                     meeting=m, issue=issue, order=i,
                     background=issue.abstract,
@@ -498,16 +500,17 @@ class Committee(UIDMixin):
             meeting_participants = self.upcoming_meeting_participants.all()
             for i, p in enumerate(meeting_participants):
                 try:
-                    mm = p.memberships.filter(committee_membership=self)
+                    _mm = p.community_memberships.get(community=self.community)
+                    mm = _mm.get_membership_groups().first()
                 except CommitteeMembership.DoesNotExist:
                     mm = None
 
                 MeetingParticipant.objects.create(meeting=m, ordinal=i,
                                                   user=p,
                                                   display_name=p.display_name,
-                                                  default_group_name=mm.default_group_name if mm else None)
+                                                  group_name=mm.group.title if mm else None)
 
-            self._register_absents(m, meeting_participants)
+            # self._register_absents(m, meeting_participants)
             self.upcoming_meeting_participants = []
 
         return m

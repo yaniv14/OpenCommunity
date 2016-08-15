@@ -162,7 +162,7 @@ $(function () {
             'val': vote_value
         };
         if (is_board) {
-            params['board'] = '1';
+            params['board'] = 1;
         }
         return $.post(vote_url, params, function (data) {
             if (data['result'] == 'ok') {

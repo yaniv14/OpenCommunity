@@ -219,7 +219,7 @@ class EditUpcomingMeetingParticipantsView(AjaxFormView, CommitteeModelMixin, Upd
             g_list.append({
                 'group_id': group.id,
                 'group_name': group.title,
-                'members': group.memberships.all().values('user_id', 'user__display_name')
+                'members': group.group_users.all().values('user_id', 'user__display_name')
             })
         d['groups'] = g_list
         d['meeting_participants'] = self.get_object().upcoming_meeting_participants.values_list('id', flat=True)

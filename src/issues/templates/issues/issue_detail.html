@@ -1,7 +1,5 @@
 {% extends "base.html" %}
-{% load i18n %}
-{% load humanize %}
-{% load voting_tags community_tags opencommunity %}
+{% load i18n humanize static voting_tags community_tags opencommunity %}
 
 {% block extra-page-id %}
 id="issue-detail"
@@ -162,19 +160,19 @@ id="issue-detail"
 {% endblock %}
 
 {% block extrahead %}
-    <link rel="stylesheet" href="{{STATIC_URL}}css/issue.css"/>
-    <link rel="stylesheet" href="{{STATIC_URL}}bootstrap/css/typeahead.js-bootstrap.css"/>
+    <link rel="stylesheet" href="{% static 'css/issue.css' %}"/>
+    <link rel="stylesheet" href="{% static 'bootstrap/css/typeahead.js-bootstrap.css' %}"/>
 {% endblock %}
 
 {% block scripts %}
-    <script src="{{STATIC_URL}}js/issue.js"></script>
-    <script src="{{STATIC_URL}}js/Chart.js"></script>
-    <script src="{{STATIC_URL}}js/proposal.js"></script>
-    <script src="{{STATIC_URL}}js/filter.js"></script>
-    <script src="{{STATIC_URL}}js/_piechart.js"></script>
-    <script src="{{STATIC_URL}}bootstrap/js/typeahead.min.js"></script>
-    <script src="{{ STATIC_URL }}js/hogan-2.0.0.js"></script>
-    <script src="{{STATIC_URL}}js/issues.js"></script>
+    <script src="{% static 'js/issue.js' %}"></script>
+    <script src="{% static 'js/Chart.js' %}"></script>
+    <script src="{% static 'js/proposal.js' %}"></script>
+    <script src="{% static 'js/filter.js' %}"></script>
+    <script src="{% static 'js/_piechart.js' %}"></script>
+    <script src="{% static 'bootstrap/js/typeahead.min.js' %}"></script>
+    <script src="{% static 'js/hogan-2.0.0.js' %}"></script>
+    <script src="{% static 'js/issues.js' %}"></script>
     <script src="{% url 'javascript-catalog' %}"></script>
     <script>
         $(function() {

@@ -3,22 +3,23 @@
 // TODO: refactor all file.
 
 
-$.fn.ocdEditor = function () {
-    this.wysihtml5({
-        locale: OCD.language == 'he' ? "he-IL" : 'en',
-        stylesheets: OCD.language == 'he' ? [OCD.static + 'css/rtl.css'] : []
-    });
-    return this;
-};
+// $.fn.ocdEditor = function () {
+//     this.init({
+//         locale: OCD.language == 'he' ? "he-IL" : 'en',
+//         selector: '.wysiwyg'
+//         // stylesheets: OCD.language == 'he' ? [OCD.static + 'css/rtl.css'] : []
+//     });
+//     return this;
+// };
 
-$.fn.enhanceHtml = function () {
-    this.find('.htmlarea textarea').ocdEditor().css({
-        'width': '100%',
-        'border-top-right-radius': '0',
-        'border-top-left-radius': '0'
-    });
-    return this;
-};
+// $.fn.enhanceHtml = function () {
+//     this.find('.htmlarea textarea').ocdEditor().css({
+//         'width': '100%',
+//         'border-top-right-radius': '0',
+//         'border-top-left-radius': '0'
+//     });
+//     return this;
+// };
 
 
 $(function () {
@@ -186,8 +187,20 @@ $(function () {
 function initForm(modal, url, origin) {
 
     var form = modal.find('form');
-
-    form.enhanceHtml().ajaxForm({
+    tinymce.init({
+        selector: 'form .htmlarea textarea',
+        menubar: false,
+        statusbar: false,
+        height: 80,
+        language: 'he_IL',
+        directionality: 'rtl',
+        plugins: [
+            'link directionality'
+        ],
+        toolbar: 'bullist numlist outdent indent | bold italic underline | alignleft aligncenter alignright | link'
+    });
+    // form.enhanceHtml().ajaxForm({
+    form.ajaxForm({
 
         url: url,
 
@@ -230,7 +243,7 @@ function initForm(modal, url, origin) {
         error: function (resp) {
             if (resp.status == 403) {
                 var newEl = $(resp.responseText.trim());
-                form.html(newEl.find('form').html()).enhanceHtml();
+                form.html(newEl.find('form').html());
             } else {
                 alert('Server Error! please try again or reload the page.');
                 form.find('input[type="submit"]').prop('disabled', false);

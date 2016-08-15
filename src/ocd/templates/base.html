@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load i18n staticfiles %}
 <!DOCTYPE html>
 <html lang="{{LANGUAGE_CODE}}" class="lang-{{LANGUAGE_CODE}}">
     <head>
@@ -11,11 +11,11 @@
 
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <link href="{{ STATIC_URL }}bootstrap/css/bootstrap{% if LANGUAGE_CODE == 'he' %}-rtl{% endif %}.css" rel="stylesheet">
-        <link href="{{ STATIC_URL }}style{% if LANGUAGE_CODE == 'he' %}-rtl{% endif %}.css" rel="stylesheet">
-        <link href="{{ STATIC_URL }}fonts/alef/alef.css" rel="stylesheet" />
-        <link href="{{ STATIC_URL }}font-awesome-4.0.3/css/font-awesome.css" rel="stylesheet" />
-        <link href="{{ STATIC_URL }}bootstrap-wysihtml5/bootstrap-wysihtml5{% if LANGUAGE_CODE == 'he' %}-rtl{% endif %}.css" rel="stylesheet" />
+        <link href="{% static 'bootstrap/css/bootstrap' %}{% if LANGUAGE_CODE == 'he' %}-rtl{% endif %}.css" rel="stylesheet">
+        <link href="{% static 'style' %}{% if LANGUAGE_CODE == 'he' %}-rtl{% endif %}.css" rel="stylesheet">
+        <link href="{% static 'fonts/alef/alef.css' %}" rel="stylesheet" />
+        <link href="{% static 'font-awesome-4.6.3/css/font-awesome.css' %}" rel="stylesheet">
+        {% comment %}<link href="{{ STATIC_URL }}bootstrap-wysihtml5/bootstrap-wysihtml5{% if LANGUAGE_CODE == 'he' %}-rtl{% endif %}.css" rel="stylesheet" />{% endcomment %}
         {% block extrahead %}
         {% endblock %}
 
@@ -92,18 +92,21 @@
             };
         </script>
 
-        <script src="{{ STATIC_URL }}jquery-1.9.1.min.js"></script>
+        <script src="{% static 'jquery-1.9.1.min.js' %}"></script>
         {% block jquiscript %}{% endblock %}
-        <script src="{{ STATIC_URL }}bootstrap/js/bootstrap.js"></script>
-        <script src="{{ STATIC_URL }}js/csrf.js"></script>
-        <script src="{{ STATIC_URL }}js/jquery.form.js"></script>
-        <script src="{{ STATIC_URL }}js/forms.js"></script>
+        <script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
+        <script src="{% static 'js/csrf.js' %}"></script>
+        <script src="{% static 'js/jquery.form.js' %}"></script>
+        <script src="{% static 'js/forms.js' %}"></script>
+        {% comment %}
         <script src="{{STATIC_URL}}bootstrap-wysihtml5/wysihtml5-0.4.0-oc.js"></script>
         <script src="{{STATIC_URL}}bootstrap-wysihtml5/bootstrap-wysihtml5.js"></script>
+        {% endcomment %}
+        <script src="{% static 'js/tinymce/tinymce.min.js' %}"></script>
         <script src="https://s3-eu-west-1.amazonaws.com/hasadna-design/hasadnaLogo.min.js" type="text/javascript"></script>
 
         {% if LANGUAGE_CODE == 'he' %}
-            <script src="{{ STATIC_URL }}bootstrap-wysihtml5/locales/bootstrap-wysihtml5.he-IL.js"></script>
+            {% comment %}<script src="{{ STATIC_URL }}bootstrap-wysihtml5/locales/bootstrap-wysihtml5.he-IL.js"></script>{% endcomment %}
         {% endif %}
         {% block scripts %}
         {% endblock %}

@@ -1,9 +1,9 @@
 # django
-Django==1.9.8
+Django==1.9.9
 
 # django apps
 django-floppyforms==1.6.2
-django-taggit==0.19.1
+django-taggit==0.20.2
 
 # general libs
 pillow==3.3.0
@@ -14,7 +14,7 @@ python-graph-core==1.8.2
 
 # search
 Whoosh==2.7.4
-django-haystack==2.4.1
+django-haystack==2.5.0
 
 # queue
 redis==2.10.5
@@ -23,7 +23,7 @@ rq==0.6.0
 django-rq==0.9.1
 
 # dev stuff
-ipython==5.0.0
-django-extensions==1.6.7
+ipython==5.1.0
+django-extensions==1.7.1
 django-debug-toolbar==1.5
 django-nose==1.4.3

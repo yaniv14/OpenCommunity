@@ -3,6 +3,7 @@ import logging
 import datetime
 from itertools import chain
 
+from communities.models import CommunityGroup
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
@@ -73,7 +74,9 @@ def _base_send_mail(committee, notification_type, sender, send_to, data=None,
         r.append(sender)
 
     if send_to:
-        r += [m.user for m in CommitteeMembership.objects.filter(group_name_id__in=send_to)]
+        community_groups = CommunityGroup.objects.filter(id__in=send_to)
+        for cg in community_groups:
+            r += [m.user for m in cg.group_users.all()]
 
     # elif send_to == SendToOption.ONLY_ATTENDEES:
     #     r = [user for user in committee.upcoming_meeting_participants.all()]

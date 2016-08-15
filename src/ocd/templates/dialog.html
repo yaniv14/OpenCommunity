@@ -4,7 +4,7 @@
 {% endblock %}
 
 <div class="modal-dialog">
-    <form method="post">
+    <form method="post"{% block form_extra %}{% endblock %}>
 
         <div class="modal-content{% block modal_content_classes%}{% endblock modal_content_classes %}">
 

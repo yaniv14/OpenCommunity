@@ -17,8 +17,10 @@ class AgendaItemManager(ConfidentialManager):
 class AgendaItem(ConfidentialByRelationMixin):
     confidential_from = 'issue'
     objects = ConfidentialManager()
-    meeting = models.ForeignKey('meetings.Meeting', on_delete=models.CASCADE, verbose_name=_("Meeting"), related_name="agenda")
-    issue = models.ForeignKey('issues.Issue', on_delete=models.CASCADE, verbose_name=_("Issue"), related_name="agenda_items")
+    meeting = models.ForeignKey('meetings.Meeting', on_delete=models.CASCADE, verbose_name=_("Meeting"),
+                                related_name="agenda")
+    issue = models.ForeignKey('issues.Issue', on_delete=models.CASCADE, verbose_name=_("Issue"),
+                              related_name="agenda_items")
     background = HTMLField(_("Background"), null=True, blank=True)
     order = models.PositiveIntegerField(default=100, verbose_name=_("Order"))
     closed = models.BooleanField(_('Closed'), default=True)
@@ -62,8 +64,8 @@ class AgendaItem(ConfidentialByRelationMixin):
 
 @python_2_unicode_compatible
 class Meeting(UIDMixin):
-    # community = models.ForeignKey('communities.Community', related_name="meetings", verbose_name=_("Community"))
-    committee = models.ForeignKey('communities.Committee', on_delete=models.CASCADE, related_name="meetings", verbose_name=_("Committee"), null=True)
+    committee = models.ForeignKey('communities.Committee', on_delete=models.CASCADE, related_name="meetings",
+                                  verbose_name=_("Committee"), null=True)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Created at"))
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="meetings_created",
                                    on_delete=models.CASCADE,
@@ -87,7 +89,7 @@ class Meeting(UIDMixin):
     class Meta:
         verbose_name = _("Meeting")
         verbose_name_plural = _("Meetings")
-        ordering = ("-held_at", )
+        ordering = ("-held_at",)
 
     def __str__(self):
         s = date_format(self.held_at)
@@ -126,19 +128,20 @@ class Meeting(UIDMixin):
         return [p.user for p in participations]
 
     def meeting_participants(self):
-        meeting_participants = {'board': [], 'members': [], }
-        board_ids = [m.user.id for m in self.committee.community.memberships.board()]
+        meeting_participants = {'board': [], 'members': [],}
+        # board_ids = [m.user.id for m in self.committee.community.memberships.board()]
         for p in self.get_participations():
-            if p.user.id in board_ids:
-                meeting_participants['board'].append(p.user)
-            else:
-                meeting_participants['members'].append(p.user)
+            meeting_participants['members'].append(p.user)
+            # if p.user.id in board_ids:
+            #     meeting_participants['board'].append(p.user)
+            # else:
+            #     meeting_participants['members'].append(p.user)
 
         # doing it simply like this, as I'd need to refactor models
         # just to order in the way that is now required.
-        for index, item in enumerate(meeting_participants['board']):
-            if item.get_default_group(self.committee.community) == DefaultGroups.CHAIRMAN:
-                meeting_participants['board'].insert(0, meeting_participants['board'].pop(index))
+        # for index, item in enumerate(meeting_participants['board']):
+        #     if item.get_default_group(self.committee.community) == DefaultGroups.CHAIRMAN:
+        #         meeting_participants['board'].insert(0, meeting_participants['board'].pop(index))
         return meeting_participants
 
     @models.permalink
@@ -153,14 +156,13 @@ class BoardParticipantsManager(models.Manager):
 
 @python_2_unicode_compatible
 class MeetingParticipant(models.Model):
-    meeting = models.ForeignKey(Meeting, on_delete=models.CASCADE, verbose_name=_("Meeting"), related_name="participations")
+    meeting = models.ForeignKey(Meeting, on_delete=models.CASCADE, verbose_name=_("Meeting"),
+                                related_name="participations")
     ordinal = models.PositiveIntegerField()
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="participations")
     # denormalize for history :
     display_name = models.CharField(_("Name"), max_length=200)
-    default_group_name = models.CharField(_('Group'), max_length=50,
-                                          choices=DefaultGroups.CHOICES,
-                                          null=True, blank=True)
+    group_name = models.CharField(_('Group'), max_length=200, null=True, blank=True)
     is_absent = models.BooleanField(_("Is Absent"), default=False)
     objects = BoardParticipantsManager()
 
@@ -190,6 +192,6 @@ class MeetingExternalParticipant(models.Model):
     def __str__(self):
         return self.name
 
-#     def natural_key(self):
+# def natural_key(self):
 #         return (self.meetings.natural_key(), self.name)
 #     natural_key.dependencies = ['meetings.meeting']
