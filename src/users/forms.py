@@ -50,8 +50,7 @@ class InvitationForm(forms.ModelForm):
 
     def __init__(self, community=None, *args, **kwargs):
         super(InvitationForm, self).__init__(*args, **kwargs)
-        self.fields['groups'].queryset = CommunityGroup.objects.filter(community=community).exclude(
-            title='administrator')
+        self.fields['groups'].queryset = CommunityGroup.objects.filter(community=community)
 
 
 class QuickSignupForm(forms.ModelForm):

@@ -16,10 +16,13 @@ def load_community_permissions(user, community):
             for committee in committees:
                 if committee.community_role:
                     all_perms.update(committee.community_role.all_perms())
-            membership = CommunityMembership.objects.get(community=community, user=user)
+            try:
+                membership = CommunityMembership.objects.get(community=community, user=user)
+            except CommunityMembership.DoesNotExist:
+                membership = None
             if membership:
                 if membership.is_manager:
-                    all_perms.update(['invite_member'])
+                    all_perms.update(['invite_member', 'manage_communitygroups'])
             # Should be removed in future, all communities should have basic roles
             if user.community_memberships.filter(community=community).exists():
                 all_perms.update(['access_community'])
@@ -37,24 +40,27 @@ def load_community_permissions(user, community):
 def load_committee_permissions(user, committee):
     from users.models import CommitteeMembership
     if user.is_authenticated():
+        all_perms = set()
+        # Memberships roles
         try:
-            all_perms = set()
-            # Memberships roles
             membership = CommitteeMembership.objects.get(committee=committee, user=user)
-            if membership:
-                all_perms.update(membership.role.all_perms())
-            else:
-                all_perms.update(committee.community_role.all_perms())
-            # Committee group roles
-            user_groups = user.group_users.all()
-            committee_groups = committee.group_roles.all().values_list('group_id', flat=True)
-            for ug in user_groups:
-                if ug.group_id in committee_groups:
-                    obj = CommunityGroupRole.objects.get(group_id=ug.group_id, committee=committee)
-                    all_perms.update(obj.role.all_perms())
-            return all_perms
         except CommitteeMembership.DoesNotExist:
-            pass
+            membership = None
+        if membership:
+            all_perms.update(membership.role.all_perms())
+        elif committee.community_role:
+            all_perms.update(committee.community_role.all_perms())
+        # Committee group roles
+        user_groups = user.group_users.all()
+        committee_groups = committee.group_roles.all().values_list('group_id', flat=True)
+        for ug in user_groups:
+            if ug.group_id in committee_groups:
+                obj = CommunityGroupRole.objects.get(group_id=ug.group_id, committee=committee)
+                all_perms.update(obj.role.all_perms())
+        # Only if we decide to use access_committee perm!
+        if membership or user_groups:
+            all_perms.update(['access_committee'])
+        return all_perms
 
     if committee.is_public:
         # todo: some basic permissions for committee?

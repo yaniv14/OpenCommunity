@@ -2,11 +2,10 @@ from django.db import models
 from django.db.models.query import QuerySet
 from haystack.query import SearchQuerySet
 from acl.default_roles import DefaultGroups
-from users.permissions import get_committee_perms
+from users.permissions import get_committee_perms, has_committee_perm
 
 
 class ActiveQuerySetMixin(object):
-
     """Exposes methods that can be used on both the manager and the queryset.
 
     This allows us to chain custom methods.
@@ -18,7 +17,6 @@ class ActiveQuerySetMixin(object):
 
 
 class ConfidentialQuerySetMixin(object):
-
     """Exposes methods that can be used on both the manager and the queryset.
 
     This allows us to chain custom methods.
@@ -52,25 +50,21 @@ class ConfidentialQuerySet(QuerySet, ConfidentialQuerySetMixin):
 
 
 class ConfidentialManager(models.Manager, ConfidentialQuerySetMixin):
-
     def get_queryset(self):
         return ConfidentialQuerySet(self.model, using=self._db)
 
 
 class ConfidentialSearchQuerySet(SearchQuerySet):
-
     def object_access_control(self, user=None, committee=None, **kwargs):
         if not user or not committee:
             raise ValueError('The access validator requires both a user and '
-                             'a community object.')
+                             'a committee object.')
         qs = self._clone()
         if user.is_superuser:
             return qs
         elif user.is_anonymous():
             return qs.filter(is_confidential=False)
         else:
-            memberships = user.memberships.filter(community=committee.community)
-            lookup = [m.default_group_name for m in memberships]
-            if DefaultGroups.MEMBER in lookup and len(lookup) == 1:
+            if not has_committee_perm(user, committee, 'view_confidential'):
                 return qs.filter(is_confidential=False)
         return qs

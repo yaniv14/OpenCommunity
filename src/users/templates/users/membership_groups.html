@@ -12,9 +12,21 @@ id="members-groups"
 {% endblock %}
 
 {% block page_header %}
+    <a class="btn btn-oc" role="button" data-toggle="collapse" href="#groupsList" aria-expanded="false" aria-controls="groupsList">
+        {% trans "Groups list" %}
+    </a>
     <a class="btn btn-oc" data-rel="form" href="{% url 'group:create' community.slug %}">{% trans "Create Group" %}</a>
     <a class="btn btn-oc" data-rel="form" href="{% url 'create_invitation' community.slug %}">{% trans "New member" %}</a>
     <a class="btn btn-oc" href="{% url 'group_role:list' community.slug %}">{% trans "Group Role" %}</a>
+    <div class="collapse" id="groupsList">
+        <ul class="list-group">
+            {% for group in groups_list %}
+            <li class="list-group-item">
+                <a data-rel="form" href="{% url 'group:update' community.slug group.id %}">{{ group.title }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
 {% endblock %}
 
 {% block content %}

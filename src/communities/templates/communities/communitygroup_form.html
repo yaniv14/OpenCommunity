@@ -2,17 +2,23 @@
 {% load i18n %}
 
 {% block page_header %}
-    {% trans "Create new group" %}
+    {% if form.instance.id %}
+        {% trans "Edit group" %}
+    {% else %}
+        {% trans "Create new group" %}
+    {% endif %}
 {% endblock %}
 {% block form_extra %} novalidate{% endblock %}
 {% block content %}
 
     {{ form }}
 
+    {% if not form.instance.id %}
     <a class="btn btn-oc" role="button" data-toggle="collapse" href="#groupRoleForm" aria-expanded="false" aria-controls="groupRoleForm">
         <i class="fa fa-plus"></i> {% trans 'Assign to committee' %}
     </a>
     <div class="collapse" id="groupRoleForm">
         {{ form.group_role }}
     </div>
+    {% endif %}
 {% endblock %}

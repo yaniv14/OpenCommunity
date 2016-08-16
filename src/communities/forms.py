@@ -148,21 +148,22 @@ class GroupForm(forms.ModelForm):
 
     def __init__(self, community=None, *args, **kwargs):
         super(GroupForm, self).__init__(*args, **kwargs)
-        self.group_role = GroupRoleForm(community=community, prefix='group_role',
-                                        data=self.data if self.is_bound else None)
-        self.group_role.fields['role'].required = False
-        self.group_role.fields['committee'].required = False
-        self.group_role.fields.pop('group')
+        if community:
+            self.group_role = GroupRoleForm(community=community, prefix='group_role',
+                                            data=self.data if self.is_bound else None)
+            self.group_role.fields['role'].required = False
+            self.group_role.fields['committee'].required = False
+            self.group_role.fields.pop('group')
 
     def is_valid(self):
         valid = super(GroupForm, self).is_valid()
-        if not self.data.get('group') or not self.data.get('role') or not self.data.get('committee'):
+        if not self.data.get('group_role-group') or not self.data.get('group_role-role') or not self.data.get('group_role-committee'):
             return valid
         return self.group_role.is_valid() and valid
 
     def save(self, commit=True):
         o = super(GroupForm, self).save(commit)
-        if self.data.get('committee') and self.data.get('role'):
+        if self.data.get('group_role-committee') and self.data.get('group_role-role'):
             self.group_role.instance.group = o
             self.group_role.save()
         return o

@@ -1,4 +1,4 @@
-from communities.models import CommunityGroupRole
+from communities.models import CommunityGroupRole, GroupUser
 from django import forms
 from django.utils.translation import ugettext, ugettext_lazy as _
 from django.contrib import admin
@@ -65,7 +65,13 @@ class UserCommunityMembershipInline(admin.TabularInline):
 class UserCommitteeMembershipInline(admin.TabularInline):
     model = CommitteeMembership
     fk_name = 'user'
-    extra = 1
+    extra = 0
+
+
+class UserGroupsInline(admin.TabularInline):
+    model = GroupUser
+    fk_name = 'user'
+    extra = 0
 
 
 class CommunityMembershipAdmin(admin.ModelAdmin):
@@ -73,7 +79,8 @@ class CommunityMembershipAdmin(admin.ModelAdmin):
         'community',
         'display_user_email',
         'user',
-        'created_at',
+        'display_user_groups',
+        'created_at'
     )
 
     list_filter = ('community', 'user__email', 'user')
@@ -83,6 +90,11 @@ class CommunityMembershipAdmin(admin.ModelAdmin):
         return obj.user.email
 
     display_user_email.short_description = _('Email')
+
+    def display_user_groups(self, obj):
+        return ", ".join([g.group.title for g in obj.user.group_users.all()])
+
+    display_user_groups.short_description = _('Groups')
 
 
 class CommitteeMembershipAdmin(admin.ModelAdmin):
@@ -144,7 +156,7 @@ class OCUserAdmin(UserAdmin):
     ordering = ('email',)
     filter_horizontal = ()
 
-    inlines = [UserCommunityMembershipInline, UserCommitteeMembershipInline]
+    inlines = [UserCommunityMembershipInline, UserCommitteeMembershipInline, UserGroupsInline]
 
     # def get_groups(self, obj):
     #     memberships = obj.memberships.all().values_list('group_name_id', flat=True)

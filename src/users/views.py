@@ -376,8 +376,7 @@ class MembershipGroupList(MembershipMixin, ListView):
     def get_context_data(self, **kwargs):
         d = super(MembershipGroupList, self).get_context_data(**kwargs)
         d['form'] = InvitationForm(initial={'message': Invitation.DEFAULT_MESSAGE % self.community.name})
-        d['form'].fields['groups'].choices = ((x.id, gettext(x.title)) for x in
-                                              CommunityGroup.objects.filter(community=self.community))
+        d['groups_list'] = CommunityGroup.objects.filter(community=self.community)
         return d
 
     def post(self, request, *args, **kwargs):
@@ -416,20 +415,19 @@ class GroupMembersUpdateView(AjaxFormView, CommunityMixin, FormView):
         for g in groups:
             for u in members:
                 if action == 1:
-                    obj, created = Membership.objects.get_or_create(
+                    obj, created = GroupUser.objects.get_or_create(
                         user_id=int(u),
-                        group_name_id=int(g),
-                        community=self.community
+                        group_id=int(g)
                     )
                     if created:
-                        obj.invited_by = self.request.user
+                        obj.created_by = self.request.user
                         obj.save()
                 elif action == 2:
                     try:
-                        obj = Membership.objects.get(user_id=int(u), group_name_id=int(g), community=self.community)
+                        obj = GroupUser.objects.get(user_id=int(u), group_id=int(g))
                         obj.delete()
-                    except:
-                        Membership.DoesNotExist
+                    except GroupUser.DoesNotExist:
+                        pass
 
         return super(GroupMembersUpdateView, self).form_valid(form)
 
