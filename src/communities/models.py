@@ -51,7 +51,7 @@ class Community(UIDMixin):
                                            null=True)
 
     straw_voting_enabled = models.BooleanField(_("Straw voting enabled"),
-                                               default=False)
+                                               default=True)
 
     issue_ranking_enabled = models.BooleanField(
         _("Issue ranking votes enabled"), default=False)
@@ -165,7 +165,7 @@ class Committee(UIDMixin):
                                          null=True, blank=True)
 
     straw_voting_enabled = models.BooleanField(_("Straw voting enabled"),
-                                               default=False)
+                                               default=True)
 
     issue_ranking_enabled = models.BooleanField(
         _("Issue ranking votes enabled"), default=False)

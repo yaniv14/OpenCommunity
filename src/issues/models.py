@@ -262,13 +262,15 @@ def issue_attachment_path(instance, filename):
 
 class IssueAttachment(UIDMixin):
     issue = models.ForeignKey(Issue, on_delete=models.CASCADE, related_name="attachments")
-    agenda_item = models.ForeignKey('meetings.AgendaItem', on_delete=models.CASCADE, null=True, blank=True, related_name="attachments")
+    agenda_item = models.ForeignKey('meetings.AgendaItem', on_delete=models.CASCADE, null=True, blank=True,
+                                    related_name="attachments")
     file = models.FileField(_("File"), storage=uploads_storage, max_length=200, upload_to=issue_attachment_path)
     title = models.CharField(_("Title"), max_length=100)
     active = models.BooleanField(default=True)
     ordinal = models.PositiveIntegerField(null=True, blank=True)
     created_at = models.DateTimeField(_("File created at"), auto_now_add=True)
-    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name=_("Created by"), related_name="files_created")
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name=_("Created by"),
+                                   related_name="files_created")
 
     @property
     def is_confidential(self):
@@ -349,7 +351,8 @@ class ProposalVoteArgumentVoteValue(object):
 @python_2_unicode_compatible
 class ProposalVoteBoard(models.Model):
     proposal = models.ForeignKey("Proposal", on_delete=models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name=_("User"), related_name="board_votes")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name=_("User"),
+                             related_name="board_votes")
     value = models.SmallIntegerField(_("Vote"), choices=ProposalVoteValue.CHOICES, default=ProposalVoteValue.NEUTRAL)
     voted_by_chairman = models.BooleanField(_("Voted by chairman"), default=False)  # TODO: by who?
 
@@ -456,10 +459,7 @@ class Proposal(UIDMixin, ConfidentialMixin):
 
     @property
     def can_show_straw_votes(self):
-        return self.has_votes and \
-               (not self.issue.is_upcoming or \
-                not self.issue.committee.upcoming_meeting_is_published or \
-                self.issue.committee.straw_vote_ended)
+        return self.has_votes and (not self.issue.is_upcoming or not self.issue.committee.upcoming_meeting_is_published or self.issue.committee.straw_vote_ended)
 
     def get_straw_results(self, meeting_id=None):
         """ get straw voting results registered for the given meeting """
@@ -605,7 +605,8 @@ class Proposal(UIDMixin, ConfidentialMixin):
 @python_2_unicode_compatible
 class ProposalVote(models.Model):
     proposal = models.ForeignKey(Proposal, on_delete=models.CASCADE, related_name='votes')
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name=_("User"), related_name="votes")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name=_("User"),
+                             related_name="votes")
     value = models.SmallIntegerField(_("Vote"), choices=ProposalVoteValue.CHOICES, default=ProposalVoteValue.NEUTRAL)
 
     @property
@@ -685,7 +686,8 @@ class ProposalVoteArgument(models.Model):
 
 class ProposalVoteArgumentRanking(models.Model):
     argument = models.ForeignKey(ProposalVoteArgument, on_delete=models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name=_("User"), related_name="argument_votes")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name=_("User"),
+                             related_name="argument_votes")
     value = models.SmallIntegerField(_("Vote"), choices=ProposalVoteArgumentVoteValue.CHOICES)
 
     class Meta:

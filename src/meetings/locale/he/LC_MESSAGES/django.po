@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open Community\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-15 09:00+0300\n"
+"POT-Creation-Date: 2016-08-22 15:19+0300\n"
 "PO-Revision-Date: 2015-05-14 13:18+0200\n"
 "Last-Translator: Yaniv Mirel <yanivmirel@gmail.com>\n"
 "Language-Team: \n"
@@ -34,7 +34,7 @@ msgstr "לא התבצעו שינויים בנושא זה במהלך הפגישה
 msgid "Undecided proposals"
 msgstr "הצעות ללא החלטה"
 
-#: .\models.py:20 .\models.py:90 .\models.py:159 .\models.py:185
+#: .\models.py:20 .\models.py:90 .\models.py:160 .\models.py:186
 msgid "Meeting"
 msgstr "פגישה"
 
@@ -120,31 +120,31 @@ msgstr "רשום כל אורח בשורה נפקדת"
 msgid "Meetings"
 msgstr "פגישות"
 
-#: .\models.py:164 .\models.py:186
+#: .\models.py:165 .\models.py:187
 msgid "Name"
 msgstr "שם"
 
-#: .\models.py:165
+#: .\models.py:166
 msgid "Group"
 msgstr "קבוצה"
 
-#: .\models.py:166
+#: .\models.py:167
 msgid "Is Absent"
 msgstr "נעדר"
 
-#: .\models.py:170
+#: .\models.py:171
 msgid "Meeting Participant"
 msgstr "משתתף בפגישה"
 
-#: .\models.py:171
+#: .\models.py:172
 msgid "Meeting Participants"
 msgstr "משתתפים בפגישה"
 
-#: .\models.py:189
+#: .\models.py:190
 msgid "Meeting External Participant"
 msgstr "משתתף חיצוני"
 
-#: .\models.py:190
+#: .\models.py:191
 msgid "Meeting External Participants"
 msgstr "משתתפים חיצוניים"
 

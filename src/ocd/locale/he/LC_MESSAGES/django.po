@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open Community\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-15 09:00+0300\n"
+"POT-Creation-Date: 2016-08-22 15:19+0300\n"
 "PO-Revision-Date: 2015-06-17 21:56+0200\n"
 "Last-Translator: Yaniv Mirel <yanivmirel@gmail.com>\n"
 "Language-Team: \n"
@@ -30,10 +30,6 @@ msgid ""
 "Models with ConfidentialByRelationMixin must declare a valid field which can "
 "pass onconfidentiality."
 msgstr ""
-
-#: .\settings.py:295
-msgid "admin"
-msgstr "מנהל קהילה"
 
 #: .\settings.py:296 .\settings.py:302
 msgid "chairman"
@@ -361,6 +357,9 @@ msgstr "הקודם"
 #: .\templates\search\search.html:72
 msgid "Next"
 msgstr "הבא"
+
+#~ msgid "admin"
+#~ msgstr "מנהל קהילה"
 
 #~ msgid "DEVELOPMENT SERVER"
 #~ msgstr "שרת פיתוח"

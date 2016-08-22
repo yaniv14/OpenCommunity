@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open Community\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-15 09:00+0300\n"
+"POT-Creation-Date: 2016-08-22 15:19+0300\n"
 "PO-Revision-Date: 2016-08-04 14:24+0300\n"
 "Last-Translator: Yaniv Mirel <yanivmirel@gmail.com>\n"
 "Language-Team: \n"
@@ -18,7 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.8.8\n"
 
-#: .\admin.py:43 .\forms.py:58
+#: .\admin.py:43 .\forms.py:57
 msgid "Password"
 msgstr "סיסמא"
 
@@ -31,16 +31,20 @@ msgstr ""
 "סיסמאות אינם נשמרות כטקסט, אז אין אפשרות לראות את הסיסמא של המשתמש, אבל ניתן "
 "לשנות סיסמא בעזרת <a href=\"password/\">הקישור הזה</a>."
 
-#: .\admin.py:85 .\admin.py:104 .\models.py:334
+#: .\admin.py:92 .\admin.py:116 .\models.py:334
 #: .\templates\users\member_profile.html:24
 msgid "Email"
 msgstr "דואל"
 
-#: .\admin.py:109 .\models.py:174
+#: .\admin.py:97 .\models.py:342
+msgid "Groups"
+msgstr "קבוצות"
+
+#: .\admin.py:121 .\models.py:174
 msgid "Role"
 msgstr "הרשאה"
 
-#: .\admin.py:118 .\models.py:346 .\models.py:349
+#: .\admin.py:130 .\models.py:346 .\models.py:349
 #: .\templates\users\member_update_form.html:9
 msgid "Group"
 msgstr "קבוצה"
@@ -64,23 +68,23 @@ msgstr "משתמש זה כבר חבר בקהילה"
 msgid "This user is already invited to this community."
 msgstr "משתמש זה כבר הוזמן לקהילה"
 
-#: .\forms.py:48 .\tests\invitation_test.py:80 .\views.py:70 .\views.py:394
+#: .\forms.py:48 .\tests\invitation_test.py:80 .\views.py:70 .\views.py:388
 msgid "Form error. Please supply a valid email."
 msgstr "יש בעיה בטופס. אנא בדוק את כתובת האימייל"
 
-#: .\forms.py:59
+#: .\forms.py:58
 msgid "Password confirmation"
 msgstr "אימות סיסמא"
 
-#: .\forms.py:73
+#: .\forms.py:72
 msgid "Passwords don't match"
 msgstr "סיסמא לא תואמת"
 
-#: .\forms.py:116
+#: .\forms.py:115
 msgid "Upload CSV file to import"
 msgstr "העלאת קובץ csv"
 
-#: .\forms.py:120
+#: .\forms.py:119
 msgid "Choose groups"
 msgstr "בחר קבוצות"
 
@@ -179,10 +183,6 @@ msgstr "שם"
 #: .\models.py:335
 msgid "Message"
 msgstr "הודעה"
-
-#: .\models.py:342
-msgid "Groups"
-msgstr "קבוצות"
 
 #: .\models.py:352
 msgid "Status"
@@ -331,7 +331,7 @@ msgid "Invite member"
 msgstr "הזמן חבר"
 
 #: .\templates\users\member_community_remove_form.html:9
-#: .\templates\users\membership_groups.html:66
+#: .\templates\users\membership_groups.html:78
 msgid "Remove from community"
 msgstr "הסר מהקהילה"
 
@@ -424,27 +424,33 @@ msgstr "מההחלטות בהם הצביע 'נגד' נדחו"
 msgid "Members"
 msgstr "חברים"
 
-#: .\templates\users\membership_groups.html:15
+#: .\templates\users\membership_groups.html:16
+#, fuzzy
+#| msgid "Groups"
+msgid "Groups list"
+msgstr "קבוצות"
+
+#: .\templates\users\membership_groups.html:18
 msgid "Create Group"
 msgstr "צור קבוצה"
 
-#: .\templates\users\membership_groups.html:16
+#: .\templates\users\membership_groups.html:19
 msgid "New member"
 msgstr "חבר חדש"
 
-#: .\templates\users\membership_groups.html:17
+#: .\templates\users\membership_groups.html:20
 msgid "Group Role"
 msgstr "קבוצת הרשאות"
 
-#: .\templates\users\membership_groups.html:25
+#: .\templates\users\membership_groups.html:37
 msgid "Search members"
 msgstr "חיפוש חברי קהילה"
 
-#: .\templates\users\membership_groups.html:60
+#: .\templates\users\membership_groups.html:72
 msgid "Add to groups"
 msgstr "הוסף לקבוצות"
 
-#: .\templates\users\membership_groups.html:63
+#: .\templates\users\membership_groups.html:75
 msgid "Remove from groups"
 msgstr "הסר מקבוצה/ות"
 
@@ -464,18 +470,17 @@ msgstr "הזמן"
 msgid "Open invitations"
 msgstr "הזמנות פתוחות"
 
-#: .\views.py:145
-msgid "member"
-msgstr "חבר"
-
-#: .\views.py:176
+#: .\views.py:171
 msgid "Oops. Something went wrong. Please try again."
 msgstr "אופס. משהו השתבש. אנה נסה שוב."
 
-#: .\views.py:312
+#: .\views.py:307
 #, python-format
 msgid "%d Invitations sent"
 msgstr "%d הזמנות נשלחו"
+
+#~ msgid "member"
+#~ msgstr "חבר"
 
 #~ msgid "Old group"
 #~ msgstr "קבוצה ישנה"

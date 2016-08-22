@@ -1,6 +1,7 @@
 from django import template
 from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse
+from django.utils.safestring import mark_safe
 from issues.models import Proposal, ProposalVote, VoteResult, ProposalVoteArgument, ProposalVoteArgumentRanking
 from meetings.models import Meeting
 from users.models import OCUser
@@ -35,11 +36,11 @@ def user_votes_on_issue(context):
         proposal__in=proposals,
         user_id=user_id).count()
     if proposals.count() == 0:
-        return "<span></span>"
+        return mark_safe("<span></span>")
     elif votes_cnt == proposals.count():
-        return "<span class='badge no-vote-badge'>{0}/{1}</span>".format(votes_cnt, proposals.count())
+        return mark_safe("<span class='badge no-vote-badge'>{0}/{1}</span>".format(votes_cnt, proposals.count()))
     else:
-        return "<span class='badge vote-badge'>{0}/{1}</span>".format(votes_cnt, proposals.count())
+        return mark_safe("<span class='badge vote-badge'>{0}/{1}</span>".format(votes_cnt, proposals.count()))
 
 
 @register.filter

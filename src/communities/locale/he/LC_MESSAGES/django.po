@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open Community\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-15 09:00+0300\n"
-"PO-Revision-Date: 2016-08-04 14:23+0300\n"
+"POT-Creation-Date: 2016-08-22 15:19+0300\n"
+"PO-Revision-Date: 2016-08-22 15:20+0300\n"
 "Last-Translator: Yaniv Mirel <yanivmirel@gmail.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -44,6 +44,10 @@ msgstr "רקע"
 msgid "Me only"
 msgstr "רק לי (לבדיקה)"
 
+#: .\forms.py:73 .\models.py:31 .\models.py:37
+msgid "All members"
+msgstr "לכל חברי הקהילה"
+
 #: .\models.py:28 .\models.py:35
 msgid "Me only (review)"
 msgstr "רק לי (לבדיקה)"
@@ -55,10 +59,6 @@ msgstr "למשתתפים בפגישה בלבד"
 #: .\models.py:30 .\models.py:36
 msgid "The board"
 msgstr "לועד בלבד"
-
-#: .\models.py:31 .\models.py:37
-msgid "All members"
-msgstr "לכל חברי הקהילה"
 
 #: .\models.py:43 .\models.py:123 .\models.py:586
 #: .\templates\communities\participants_form.html:70
@@ -353,7 +353,7 @@ msgstr "נושא בדיון"
 #: .\templates\communities\_my_community.html:19
 #: .\templates\communities\_my_community.html:23
 msgid "Logistic manager"
-msgstr ""
+msgstr "מנהל לוגיסטי"
 
 #: .\templates\communities\base_meeting.html:31
 #: .\templates\communities\upcoming.html:37
@@ -442,12 +442,16 @@ msgstr "הבא"
 msgid "Edit"
 msgstr "עריכה"
 
-#: .\templates\communities\communitygroup_form.html:5
+#: .\templates\communities\communitygroup_form.html:6
+msgid "Edit group"
+msgstr "ערוך קבוצה"
+
+#: .\templates\communities\communitygroup_form.html:8
 #: .\templates\communities\communitygrouprole_form.html:5
 msgid "Create new group"
 msgstr "צור קבוצה"
 
-#: .\templates\communities\communitygroup_form.html:13
+#: .\templates\communities\communitygroup_form.html:18
 msgid "Assign to committee"
 msgstr "שייך לועדה"
 
@@ -751,35 +755,39 @@ msgid "Summary draft"
 msgstr "טיוטת סיכום"
 
 #: .\templates\communities\publish_upcoming.html:8
-#: .\templates\communities\publish_upcoming.html:55
+#: .\templates\communities\publish_upcoming.html:56
 msgid "Publish"
 msgstr "פרסם"
 
-#: .\templates\communities\publish_upcoming.html:46
+#: .\templates\communities\publish_upcoming.html:30
+msgid "Choose from community groups"
+msgstr "בחר קבוצה/ות"
+
+#: .\templates\communities\publish_upcoming.html:47
 msgid "Preview details"
 msgstr "הצגת פירוט"
 
-#: .\templates\communities\publish_upcoming.html:48
+#: .\templates\communities\publish_upcoming.html:49
 msgid "Preview protocol"
 msgstr "הצגת פרוטוקול"
 
-#: .\templates\communities\publish_upcoming.html:51
+#: .\templates\communities\publish_upcoming.html:52
 msgid "Preview draft"
 msgstr "הצגת סדר יום"
 
-#: .\templates\communities\publish_upcoming.html:54
+#: .\templates\communities\publish_upcoming.html:55
 msgid "Close"
 msgstr "סגור"
 
-#: .\templates\communities\publish_upcoming.html:61
+#: .\templates\communities\publish_upcoming.html:62
 msgid "Print details"
 msgstr "הדפס פירוט"
 
-#: .\templates\communities\publish_upcoming.html:63
+#: .\templates\communities\publish_upcoming.html:64
 msgid "Print protocol"
 msgstr "הדפס פרוטוקול"
 
-#: .\templates\communities\publish_upcoming.html:66
+#: .\templates\communities\publish_upcoming.html:67
 msgid "Print draft"
 msgstr "הדפס סדר יום"
 

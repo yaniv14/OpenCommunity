@@ -134,6 +134,13 @@ ul.errorlist li {
     margin-top: 0;
 }
 
+p.modal-paragraph {
+    padding-left: 40px;
+    text-decoration: underline;
+    font-weight: bold;
+    font-size: 15px;
+}
+
 .form-group {
     margin-bottom: 10px;
 }
@@ -2155,6 +2162,11 @@ label[for=id_proposal-title] {
 
 .user_vote_line {
     border-bottom: 1px dotted #d8e0df;
+    line-height: 30px;
+}
+
+.user_vote_line label {
+    margin-bottom: 14px;
 }
 
 .board_vote .col-xs-4,
@@ -2369,6 +2381,7 @@ ul.prop-table .prop-content span {
     .ios-chrome .modal-backdrop {
         display: none;
     }
+
     .welcome-video {
         margin-top: 20px;
     }
@@ -2566,11 +2579,13 @@ label[for=id_proposal-confidential_reason] {
 @media (min-width: 1200px) {
 
 }
+
 .checkbox.form-control.members-list-abc {
     margin-top: 0;
     height: 44px;
     padding: 11px 12px;
 }
+
 .letter-sort {
     margin: 20px auto;
     text-align: center;

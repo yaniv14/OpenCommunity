@@ -249,8 +249,9 @@ class PublishUpcomingView(AjaxFormView, CommitteeModelMixin, UpdateView):
     def get_form(self, form_class=None):
         form = super(PublishUpcomingView, self).get_form(form_class)
         c = self.get_object()
-        if not c.upcoming_meeting_started:
-            form.fields['send_to'].choices = ((x.group.id, gettext(x.group.title)) for x in c.group_roles.all())
+        # if not c.upcoming_meeting_started:
+        #     form.fields['send_to'].choices = ((x.group.id, gettext(x.group.title)) for x in c.group_roles.all())
+        form.fields['send_to'].choices = ((x.group.id, gettext(x.group.title)) for x in c.group_roles.all())
 
         return form
 
@@ -260,7 +261,7 @@ class PublishUpcomingView(AjaxFormView, CommitteeModelMixin, UpdateView):
         c = self.object
 
         # increment agenda if publishing agenda.
-        if not c.upcoming_meeting_started and form.cleaned_data['send_to'] != []:
+        if not c.upcoming_meeting_started and (form.cleaned_data['send_to'] != [] or form.cleaned_data['all_members']):
             c.upcoming_meeting_is_published = True
             c.upcoming_meeting_published_at = datetime.datetime.now()
             c.upcoming_meeting_version += 1
@@ -275,7 +276,7 @@ class PublishUpcomingView(AjaxFormView, CommitteeModelMixin, UpdateView):
             ) and c.upcoming_meeting_is_published
         }
         total = send_mail(c, template, self.request.user, form.cleaned_data['send_to'], tpl_data,
-                          send_to_me=form.cleaned_data['me'])
+                          send_to_me=form.cleaned_data['me'], send_to_all_members=form.cleaned_data['all_members'])
         messages.info(self.request, _("Sending to %d users") % total)
 
         return resp

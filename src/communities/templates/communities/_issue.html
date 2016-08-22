@@ -18,7 +18,7 @@
     </div>
     {% if not object.upcoming_meeting_started and i.is_upcoming and i.can_straw_vote %}
     <div class="user_votes_on_issue">
-      {{ user_votes_on_issue }}
+      {% user_votes_on_issue %}
     </div>
     {% endif %}
 		<div class="icon-plus-minus agenda_plus_minus">
@@ -27,7 +27,7 @@
 	{% else %}
 		{% if i.can_straw_vote and 'vote' in cperms and user.id and not object.upcoming_meeting_started and i.is_upcoming %}
 			<div class="user_votes_on_issue">
-				{{ user_votes_on_issue }}
+				{% user_votes_on_issue %}
 			</div>
 		{% endif %}
 		{% if object.upcoming_meeting_started %}

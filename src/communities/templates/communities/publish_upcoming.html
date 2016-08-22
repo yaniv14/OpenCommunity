@@ -11,13 +11,13 @@
 
 {% block content %}
 {% for field in form %}
-    {% if field.html_name == 'me' %}
+    {% if field.html_name == 'me' or field.html_name == 'all_members' %}
         <div class="checkbox">
             <ul>
                 <li>
                     {{ field.errors }}
                     <label for="{{ field.id_for_label }}">
-                        <input type="checkbox" id="{{ field.id_for_label }}" name="{{ field.html_name }}" value="{{ field.value }}">
+                        <input type="checkbox" id="{{ field.id_for_label }}" name="{{ field.html_name }}">
                         {{ field.label }}
                     </label>
                     {% if field.help_text %}
@@ -27,6 +27,7 @@
             </ul>
         </div>
     {% else %}
+        <p class="modal-paragraph">{% trans 'Choose from community groups' %}</p>
         <div class="checkbox">
             {{ field.errors }}
             {{ field }}

@@ -139,6 +139,13 @@ ul.errorlist li {
     margin-bottom: 10px;
 }
 
+p.modal-paragraph {
+    padding-right: 40px;
+    text-decoration: underline;
+    font-weight: bold;
+    font-size: 15px;
+}
+
 #upcoming-meeting .field-send_to ul {
     list-style-type: none;
 }
@@ -2171,6 +2178,11 @@ label[for=id_proposal-title] {
 
 .user_vote_line {
     border-bottom: 1px dotted #d8e0df;
+    line-height: 30px;
+}
+
+.user_vote_line label {
+    margin-bottom: 14px;
 }
 
 .board_vote .col-xs-4,

@@ -103,7 +103,7 @@
         <div class="open-proposals filter-upcoming filter">
             {% for proposal in proposals.open %}
                 {% include 'issues/_proposal.html' %}
-                {% if can_straw_vote and not proposal.decided and 'vote' in cperms and user|member_of:community %}
+                {% if can_straw_vote and not proposal.decided and 'vote' in cperms and user|member_of:proposal.issue.committee.community %}
                     <div class="issue_proposal_vote{% if proposal.arguments_for or proposal.arguments_against or user|voted_on:proposal.id %} with_arguments{% endif %}{% if proposal.is_confidential %} is_confidential{% endif %}" data-argument-url="{% url 'proposal_more_arguments' proposal.issue.committee.community.slug proposal.issue.committee.slug proposal.issue.id proposal.id %}">
                         {% include 'issues/_straw_vote.html' %}
                         <div class="vote_arguments clearfix clear">

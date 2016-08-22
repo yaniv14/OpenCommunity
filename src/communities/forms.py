@@ -70,6 +70,7 @@ class EditUpcomingMeetingForm(forms.ModelForm):
 
 class PublishUpcomingMeetingForm(forms.ModelForm):
     me = forms.BooleanField(label=_("Me only"), widget=forms.CheckboxInput, required=False)
+    all_members = forms.BooleanField(label=_("All members"), widget=forms.CheckboxInput, required=False)
     send_to = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(), required=False)
 
     class Meta:

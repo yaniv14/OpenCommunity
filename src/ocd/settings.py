@@ -292,7 +292,7 @@ OPENCOMMUNITY_ANALYTICS = {
 }
 
 OPENCOMMUNITY_DEFAULT_GROUPS = [
-    gettext('admin'),
+    # gettext('admin'),
     gettext('chairman'),
     gettext('board'),
     gettext('member')

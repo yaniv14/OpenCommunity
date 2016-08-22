@@ -10,7 +10,7 @@ from django.template.loader import render_to_string
 from django.utils import translation
 import django_rq
 from issues.models import IssueStatus
-from users.models import CommitteeMembership
+from users.models import CommitteeMembership, CommunityMembership
 
 logger = logging.getLogger(__name__)
 
@@ -56,7 +56,7 @@ def construct_mock_users(email_list, type):
 
 
 def _base_send_mail(committee, notification_type, sender, send_to, data=None,
-                    base_url=None, with_guests=False, language=None, send_to_me=False):
+                    base_url=None, with_guests=False, language=None, send_to_me=False, send_to_all_members=False):
     """Sends mail to community members, and applies object access control.
 
     The type of email being sent is detected from notification_type.
@@ -70,18 +70,22 @@ def _base_send_mail(committee, notification_type, sender, send_to, data=None,
     # will be personalized.
 
     r = []
-    if send_to_me:
-        r.append(sender)
+    if send_to_all_members:
+        all_members = CommunityMembership.objects.filter(community=committee.community)
+        r += [am.user for am in all_members]
+    else:
+        if send_to_me:
+            r.append(sender)
 
-    if send_to:
-        community_groups = CommunityGroup.objects.filter(id__in=send_to)
-        for cg in community_groups:
-            r += [m.user for m in cg.group_users.all()]
+        if send_to:
+            community_groups = CommunityGroup.objects.filter(id__in=send_to)
+            for cg in community_groups:
+                r += [m.user for m in cg.group_users.all()]
 
     # elif send_to == SendToOption.ONLY_ATTENDEES:
     #     r = [user for user in committee.upcoming_meeting_participants.all()]
 
-    if not send_to_me and send_to == []:
+    if not send_to_me and not send_to_all_members and send_to == []:
         logger.error('Received an email job with no valid send_to. '
                      'send_to: {0}.'.format(send_to))
 
