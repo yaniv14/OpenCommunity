@@ -51,7 +51,7 @@ class CommunityAdmin(ModelAdmin):
 class CommitteeAdmin(ModelAdmin):
     list_display = ['community', 'name', 'slug']
     list_display_links = ['community', 'name', 'slug']
-    fields = ('community', 'name', 'slug', 'official_identifier', 'logo', 'is_public',
+    fields = ('community', 'name', 'slug', 'official_identifier', 'logo', 'community_role', 'is_public',
               'straw_voting_enabled', 'issue_ranking_enabled',
               'allow_links_in_emails', 'register_missing_board_members',
               'email_invitees', 'inform_system_manager', 'no_meetings_committee')
