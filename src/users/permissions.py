@@ -1,5 +1,5 @@
 from acl.default_roles import ALL_PERMISSIONS
-from communities.models import Committee, CommunityGroupRole
+from communities.models import Committee
 
 """
 These functions work with anonymous users as well, and therefore are not a
@@ -38,35 +38,32 @@ def load_community_permissions(user, community):
 
 
 def load_committee_permissions(user, committee):
-    from users.models import CommitteeMembership
-    if user.is_authenticated():
-        all_perms = set()
-        # Memberships roles
-        try:
-            membership = CommitteeMembership.objects.get(committee=committee, user=user)
-        except CommitteeMembership.DoesNotExist:
-            membership = None
-        if membership:
-            all_perms.update(membership.role.all_perms())
-        elif committee.community_role:
-            all_perms.update(committee.community_role.all_perms())
-        # Committee group roles
-        user_groups = user.group_users.all()
-        committee_groups = committee.group_roles.all().values_list('group_id', flat=True)
-        for ug in user_groups:
-            if ug.group_id in committee_groups:
-                obj = CommunityGroupRole.objects.get(group_id=ug.group_id, committee=committee)
-                all_perms.update(obj.role.all_perms())
-        # Only if we decide to use access_committee perm!
-        if membership or user_groups:
-            all_perms.update(['access_committee'])
-        return all_perms
+    if not user.is_authenticated():
+        if committee.is_public:
+            # todo: some basic permissions for committee?
+            return set(['access_committee'])
 
-    if committee.is_public:
-        # todo: some basic permissions for committee?
-        return set(['access_committee'])
+        return set()
 
-    return []
+    all_perms = set()
+
+    # Memberships roles
+    membership = user.committee_memberships.filter(committee=committee).first()
+    # if membership:
+    #     all_perms.update(['access_committee'])
+    role = membership.role if membership else committee.community_role
+    if role:
+        all_perms.update(role.all_perms())
+
+    group_roles = committee.group_roles.filter(committee__community__groups__group_users__user=user)
+    print(group_roles.query)
+    print(group_roles)
+    for group_role in group_roles:
+        all_perms.update(group_role.role.all_perms())
+
+    print(all_perms)
+
+    return all_perms
 
 
 def get_community_permissions(user, community, committee=None):

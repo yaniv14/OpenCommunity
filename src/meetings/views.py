@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib import messages
 from django.http.response import HttpResponse
 from django.utils import timezone
@@ -97,7 +98,7 @@ class MeetingCreateView(AjaxFormView, MeetingMixin, CreateView):
 
     def get_form_kwargs(self):
         kwargs = super(MeetingCreateView, self).get_form_kwargs()
-        kwargs['community'] = self.committee.community
+        kwargs['committee'] = self.committee
         kwargs['issues'] = self.committee.upcoming_issues(
             user=self.request.user, committee=self.committee)
         return kwargs
@@ -107,6 +108,7 @@ class MeetingCreateView(AjaxFormView, MeetingMixin, CreateView):
         m = self.committee.close_meeting(form.instance, self.request.user, self.committee)
         Issue.objects.filter(id__in=form.cleaned_data['issues']).update(
             completed=True, status=IssueStatus.ARCHIVED)
-        total = send_mail(self.committee, 'protocol', self.request.user, form.cleaned_data['send_to'], {'meeting': m})
+        total = send_mail(self.committee, 'protocol', self.request.user, form.cleaned_data['send_to'], {'meeting': m},
+                          send_to_all_members=form.cleaned_data['all_members'])
         messages.info(self.request, _("Sending to %d users") % total)
         return HttpResponse(m.get_absolute_url())

@@ -18,7 +18,41 @@
     </div>
 
     {% with issues_ready_to_close as issues %}
-        {{ form }}
+        {% for field in form %}
+            {% if field.html_name == 'me' or field.html_name == 'all_members' %}
+                <div class="checkbox">
+                    <ul>
+                        <li>
+                            {{ field.errors }}
+                            <label for="{{ field.id_for_label }}">
+                                <input type="checkbox" id="{{ field.id_for_label }}" name="{{ field.html_name }}">
+                                {{ field.label }}
+                            </label>
+                            {% if field.help_text %}
+                            <p class="help">{{ field.help_text|safe }}</p>
+                            {% endif %}
+                        </li>
+                    </ul>
+                </div>
+            {% else %}
+                {{ field.errors }}
+                {% if not field.html_name == 'send_to' %}
+                    {{ field.label_tag }}
+                {% endif %}
+                    {% if field.html_name == 'held_at' %}
+                        <div class="controls field-{{ field.html_name }}">{{ field }}</div>
+                        {% if field.help_text %}
+                            <p class="help">{{ field.help_text|safe }}</p>
+                        {% endif %}
+                        <label>{% trans 'Send mail to' %}:</label>
+                    {% else %}
+                        {{ field }}
+                        {% if field.help_text %}
+                            <p class="help">{{ field.help_text|safe }}</p>
+                        {% endif %}
+                    {% endif %}
+            {% endif %}
+        {% endfor %}
     {% endwith %}
 
      <div class="alerts">
